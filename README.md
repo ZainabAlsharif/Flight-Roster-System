@@ -14,5 +14,4 @@ A web-based project developed by our CMPE331 team to manage flight rosters, crew
 - Node.js
 - Express.js 
 - HTML, CSS, JavaScript 
-- MySQL 
- 
+- MySQL
