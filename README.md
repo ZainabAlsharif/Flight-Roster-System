@@ -9,9 +9,3 @@ A web-based project developed by our CMPE331 team to manage flight rosters, crew
 - Nour 
 - Asma 
 - Mohammed 
-
-## Tech Stack
-- Node.js
-- Express.js 
-- HTML, CSS, JavaScript 
-- MySQL
