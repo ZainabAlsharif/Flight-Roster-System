@@ -9,11 +9,11 @@ INSERT INTO Airport (AirportCode, AirportName, City, Country) VALUES
 ('BGW', 'Baghdad International Airport', 'Baghdad', 'Iraq'),
 ('CAI', 'Cairo International Airport', 'Cairo', 'Egypt');
 
+--vehicle types
 INSERT INTO VehicleType (VehicleTypeCode, SeatCount, SeatingPlan, StandardMenu) VALUES
 ('B737', 189, 'Business: 20 seats, Economy: 169 seats', 'Light meals, beverages, snacks'),
 ('A320', 194, 'Business: 24 seats, Economy: 170 seats', 'Full meal service, beverages, snacks'),
 ('A380', 555, 'First: 14 seats, Business: 80 seats, Economy: 461 seats', 'Premium meal service, wines, champagne, gourmet meals');
-
 
 --flights (airlines alpabet is FT for FlyTech)
 INSERT INTO Flight (FlightNumber, FlightDateTime, DurationMinutes, DistanceKm, SourceAirportCode, DestinationAirportCode, VehicleTypeCode, SharedFlightNumber, SharedCompanyName, ConnectingFlightNumber) VALUES
@@ -70,7 +70,6 @@ INSERT INTO Dish (DishId, DishName) VALUES
 (2, 'Vegetable Biryani'),
 (3, 'Caesar Salad');
 
-
 --chef dishes
 INSERT INTO ChefDish (AttendantId, DishId) VALUES
 (1, 1), (1, 2),
@@ -83,7 +82,6 @@ INSERT INTO Passenger (PassengerId, FlightNumber, Name, Age, Gender, Nationality
 (4, 'FT201', 'Amina Youssef', 2, 'Female', 'Egypt', 'Economy', '15C', 3),
 (5, 'FT303', 'Sara Ahmed', 25, 'Female', 'Iraq', 'Economy', '14D', NULL),
 (6, 'FT405', 'Lina Mustafa', 35, 'Female', 'Libya', 'Business', '3B', NULL);
-
 
 --passenger affiliations
 INSERT INTO PassengerAffiliation (PassengerId, AffiliateId) VALUES
