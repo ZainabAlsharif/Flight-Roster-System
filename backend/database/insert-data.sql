@@ -11,9 +11,9 @@ INSERT INTO Airport (AirportCode, AirportName, City, Country) VALUES
 
 --vehicle types
 INSERT INTO VehicleType (VehicleTypeCode, SeatCount, SeatingPlan, StandardMenu) VALUES
-('B737', 189, 'Business: 20 seats, Economy: 169 seats', 'Light meals, beverages, snacks'),
-('A320', 194, 'Business: 24 seats, Economy: 170 seats', 'Full meal service, beverages, snacks'),
-('A380', 555, 'First: 14 seats, Business: 80 seats, Economy: 461 seats', 'Premium meal service, wines, champagne, gourmet meals');
+('B737', 166, 'Business: 16 seats, Economy: 150 seats', 'Light meals, beverages, snacks'),
+('A320', 180, 'Business: 20 seats, Economy: 160 seats', 'Full meal service, beverages, snacks'),
+('B777', 244, 'First: 8 seats, Business: 35 seats, Economy: 201 seats', 'Premium meal service, beverages, snacks');
 
 --flights (airlines alpabet is FT for FlyTech)
 INSERT INTO Flight (FlightNumber, FlightDateTime, DurationMinutes, DistanceKm, SourceAirportCode, DestinationAirportCode, VehicleTypeCode, SharedFlightNumber, SharedCompanyName, ConnectingFlightNumber) VALUES
