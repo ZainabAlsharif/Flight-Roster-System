@@ -27,7 +27,7 @@ const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
 //search flights with optional filters (FlightNumber)
 //returns flight info joined with airport names and vehicle details
 app.get('/api/flights', (req, res) => {
-    const { flightNumber} = req.query;
+    const {flightNumber,date, source, dest} = req.query;
 
     // Base Query: Join Flight with Airport (twice) and VehicleType
     let sql = `
@@ -63,12 +63,29 @@ app.get('/api/flights', (req, res) => {
 
     const params = [];
 
-    //filter by Flight Number 
+     //filter by Flight Number 
     if (flightNumber) {
         sql += ` AND f.FlightNumber = ?`;
         params.push(flightNumber);
     }
 
+     //filter by Date (Partial match for 'YYYY-MM-DD')
+    if (date) {
+        sql += ` AND f.FlightDateTime LIKE ?`;
+        params.push(`${date}%`);
+    }
+
+    //filter by Source Airport Code (e.g., 'IST')
+    if (source) {
+        sql += ` AND f.SourceAirportCode = ?`;
+        params.push(source);
+    }
+
+    //filter by Destination Airport Code (e.g., 'LHR')
+    if (dest) {
+        sql += ` AND f.DestinationAirportCode = ?`;
+        params.push(dest);
+    }
     // Execute
     db.all(sql, params, (err, rows) => {
         if (err) {
@@ -78,6 +95,7 @@ app.get('/api/flights', (req, res) => {
         }
         res.json({ count: rows.length, flights: rows });
     });
+
 });
 
 //GET /api/flights/:flightNumber
