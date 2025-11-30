@@ -18,9 +18,9 @@ INSERT INTO VehicleType (VehicleTypeCode, SeatCount, SeatingPlan, StandardMenu) 
 --flights (airlines alpabet is FT for FlyTech)
 INSERT INTO Flight (FlightNumber, FlightDateTime, DurationMinutes, DistanceKm, SourceAirportCode, DestinationAirportCode, VehicleTypeCode, SharedFlightNumber, SharedCompanyName, ConnectingFlightNumber) VALUES
 ('FT101', '2025-12-10 12:00:00', 120, 1500, 'IST', 'SAW', 'A320', NULL, NULL, NULL),
-('FT201', '2025-12-12 15:30:00', 180, 2500, 'MJI', 'ALG', 'A380', 'EK201', 'Emirates', NULL),
+('FT201', '2025-12-12 15:30:00', 180, 2500, 'MJI', 'ALG', 'B777', 'EK201', 'Emirates', NULL),
 ('FT303', '2025-12-15 09:00:00', 90, 800, 'BGW', 'CAI', 'B737', NULL, NULL, NULL),
-('FT405', '2025-12-18 17:00:00', 240, 3000, 'CAI', 'IST', 'A380', NULL, NULL, 'SV101');
+('FT405', '2025-12-18 17:00:00', 240, 3000, 'CAI', 'IST', 'A380', NULL, NULL, 'FT101');
 
 --languages
 INSERT INTO Language (LanguageCode, LanguageName) VALUES
@@ -48,32 +48,62 @@ INSERT INTO Attendant (AttendantId, Name, Age, Gender, Nationality, AttendantTyp
 (1, 'Hassan Alawi', 32, 'Male', 'Egypt', 'flight attendant'),
 (2, 'Merve Yildiz', 29, 'Female', 'Turkey', 'flight attendant'),
 (3, 'Fatima Almansouri', 30, 'Female', 'Libya', 'chef'),
-(4, 'Omar Nasser', 31, 'Male', 'Iraq', 'chef');
+(4, 'Omar Nasser', 31, 'Male', 'Iraq', 'chef'),
+(5, 'Lina Saeed', 28, 'Female', 'Algeria', 'flight attendant'),
+(6, 'Yusuf Karim', 33, 'Male', 'Egypt', 'flight attendant'),
+(7, 'Ayla Demir', 27, 'Female', 'Turkey', 'chef'),
+(8, 'Sami Haddad', 34, 'Male', 'Iraq', 'chef'),
+(9, 'Nadia Bensalem', 30, 'Female', 'Algeria', 'flight attendant'),
+(10, 'Salma Farouk', 29, 'Female', 'Libya', 'flight attendant'),
+(11, 'Omar Zaki', 35, 'Male', 'Egypt', 'chef'),
+(12, 'Dina Youssef', 28, 'Female', 'Turkey', 'chef');
 
 --attendant languages
 INSERT INTO AttendantLanguage (AttendantId, LanguageCode) VALUES
 (1, 'AR'), (1, 'EN'),
 (2, 'AR'), (2, 'EN'), (2, 'TR'),
 (3, 'TR'), (3, 'EN'),
-(4, 'AR'), (4, 'EN');
+(4, 'AR'), (4, 'EN'),
+(5, 'FR'), (5, 'EN'),
+(6, 'AR'), (6, 'EN'),
+(7, 'TR'), (7, 'EN'),
+(8, 'AR'), (8, 'EN'),
+(9, 'FR'), (9, 'EN'),
+(10, 'TR'), (10, 'EN'),
+(11, 'AR'), (11, 'EN'),
+(12, 'TR'), (12, 'EN');
 
 --attendant vehicle assignments
 INSERT INTO AttendantVehicle (AttendantId, VehicleTypeCode) VALUES
 (1, 'A320'),
 (2, 'A320'),
 (3, 'A320'),
-(4, 'A320');
+(4, 'A320'),
+(5, 'B777'),
+(6, 'B777'),
+(7, 'B777'),
+(8, 'B777'),
+(9, 'B737'),
+(10, 'B737'),
+(11, 'B737'),
+(12, 'B737');
 
 --dishes
 INSERT INTO Dish (DishId, DishName) VALUES
 (1, 'Chicken Kabsa'),
 (2, 'Vegetable Biryani'),
-(3, 'Caesar Salad');
+(3, 'Caesar Salad'),
+(4, 'Grilled Fish with Lemon Butter'),
+(5, 'Pasta Primavera');
 
 --chef dishes
 INSERT INTO ChefDish (AttendantId, DishId) VALUES
 (1, 1), (1, 2),
-(4, 1), (4, 3);
+(4, 1), (4, 3),
+(3, 4), (3, 5),
+(8, 2), (8, 5),
+(11, 1), (11, 4),
+(12, 3), (12, 5);
 
 --passengers
 INSERT INTO Passenger (PassengerId, FlightNumber, Name, Age, Gender, Nationality, SeatType, SeatNumber, ParentPassengerId) VALUES
@@ -107,7 +137,7 @@ INSERT INTO SystemUser (UserId, Username, PasswordHash, Role) VALUES
 
 --rosters
 INSERT INTO Roster (RosterId, FlightNumber, GeneratedAt, RosterJson) VALUES
-(1, 'FT101', '2025-11-01 10:00:00', '{"pilots": [1, 2], "attendants": [1, 2], "passengers": [1]}'),
-(2, 'FT201', '2025-11-05 14:00:00', '{"pilots": [3, 4], "attendants": [3, 4], "passengers": [3, 4]}'),
-(3, 'FT303', '2025-11-10 09:00:00', '{"pilots": [1, 3], "attendants": [1, 2], "passengers": [5]}'),
-(4, 'FT405', '2025-11-15 16:00:00', '{"pilots": [2, 4], "attendants": [3, 4], "passengers": [6]}');
+(1, 'FT101', '2025-11-01 10:00:00', '{"PilotId":1,"Attendants":[1,2,3,4]}'),
+(2, 'FT201', '2025-11-05 11:00:00', '{"PilotId":2,"Attendants":[5,6,7,8]}'),
+(3, 'FT303', '2025-11-10 09:30:00', '{"PilotId":3,"Attendants":[1,6,9,10]}'),
+(4, 'FT405', '2025-11-15 14:00:00', '{"PilotId":4,"Attendants":[2,5,11,12]}');
