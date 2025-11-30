@@ -24,10 +24,10 @@ const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
 });
 
 // GET /api/flights
-//search flights with optional filters (Date, Source, Destination)
+//search flights with optional filters (FlightNumber)
 //returns flight info joined with airport names and vehicle details
 app.get('/api/flights', (req, res) => {
-    const { date, source, dest } = req.query;
+    const { flightNumber} = req.query;
 
     // Base Query: Join Flight with Airport (twice) and VehicleType
     let sql = `
@@ -63,22 +63,10 @@ app.get('/api/flights', (req, res) => {
 
     const params = [];
 
-    // 1. Filter by Date (Partial match for 'YYYY-MM-DD')
-    if (date) {
-        sql += ` AND f.FlightDateTime LIKE ?`;
-        params.push(`${date}%`);
-    }
-
-    // 2. Filter by Source Airport Code (e.g., 'IST')
-    if (source) {
-        sql += ` AND f.SourceAirportCode = ?`;
-        params.push(source);
-    }
-
-    // 3. Filter by Destination Airport Code (e.g., 'LHR')
-    if (dest) {
-        sql += ` AND f.DestinationAirportCode = ?`;
-        params.push(dest);
+    //filter by Flight Number 
+    if (flightNumber) {
+        sql += ` AND f.FlightNumber = ?`;
+        params.push(flightNumber);
     }
 
     // Execute
@@ -93,7 +81,7 @@ app.get('/api/flights', (req, res) => {
 });
 
 //GET /api/flights/:flightNumber
-//get detailed info for a single flight (useful for the plane view)
+//get detailed info for a single flight
 app.get('/api/flights/:flightNumber', (req, res) => {
     const flightNumber = req.params.flightNumber;
 
@@ -152,6 +140,6 @@ app.get('/api/vehicles', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Flight Information API running on http://localhost:${PORT}`);
+    console.log(`Flight Information API running on http://localhost:${PORT}/api/flights`);
     console.log(`Connected to database: roster.db`);
 });
