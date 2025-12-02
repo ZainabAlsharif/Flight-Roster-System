@@ -156,7 +156,7 @@ app.get('/api/vehicles', (req, res) => {
         res.json(rows);
     });
 });
-
+//test connection
 app.listen(PORT, () => {
     console.log(`Flight Information API running on http://localhost:${PORT}/api/flights`);
     console.log(`Connected to database: roster.db`);
