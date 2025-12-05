@@ -14,16 +14,14 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// --- PATH CONFIGURATION ---
-// 1. Check where the frontend folder is
+// Path to frontend
 let frontendPath = path.join(__dirname, '../frontend');
 if (!fs.existsSync(frontendPath)) {
     frontendPath = path.join(__dirname, 'frontend');
 }
 console.log('Serving frontend from:', frontendPath);
 
-// --- STATIC FILES ---
-// 2. Fix: Allow clean URLs (no .html)
+// Stsqtic files
 app.use(express.static(frontendPath, { index: false, extensions: ['html'] }));
 
 // Database connection
@@ -37,9 +35,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
 });
 app.locals.db = db;
 
-// --- ROUTES ---
-
-// 3. Fix: Explicitly serve login.html at root
+// Routes
 app.get('/', (req, res) => {
     const loginFile = path.join(frontendPath, 'login.html');
     if (fs.existsSync(loginFile)) {
@@ -49,7 +45,7 @@ app.get('/', (req, res) => {
     }
 });
 
-// Passwords for reference (handled by DB below)
+//passwords for staff users
 const testUsers = {
   'pilot_abdulsallam': 'pilot1',
   'pilot_aya': 'pilot2',
@@ -59,6 +55,17 @@ const testUsers = {
   'attendant_merve': 'attendant6',
   'attendant_fatima': 'attendant7',
 };
+
+//hashing passwords
+async function generateHashes() {
+    for (const [username, password] of Object.entries(testUsers)) {
+        const hash = await bcrypt.hash(password, saltRounds);
+
+        console.log(`Username: ${username}`)
+        console.log(`Plain Password: ${password}`);
+        console.log(`Hashed: ${hash}\n`);}
+}
+//generateHashes().catch(err => console.error('Error:', err));
 
 // Login Route
 app.post('/login/assigned-flight-list', async (req, res) => {
