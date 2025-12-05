@@ -162,7 +162,7 @@ CREATE TABLE PassengerAffiliation (
 CREATE TABLE SystemUser (
     UserId INTEGER PRIMARY KEY,
     Username TEXT NOT NULL UNIQUE,
-    PasswordHash TEXT NOT NULL,
+    Password TEXT NOT NULL,
     Role TEXT NOT NULL               -- staff / passenger
 );
 

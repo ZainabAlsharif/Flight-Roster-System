@@ -203,8 +203,8 @@ body {
     width: 450vw; 
     max-width: 1700px;
     height: auto;
-    pointer-events: none; /* Allows clicking through the image */
-    z-index: -1; /* Behind everything */
+    pointer-events: none; 
+    z-index: -1; 
     
     /* Animation for smooth entrance */
     opacity: 0;
@@ -214,7 +214,6 @@ body {
 .airplane-img {
     width: 100%;
     height: auto;
-    /* Rotate to match the dynamic angle in your screenshot */
     transform: rotate(-12deg); 
     filter: drop-shadow(10px 10px 20px rgba(0,0,0,0.3));
 }
@@ -242,7 +241,7 @@ body {
         width: 80vw;
         bottom: -5vh;
         right: -15vw;
-        opacity: 0.6; /* Fade it out slightly so text is readable */
+        opacity: 0.6;
     }
 }
 

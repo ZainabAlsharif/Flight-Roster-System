@@ -121,23 +121,19 @@ INSERT OR REPLACE INTO PassengerAffiliation (PassengerId, AffiliateId) VALUES
 (6, 1);
 
 ---system users
-INSERT OR REPLACE INTO SystemUser (UserId, Username, PasswordHash, Role) VALUES
-(1, 'pilot_abdulsallam', 'TBD', 'staff'),
-(2, 'pilot_aya', 'TBD', 'staff'),
-(3, 'pilot_karim', 'TBD', 'staff'),
-(4, 'pilot_selin', 'TBD', 'staff'),
-(5, 'attendant_hassan', 'TBD', 'staff'),
-(6, 'attendant_merve', 'TBD', 'staff'),
-(7, 'attendant_fatima', 'TBD', 'staff'),
-(8, 'attendant_omar', 'TBD', 'staff'),
-(9, 'passenger_omar', 'TBD', 'passenger'),
-(10, 'passenger_youssef', 'TBD', 'passenger'),
-(11, 'passenger_sara', 'TBD', 'passenger'),
-(12, 'passenger_lina', 'TBD', 'passenger');
+-- Passwords are hashed with bcrypt (saltRounds=10)
+INSERT OR REPLACE INTO SystemUser (UserId, Username, Password, Role) VALUES
+(1, 'pilot_abdulsallam', '$2b$10$c01qtNQhw82Rz.4jLwRchOp7twyo4vZPaQ.mm1zI2Z2c8YTu3QuhW', 'staff'), --pilot1
+(2, 'pilot_aya', '$2b$10$sr0MDZPbWMWcAzge0g90f.sIztNP4W/NL/NIOFuCqTlu0p5vg.06O', 'staff'), --pilot2
+(3, 'pilot_karim', '$2b$10$uZhdSASW6Aapcgrn7ZOOOuxT8isneyTeJB3cexi4U7NudnUYs9FPe', 'staff'), --pilot3
+(4, 'pilot_selin', '$2b$10$HrRlZsNHOmT3XJFELDR/5O127YBrHHM.dBISkbQYr7.EAvsjHWk6C', 'staff'), --pilot4
+(5, 'attendant_hassan', '$2b$10$mEO.SBuVvm1j2tFmDHQosuNkcohvQ9SvtGA7/mts.qiTTlV3RBpsi', 'staff'), --attendant5
+(6, 'attendant_merve', '$2b$10$6xUMej249btgOiGirTRqbO56Z5VAf5boVeIl9hf1Vs.6GOaoQs35e', 'staff'), --attendant6
+(7, 'attendant_fatima', '$2b$10$Nmr4NRsu3fqW.U4R.ARzJ.6V55lY1IpxZ9dEZ0WA5kN1bPVW18SUG', 'staff'); --attendant7
 
 --rosters
 INSERT OR REPLACE INTO Roster (RosterId, FlightNumber, GeneratedAt, RosterJson) VALUES
-(1, 'FT101', '2025-11-01 10:00:00', '{"PilotId":1,"Attendants":[1,2,3,4]}'),
-(2, 'FT201', '2025-11-05 11:00:00', '{"PilotId":2,"Attendants":[5,6,7,8]}'),
-(3, 'FT303', '2025-11-10 09:30:00', '{"PilotId":3,"Attendants":[1,6,9,10]}'),
-(4, 'FT405', '2025-11-15 14:00:00', '{"PilotId":4,"Attendants":[2,5,11,12]}');
+(1, 'FT101', '11-01-2025 / 10:00:00', '{"pilots":[1],"attendants":[1,2,3,4]}'),
+(2, 'FT201', '05-11-2025 / 11:00:00', '{"pilots":[2],"attendants":[5,6,7,8]}'),
+(3, 'FT303', '10-11-2025 / 09:30:00', '{"pilots":[3],"attendants":[1,6,9,10]}'),
+(4, 'FT405', '15-11-2025 / 14:00:00', '{"pilots":[4],"attendants":[2,5,11,12]}');
