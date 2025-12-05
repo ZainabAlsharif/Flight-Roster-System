@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlyTech - Log-in Page</title>
+    <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
+    <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
+    <link href="[https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap)" rel="stylesheet">
+    
+    <!-- Linked CSS File -->
+    <link rel="stylesheet" href="./public/styles/login.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo-section">
+            <div class="logo-icon">
+                <svg width="32" height="32" viewBox="0 0 44 44" fill="none">
+                    <path d="M2.75 22L14.6667 27.5L22 41.25L27.5 22L41.25 2.75L2.75 22Z" fill="white"/>
+                </svg>
+            </div>
+            <span class="logo-text">FlyTech</span>
+        </div>
+
+        <div class="nav-links">
+            <a class="nav-link">About Us</a>
+            <a class="nav-link">Services</a>
+            <div class="login-badge">Log-in</div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        
+        <!-- Login Form Section -->
+        <div class="login-wrapper">
+            <div class="welcome-text">
+                <h1>Welcome back</h1>
+                <p>Log-in to view flights</p>
+            </div>
+
+            <form class="form-group" onsubmit="event.preventDefault();">
+                <div class="input-wrapper">
+                    <label>Staff ID</label>
+                    <input type="text" class="custom-input" placeholder="12345">
+                </div>
+
+                <div class="input-wrapper">
+                    <label>Password</label>
+                    <input type="password" class="custom-input" value="" placeholder="********">
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary">Log-in as Staff</button>
+                    <button class="btn btn-secondary">Continue as Passenger</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Background Image -->
+        <div class="airplane-container">
+            <img src="./airplane.png" alt="Airplane" class="airplane-img">
+        </div>
+
+    </main>
+
+</body>
+</html>
