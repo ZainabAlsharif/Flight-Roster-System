@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assigned Flights - FlyTech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./public/styles/assigned-flight-list.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo-section">
+            <div class="logo-icon">
+                <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- fix nav bar icon-->
+                    <path d="" fill="white"/>
+                </svg>
+            </div>
+            <span class="logo-text">FlyTech</span>
+        </div>
+
+        <div class="nav-links">
+            <a class="nav-link">About Us</a>
+            <a class="nav-link">Services</a>
+            <div class="btn-login">Log-in</div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        
+        <!-- Top Info Card -->
+        <div class="info-card">
+            <h1 class="page-title">Assigned Flights</h1>
+            <div class="staff-details">
+                <p>Staff ID:</p>
+                <p>Staff Name:</p>
+            </div>
+        </div>
+
+        <!-- Flights List Card -->
+        <div class="flights-card">
+            
+            <!-- Ticket 1 -->
+            <div class="ticket">
+                <div class="ticket-header">
+                    <span class="flight-number">FT101</span>
+                    <span class="status-badge">SCHEDULED</span>
+                </div>
+                
+                <div class="ticket-body">
+                    <div class="route-section">
+                        <div class="airport">
+                            <span class="code">IST</span>
+                            <span class="city">Istanbul</span>
+                        </div>
+                        
+                        <div class="flight-visual">
+                            <div class="line"></div>
+                            <svg class="plane-icon" viewBox="0 0 24 24" fill="none">
+                                <!--fix airplane icon for ticket-->
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="airplaneicon" fill="black"/>
+                            </svg>
+                        </div>
+
+                        <div class="airport">
+                            <span class="code">JFK</span>
+                            <span class="city">New York</span>
+                        </div>
+                    </div>
+
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <span class="label">Date / Time</span>
+                            <span class="value">11-01-2025 / 15:00</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Duration</span>
+                            <span class="value">150 mins</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Distance</span>
+                            <span class="value">150 KM</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Aircraft</span>
+                            <span class="value">B777</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ticket 2 -->
+            <div class="ticket">
+                <div class="ticket-header">
+                    <span class="flight-number">FT101</span>
+                    <span class="status-badge">SCHEDULED</span>
+                </div>
+                
+                <div class="ticket-body">
+                    <div class="route-section">
+                        <div class="airport">
+                            <span class="code">IST</span>
+                            <span class="city">Istanbul</span>
+                        </div>
+                        
+                        <div class="flight-visual">
+                            <div class="line"></div>
+                            <svg class="plane-icon" viewBox="0 0 24 24" fill="none">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="" fill="black"/>
+                            </svg>
+                        </div>
+
+                        <div class="airport">
+                            <span class="code">JFK</span>
+                            <span class="city">New York</span>
+                        </div>
+                    </div>
+
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <span class="label">Date / Time</span>
+                            <span class="value">11-01-2025 / 15:00</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Duration</span>
+                            <span class="value">150 mins</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Distance</span>
+                            <span class="value">150 KM</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Aircraft</span>
+                            <span class="value">B777</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>
