@@ -1,0 +1,310 @@
+:root {
+    --primary-dark: #253360;
+    --ticket-header-blue: #9eb8eb; 
+    --ticket-border: #253360;
+    --card-bg: #FEFFFF;
+    --font-main: 'Inter', sans-serif;
+    --text-label: rgba(0, 0, 0, 0.7);
+    --status-bg: #d1edd5;
+    --status-text: #48784f;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-main);
+    min-height: 100vh;
+    width: 100%;
+    background: linear-gradient(to top, 
+        #c4daf5 0%, 
+        #70b7e9 19.036%, 
+        #212f5e 100%);
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+    color: var(--primary-dark);
+}
+
+/* --- Navigation --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem var(--padding-desktop);
+    width: 100%;
+    position: relative;
+    z-index: 10; 
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo-text {
+    font-size: 1.75rem; 
+    font-weight: 500;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--text-white);
+    font-size: 1.125rem; 
+    font-weight: 400;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.nav-link:hover {
+    opacity: 0.8;
+}
+
+.login-badge {
+    background-color: var(--primary-blue);
+    padding: 0.6rem 2rem;
+    border-radius: 50px;
+    font-weight: 500;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s;
+}
+
+.login-badge:hover {
+    transform: translateY(-2px);
+}
+
+/* --- Main Layout --- */
+.main-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    gap: 2rem;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Top Info Card */
+.info-card {
+    background-color: var(--card-bg);
+    width: 100%;
+    border-radius: 25px;
+    padding: 2.5rem 3.5rem;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.page-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: black;
+}
+
+.staff-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+/* Flights List Card */
+.flights-card {
+    background-color: var(--card-bg);
+    width: 100%;
+    border-radius: 25px;
+    padding: 3rem;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    min-height: 500px; 
+}
+
+/* --- Ticket Styles --- */
+.ticket {
+    border: 2px solid var(--ticket-border);
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.ticket-header {
+    background-color: var(--ticket-header-blue);
+    padding: 1.5rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--ticket-border);
+}
+
+.flight-number {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: black;
+}
+
+.status-badge {
+    background-color: var(--status-bg);
+    color: var(--status-text);
+    padding: 0.5rem 1.2rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.ticket-body {
+    padding: 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+
+.route-section {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex: 1;
+    min-width: 250px;
+}
+
+.airport {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.airport .code {
+    font-size: 2rem;
+    font-weight: 700;
+    color: black;
+}
+
+.airport .city {
+    font-size: 0.95rem;
+    color: var(--text-label);
+    margin-top: 0.2rem;
+}
+
+.flight-visual {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: center;
+    min-width: 80px;
+}
+
+.flight-visual .line {
+    width: 100%;
+    height: 4px;
+    background-color: #dbe4f7;
+    border-radius: 2px;
+}
+
+.flight-visual .plane-icon {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    background: var(--card-bg);
+    padding: 0 4px;
+}
+
+
+.details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem 4rem;
+    flex: 2;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.detail-item .label {
+    font-size: 0.95rem;
+    color: var(--text-label);
+    font-weight: 500;
+}
+
+.detail-item .value {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: rgb(0, 0, 0);
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 1024px) {
+    .navbar {
+        padding: 1.5rem 2rem;
+    }
+    
+    .ticket-body {
+        flex-direction: column;
+        gap: 2rem;
+    }
+    
+    .route-section {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .details-grid {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 1rem;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .info-card, .flights-card {
+        padding: 1.5rem;
+    }
+
+    .details-grid {
+        grid-template-columns: 1fr; /* Stack details on mobile */
+        gap: 1.5rem;
+    }
+
+    .ticket-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .ticket-body {
+        padding: 1.5rem;
+    }
+    
+    .flight-number {
+        font-size: 1.4rem;
+    }
+}

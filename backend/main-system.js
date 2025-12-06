@@ -14,15 +14,9 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Path to frontend
-let frontendPath = path.join(__dirname, '../frontend');
-if (!fs.existsSync(frontendPath)) {
-    frontendPath = path.join(__dirname, 'frontend');
-}
-console.log('Serving frontend from:', frontendPath);
-
-// Stsqtic files
-app.use(express.static(frontendPath, { index: false, extensions: ['html'] }));
+// static files
+app.use(express.static(path.join(__dirname, '..', 'frontend')));
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'public')));
 
 // Database connection
 const dbPath = path.join(__dirname, 'database', 'roster.db');
@@ -30,35 +24,24 @@ const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
         console.error('Database connection error:', err);
     } else {
-        console.log('Connected to SQLite database at', dbPath);
+        console.log('Connected to database at', dbPath);
     }
 });
 app.locals.db = db;
 
-// Routes
-app.get('/', (req, res) => {
-    const loginFile = path.join(frontendPath, 'login.html');
-    if (fs.existsSync(loginFile)) {
-        res.sendFile(loginFile);
-    } else {
-        res.status(404).send('Error: login.html not found');
-    }
-});
-
-//passwords for staff users
-const testUsers = {
-  'pilot_abdulsallam': 'pilot1',
-  'pilot_aya': 'pilot2',
-  'pilot_karim': 'pilot3',
-  'pilot_selin': 'pilot4',
-  'attendant_hassan': 'attendant5',
-  'attendant_merve': 'attendant6',
-  'attendant_fatima': 'attendant7',
+const staffUsers = {
+    'pilot_abdulsallam': 'pilot1',
+    'pilot_aya': 'pilot2',
+    'pilot_karim': 'pilot3',
+    'pilot_selin': 'pilot4',
+    'attendant_hassan': 'attendant5',
+    'attendant_merve': 'attendant6',
+    'attendant_fatima': 'attendant7',
 };
 
 //hashing passwords
 async function generateHashes() {
-    for (const [username, password] of Object.entries(testUsers)) {
+    for (const [username, password] of Object.entries(staffUsers)) {
         const hash = await bcrypt.hash(password, saltRounds);
 
         console.log(`Username: ${username}`)
@@ -67,8 +50,18 @@ async function generateHashes() {
 }
 //generateHashes().catch(err => console.error('Error:', err));
 
-// Login Route
-app.post('/login/assigned-flight-list', async (req, res) => {
+//=============================================================================================================
+
+
+// ROUTES
+
+// show login page (GET)
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'login.html'));
+});
+
+// Handle Login (POST)
+app.post('/', async (req, res) => {
     const { staffId, password } = req.body;
 
     if (!staffId || !password) {
@@ -88,16 +81,15 @@ app.post('/login/assigned-flight-list', async (req, res) => {
         });
 
         if (!user) {
-            return res.status(401).send('Invalid Staff ID or password');
+            return res.redirect('/');
         }
 
         const match = await bcrypt.compare(password, user.Password);
 
         if (match) {
-            // 4. Fix: Redirect to clean URL (no .html)
-            res.redirect('/assigned-flight-list');
+            return res.redirect('/assigned-flight-list');
         } else {
-            res.status(401).send('Invalid Staff ID or password');
+            return res.redirect('/');
         }
 
     } catch (err) {
@@ -106,6 +98,16 @@ app.post('/login/assigned-flight-list', async (req, res) => {
     }
 });
 
+// Show assigned flight list page (GET)
+app.get('/assigned-flight-list', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'assigned-flight-list.html'));
+});
+
+// Passenger Flight Search (GET)
+app.get('/passenger-flight-search', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'passenger-flight-search.html'));
+});
+
 app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+    console.log(`http://localhost:${PORT}`);
 });

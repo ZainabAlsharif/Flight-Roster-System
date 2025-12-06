@@ -198,10 +198,10 @@ body {
 /* --- Background Airplane --- */
 .airplane-container {
     position: absolute;
-    bottom: -70vh; 
+    bottom: -65vh; 
     right: -20vw;
     width: 450vw; 
-    max-width: 1700px;
+    max-width: 1900px;
     height: auto;
     pointer-events: none; 
     z-index: -1; 
