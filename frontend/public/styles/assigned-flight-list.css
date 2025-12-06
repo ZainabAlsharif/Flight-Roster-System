@@ -1,12 +1,19 @@
 :root {
+    --primary-blue: #253360; /* Added from Login */
     --primary-dark: #253360;
+    --text-white: #ffffff;   /* Added from Login */
+    --text-label: rgba(0, 0, 0, 0.7);
+    
+    --glass-border: rgba(255, 255, 255, 0.3);
     --ticket-header-blue: #9eb8eb; 
     --ticket-border: #253360;
     --card-bg: #FEFFFF;
-    --font-main: 'Inter', sans-serif;
-    --text-label: rgba(0, 0, 0, 0.7);
     --status-bg: #d1edd5;
     --status-text: #48784f;
+    
+    --font-main: 'Inter', sans-serif;
+    --padding-desktop: 4rem;
+    --padding-mobile: 1.5rem;
 }
 
 * {
@@ -37,13 +44,14 @@ body {
     padding: 1.5rem var(--padding-desktop);
     width: 100%;
     position: relative;
-    z-index: 10; 
+    z-index: 10;
 }
 
 .logo-section {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    color: var(--text-white); 
 }
 
 .logo-text {
@@ -72,11 +80,13 @@ body {
 
 .login-badge {
     background-color: var(--primary-blue);
+    color: var(--text-white); /* Ensure text is visible */
     padding: 0.6rem 2rem;
     border-radius: 50px;
     font-weight: 500;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     transition: transform 0.2s;
+    cursor: pointer;
 }
 
 .login-badge:hover {
@@ -179,7 +189,6 @@ body {
     flex-wrap: wrap;
 }
 
-
 .route-section {
     display: flex;
     align-items: center;
@@ -231,7 +240,6 @@ body {
     padding: 0 4px;
 }
 
-
 .details-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -259,10 +267,12 @@ body {
 
 /* --- Responsive Design --- */
 @media (max-width: 1024px) {
+    /* Navbar specific */
     .navbar {
         padding: 1.5rem 2rem;
     }
     
+    /* Ticket specifics */
     .ticket-body {
         flex-direction: column;
         gap: 2rem;
@@ -279,20 +289,22 @@ body {
 }
 
 @media (max-width: 768px) {
+    /* Navbar specific */
     .navbar {
-        padding: 1rem;
+        padding: 1rem var(--padding-mobile);
     }
-
+    
     .nav-links {
-        display: none;
+        display: none; /* Hides links on mobile */
     }
 
+    /* Content specifics */
     .info-card, .flights-card {
         padding: 1.5rem;
     }
 
     .details-grid {
-        grid-template-columns: 1fr; /* Stack details on mobile */
+        grid-template-columns: 1fr; 
         gap: 1.5rem;
     }
 
