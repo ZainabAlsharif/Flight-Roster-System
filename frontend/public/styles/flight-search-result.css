@@ -1,0 +1,391 @@
+:root {
+    --primary-color: #253360;
+    --primary-dark: #253360;
+    --accent-blue: #70b7e9;
+    --bg-light: #f4f4f5;
+    --text-dark: #18181b;
+    --text-gray: #8b8b99;
+    --white: #ffffff;
+    --radius: 24px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(to top, #c4daf5 0%, #70b7e9 19%, #212f5e 100%);
+    min-height: 100vh;
+    color: var(--text-dark);
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Navigation --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 4rem;
+    width: 100%;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-container {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.airplane-icon {
+    width: 44px;
+    height: 44px;
+}
+
+.airplane-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.logo-text {
+    font-size: 1.75rem;
+    font-weight: 500;
+    color: white;
+    white-space: nowrap;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.nav-link:hover {
+    opacity: 0.8;
+}
+
+.btn-login {
+    background-color: var(--primary-dark);
+    padding: 0.75rem 2.5rem;
+    border-radius: 50px;
+    color: white;
+    font-weight: 500;
+    font-size: 1.2rem;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+}
+
+/* --- Main Content Area --- */
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.white-card {
+    background: var(--white);
+    width: 100%;
+    max-width: 1200px;
+    border-radius: 25px;
+    padding: 3rem 5rem;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-height: 600px;
+}
+
+/* --- Flight Info Section --- */
+.flight-info {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.flight-info h1 {
+    font-size: 24px;
+    color: #000;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.flight-info p {
+    font-size: 16px;
+    color: #444;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.flight-info span {
+    font-weight: 500;
+}
+
+/* --- Info Divider (Outside Ticket) --- */
+.info-divider {
+    width: 100%;
+    height: 1px;
+    background-color: #e5e5e5;
+    margin: 10px 0 30px 0;
+}
+
+/* --- Boarding Pass Container --- */
+.boarding-pass {
+    display: flex;
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08); /* Softer shadow */
+    overflow: hidden;
+    width: 100%;
+    border: 1px solid #eee; /* Slight border definition */
+}
+
+/* -- Ticket Left -- */
+.ticket-left {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+}
+
+.ticket-header {
+    background: var(--primary-color);
+    padding: 16px 30px;
+    color: var(--white);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 64px;
+}
+
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ticket-icon {
+    width: 22px;
+    height: 22px;
+}
+
+.ticket-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.ticket-brand-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    letter-spacing: 0.5px;
+}
+
+.class-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    opacity: 0.9;
+}
+
+.ticket-body {
+    padding: 30px;
+    display: flex;
+    gap: 30px;
+    position: relative;
+}
+
+/* Vertical Barcode */
+.barcode-vertical {
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.barcode-vertical img {
+    transform: rotate(-90deg);
+    width: 200px;
+    height: 50px;
+    opacity: 0.8;
+}
+
+/* Grid for Flight Details */
+.flight-details-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px 20px; /* Row gap 25px, Col gap 20px */
+    align-items: start;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+/* -- Vertical Divider between Ticket and Stub -- */
+.ticket-divider {
+    width: 0;
+    border-left: 2px dashed #d1d5db;
+    background: #fff;
+    position: relative;
+    z-index: 10;
+}
+
+/* Add little cutouts for the divider (Optional visual flair to match paper tickets) */
+.ticket-divider::before, .ticket-divider::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #fff; /* Match parent container bg */
+    border-radius: 50%;
+    left: -11px;
+}
+.ticket-divider::before { top: -10px; background: var(--primary-color); } /* Top cutout matches header color */
+.ticket-divider::after { bottom: -10px; background: var(--white); }
+
+/* -- Ticket Right (Stub) -- */
+.ticket-right {
+    flex: 1;
+    min-width: 280px;
+    background: #fcfcfc; /* Slightly off-white for visual separation */
+    display: flex;
+    flex-direction: column;
+}
+
+.stub-body {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+    justify-content: space-between;
+}
+
+.stub-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.barcode-horizontal img {
+    width: 100%;
+    height: 45px;
+    object-fit: fill;
+    opacity: 0.9;
+}
+
+/* --- Typography Classes --- */
+.label {
+    font-family: 'Roboto', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--text-gray);
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+.value-xl { 
+    font-weight: 700; 
+    font-size: 22px; 
+    font-family: 'Inter', sans-serif; 
+    color: #000;
+}
+
+.value-lg { 
+    font-weight: 700; 
+    font-size: 24px; 
+    font-family: 'Inter', sans-serif; 
+    color: #000;
+}
+
+.value-md { 
+    font-weight: 600; 
+    font-size: 18px; 
+    font-family: 'Inter', sans-serif; 
+    color: #000; 
+}
+
+/* Stub specific typography */
+.value-md-stub {
+    font-weight: 700; 
+    font-size: 16px; 
+    font-family: 'Inter', sans-serif; 
+    color: #000; 
+}
+
+.value-sm { 
+    font-weight: 700; 
+    font-size: 16px; 
+    font-family: 'Inter', sans-serif; 
+    color: #000; 
+}
+
+.value-xs {
+    font-weight: 600; 
+    font-size: 14px; 
+    font-family: 'Inter', sans-serif; 
+    color: #000; 
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .navbar {
+        padding: 1.5rem 2rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .boarding-pass {
+        flex-direction: column;
+    }
+    .ticket-left {
+        border-bottom: 2px dashed #d1d5db;
+    }
+    .ticket-divider { display: none; }
+    .ticket-right { border-left: none; min-width: auto; }
+    
+    .barcode-vertical { display: none; } /* Hide vertical barcode on mobile */
+    
+    .flight-details-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .full-width, .grid-divider {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 1rem 1.5rem;
+    }
+
+    .nav-links {
+        display: none;
+    }
+}
