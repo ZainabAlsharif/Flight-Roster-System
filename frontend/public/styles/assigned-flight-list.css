@@ -170,6 +170,7 @@ body {
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    cursor: pointer;
 }
 
 .ticket-header {
