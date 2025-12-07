@@ -121,12 +121,21 @@ app.post('/passenger-flight-search', (req, res) => {
         }
 
         if (row) {
-            //update to passenger flight info
-            return res.redirect('/');
+            return res.redirect('/flight-search-result');
         } else {
             return res.redirect('/passenger-flight-search');
         }
     });
+});
+
+// Show flight search result page (GET)
+app.get('/flight-search-result', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'flight-search-result.html'));
+});
+
+// Show tabular view page (GET)
+app.get('/tabular-view', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'tabular-view.html'));
 });
 
 app.listen(PORT, () => {
