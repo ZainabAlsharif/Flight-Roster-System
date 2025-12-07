@@ -108,6 +108,27 @@ app.get('/passenger-flight-search', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'frontend', 'passenger-flight-search.html'));
 });
 
+// Passenger Flight Search (POST)
+app.post('/passenger-flight-search', (req, res) => {
+    const { flightNumber } = req.body;
+
+    const query = 'SELECT FlightNumber FROM Flight WHERE FlightNumber = ?';
+
+    db.get(query, [flightNumber], (err, row) => {
+        if (err) {
+            console.error('Search error:', err);
+            return res.redirect('/passenger-flight-search');
+        }
+
+        if (row) {
+            //update to passenger flight info
+            return res.redirect('/');
+        } else {
+            return res.redirect('/passenger-flight-search');
+        }
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`http://localhost:${PORT}`);
 });

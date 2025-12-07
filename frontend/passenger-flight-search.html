@@ -4,15 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FlyTech - Search Flights</title>
-    <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
-    <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
-    <link href="[https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap)" rel="stylesheet">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./public/styles/passenger-flight-search.css">
 </head>
 <body>
 
-    <!-- Header / Navigation -->
     <nav class="navbar">
         <div class="logo-section">
             <div class="logo-container">
@@ -33,16 +31,14 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="main-container">
         
         <div class="search-card">
             
-            <!-- Card Header -->
             <div class="card-header">
                 <div class="title-row">
                     <div class="search-icon">
-                        <svg viewBox="0 0 41 41" fill="none" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)">
+                        <svg viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M16.2292 27.3333C13.1257 27.3333 10.4994 26.2582 8.35033 24.108C6.20125 21.9578 5.12614 19.3315 5.125 16.2292C5.12386 13.1268 6.19897 10.5006 8.35033 8.35033C10.5017 6.20011 13.128 5.125 16.2292 5.125C19.3304 5.125 21.9572 6.20011 24.1097 8.35033C26.2622 10.5006 27.3368 13.1268 27.3333 16.2292C27.3333 17.4819 27.134 18.6635 26.7354 19.774C26.3368 20.8844 25.7958 21.8667 25.1125 22.7208L34.6792 32.2875C34.9924 32.6007 35.149 32.9993 35.149 33.4833C35.149 33.9674 34.9924 34.366 34.6792 34.6792C34.366 34.9924 33.9674 35.149 33.4833 35.149C32.9993 35.149 32.6007 34.9924 32.2875 34.6792L22.7208 25.1125C21.8667 25.7958 20.8844 26.3368 19.774 26.7354C18.6635 27.134 17.4819 27.3333 16.2292 27.3333ZM16.2292 23.9167C18.3646 23.9167 20.18 23.1696 21.6753 21.6753C23.1707 20.1811 23.9178 18.3657 23.9167 16.2292C23.9155 14.0926 23.1684 12.2778 21.6753 10.7847C20.1823 9.29163 18.3669 8.54394 16.2292 8.54167C14.0915 8.53939 12.2767 9.28707 10.7847 10.7847C9.29276 12.2823 8.54508 14.0972 8.54167 16.2292C8.53825 18.3612 9.28593 20.1766 10.7847 21.6753C12.2835 23.1741 14.0983 23.9212 16.2292 23.9167Z" fill="black"/>
                         </svg>
                     </div>
@@ -51,17 +47,15 @@
                 <p class="card-subtitle">Search by flight number to view flight information</p>
             </div>
 
-            <!-- Tab / Divider -->
             <div class="tab-section">
                 <span class="tab-label">Flight Number</span>
                 <div class="divider"></div>
             </div>
 
-            <!-- Input Form -->
-            <form class="form-section" onsubmit="event.preventDefault();">
+            <form class="form-section" action="/passenger-flight-search" method="POST">
                 <div class="input-group">
                     <label class="input-label">Enter flight number</label>
-                    <input type="text" class="custom-input" placeholder="e.g. FT123">
+                    <input type="text" name="flightNumber" class="custom-input" placeholder="e.g. FT123" required>
                 </div>
 
                 <button type="submit" class="btn-search">Search</button>
