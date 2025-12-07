@@ -4,31 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flight Search Result - FlyTech</title>
+    <link rel="stylesheet" href="./public/styles/flight-search-result.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./public/styles/flight-search-result.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Material+Icons&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <nav class="navbar">
-        <div class="logo-section">
-            <div class="logo-container">
+    <div class="app-container">
+        
+        <header class="main-header">
+            <div class="logo-section">
                 <div class="airplane-icon">
-                    <svg viewBox="0 0 44 44" fill="none">
+                    <svg fill="none" viewBox="0 0 44 44">
                         <path d="M37.6933 7.16833C38.775 8.25 38.775 9.99167 37.6933 11.055L30.5617 18.1867L34.4483 35.035L31.8633 37.6383L24.75 24.0167L17.6 31.1667L18.26 35.695L16.2983 37.6383L13.0717 31.8083L7.22333 28.5633L9.16667 26.5833L13.75 27.2617L20.845 20.1667L7.22333 12.9983L9.82667 10.4133L26.675 14.3L33.8067 7.16833C34.8333 6.105 36.6667 6.105 37.6933 7.16833Z" fill="white" />
                     </svg>
                 </div>
                 <span class="logo-text">FlyTech</span>
             </div>
-        </div>
-
-        <div class="nav-links">
-            <a class="nav-link">About Us</a>
-            <a class="nav-link">Services</a>
-            <div class="btn-login" onclick="window.location.href='./login.html';">Log-in</div>
-        </div>
-    </nav>
+            
+            <nav class="nav-links">
+                <a href="#" class="nav-link">About Us</a>
+                <a href="#" class="nav-link">Services</a>
+                <a href="./login.html" class="btn-login">Log-in</a>
+            </nav>
+        </header>
 
     <main class="content-wrapper">
         <div class="white-card">
@@ -58,7 +57,7 @@
 
                     <div class="ticket-body">
                         <div class="barcode-vertical">
-                            <img src="./barcode.png" alt="Barcode">
+                            <img src="./images/barcode.png" alt="Barcode">
                         </div>
 
                         <div class="flight-details-grid">
@@ -160,13 +159,13 @@
                         </div>
                         
                         <div class="barcode-horizontal">
-                            <img src="./barcode.png" alt="Barcode">
+                            <img src="./images/barcode.png" alt="Barcode">
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            </div>
     </main>
+    </div>
 </body>
-</html>
 </html>
