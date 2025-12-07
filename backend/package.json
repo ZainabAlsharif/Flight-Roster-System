@@ -10,6 +10,7 @@
   "description": "A web-based project developed by our CMPE331 team to manage flight rosters, crew assignments, and passenger information.",
   "main": "index.js",
   "scripts": {
+    "start": "node main-system.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
