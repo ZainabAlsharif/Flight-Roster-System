@@ -12,22 +12,25 @@
 <body>
     <div class="app-container">
         
-        <header class="main-header">
-            <div class="logo-section">
+         <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo-section">
+            <div class="logo-container">
                 <div class="airplane-icon">
-                    <svg fill="none" viewBox="0 0 44 44">
+                    <svg viewBox="0 0 44 44" fill="none">
                         <path d="M37.6933 7.16833C38.775 8.25 38.775 9.99167 37.6933 11.055L30.5617 18.1867L34.4483 35.035L31.8633 37.6383L24.75 24.0167L17.6 31.1667L18.26 35.695L16.2983 37.6383L13.0717 31.8083L7.22333 28.5633L9.16667 26.5833L13.75 27.2617L20.845 20.1667L7.22333 12.9983L9.82667 10.4133L26.675 14.3L33.8067 7.16833C34.8333 6.105 36.6667 6.105 37.6933 7.16833Z" fill="white" />
                     </svg>
                 </div>
                 <span class="logo-text">FlyTech</span>
             </div>
-            
-            <nav class="nav-links">
-                <a href="#" class="nav-link">About Us</a>
-                <a href="#" class="nav-link">Services</a>
-                <a href="./login.html" class="btn-login">Log-in</a>
-            </nav>
-        </header>
+        </div>
+
+        <div class="nav-links">
+            <a class="nav-link">About Us</a>
+            <a class="nav-link">Services</a>
+            <div class="login-badge" onclick="window.location.href='./login.html';">Log-in</div>
+        </div>
+    </nav>
 
     <main class="content-wrapper">
         <div class="white-card">
