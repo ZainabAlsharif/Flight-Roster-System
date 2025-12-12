@@ -4,16 +4,23 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const path = require('path');
 const fs = require('fs');
-
+const session = require("express-session");
 const app = express();
 const saltRounds = 10;
 const PORT = 3000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true
+}));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
+app.use(session({
+  secret: "cmpe331-flytech-secret",   
+  resave: false,
+  saveUninitialized: false,
+}));
 // static files
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'public')));
@@ -27,8 +34,20 @@ const db = new sqlite3.Database(dbPath, (err) => {
         console.log('Connected to database at', dbPath);
     }
 });
+
 app.locals.db = db;
 
+function dbGet(sql, params = []) {
+  return new Promise((resolve, reject) => {
+    db.get(sql, params, (err, row) => (err ? reject(err) : resolve(row)));
+  });
+}
+
+function dbAll(sql, params = []) {
+  return new Promise((resolve, reject) => {
+    db.all(sql, params, (err, rows) => (err ? reject(err) : resolve(rows)));
+  });
+}
 const staffUsers = {
     'pilot_abdulsallam': 'pilot1',
     'pilot_aya': 'pilot2',
@@ -87,6 +106,7 @@ app.post('/', async (req, res) => {
         const match = await bcrypt.compare(password, user.Password);
 
         if (match) {
+            req.session.userId = user.UserId;
             return res.redirect('/assigned-flight-list');
         } else {
             return res.redirect('/');
@@ -136,6 +156,275 @@ app.get('/flight-search-result', (req, res) => {
 // Show tabular view page (GET)
 app.get('/tabular-view', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'frontend', 'tabular-view.html'));
+});
+
+// Return flights that have rosters assigned
+app.get("/api/assigned-flights", async (req, res) => {
+  try {
+    const rows = await dbAll(`
+      SELECT
+        f.FlightNumber,
+        f.FlightDateTime,
+        f.DurationMinutes,
+        f.DistanceKm,
+        f.SourceAirportCode,
+        sa.City AS SourceCity,
+        f.DestinationAirportCode,
+        da.City AS DestinationCity,
+        f.VehicleTypeCode
+      FROM Flight f
+      JOIN Airport sa ON sa.AirportCode = f.SourceAirportCode
+      JOIN Airport da ON da.AirportCode = f.DestinationAirportCode
+      WHERE EXISTS (
+        SELECT 1 FROM Roster r WHERE r.FlightNumber = f.FlightNumber
+      )
+      ORDER BY f.FlightDateTime
+    `);
+
+    res.json(rows);
+  } catch (err) {
+    console.error("GET /api/assigned-flights failed:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+app.get("/api/roster/:flightNumber", async (req, res) => {
+  try {
+    const flightNumber = req.params.flightNumber;
+
+    // 1) Load flight + airports + vehicle
+    const flight = await dbGet(
+      `
+      SELECT
+        f.FlightNumber,
+        f.FlightDateTime,
+        f.DurationMinutes,
+        f.DistanceKm,
+        f.SourceAirportCode,
+        sa.AirportName AS SourceAirportName,
+        sa.City AS SourceCity,
+        sa.Country AS SourceCountry,
+        f.DestinationAirportCode,
+        da.AirportName AS DestinationAirportName,
+        da.City AS DestinationCity,
+        da.Country AS DestinationCountry,
+        f.VehicleTypeCode,
+        vt.SeatCount,
+        vt.SeatingPlan,
+        vt.StandardMenu,
+        f.SharedFlightNumber,
+        f.SharedCompanyName,
+        f.ConnectingFlightNumber
+      FROM Flight f
+      JOIN Airport sa ON sa.AirportCode = f.SourceAirportCode
+      JOIN Airport da ON da.AirportCode = f.DestinationAirportCode
+      JOIN VehicleType vt ON vt.VehicleTypeCode = f.VehicleTypeCode
+      WHERE f.FlightNumber = ?
+      `,
+      [flightNumber]
+    );
+
+    if (!flight) {
+      return res.status(404).json({ error: "Flight not found" });
+    }
+
+    // 2) Load passengers for this flight (seat already stored in Passenger)
+    const passengers = await dbAll(
+      `
+      SELECT
+        PassengerId,
+        Name,
+        Age,
+        Gender,
+        Nationality,
+        SeatType,
+        SeatNumber,
+        ParentPassengerId
+      FROM Passenger
+      WHERE FlightNumber = ?
+      ORDER BY
+        CASE WHEN SeatType = 'Business' THEN 0 ELSE 1 END,
+        SeatNumber
+      `,
+      [flightNumber]
+    );
+
+    // 3) Load latest roster record (if any) and parse crew IDs
+    const rosterRow = await dbGet(
+      `
+      SELECT RosterId, FlightNumber, GeneratedAt, RosterJson
+      FROM Roster
+      WHERE FlightNumber = ?
+      ORDER BY RosterId DESC
+      LIMIT 1
+      `,
+      [flightNumber]
+    );
+
+    let roster = null;
+    let pilotIds = [];
+    let attendantIds = [];
+
+    if (rosterRow) {
+      roster = {
+        rosterId: rosterRow.RosterId,
+        generatedAt: rosterRow.GeneratedAt,
+      };
+
+      try {
+        const parsed = JSON.parse(rosterRow.RosterJson || "{}");
+        pilotIds = Array.isArray(parsed.pilots) ? parsed.pilots : [];
+        attendantIds = Array.isArray(parsed.attendants) ? parsed.attendants : [];
+      } catch (e) {
+        // bad JSON in DB: don’t crash the system
+        pilotIds = [];
+        attendantIds = [];
+      }
+    }
+
+    // 4) Expand pilots by IDs
+    let pilots = [];
+    if (pilotIds.length > 0) {
+      const placeholders = pilotIds.map(() => "?").join(",");
+      pilots = await dbAll(
+        `
+        SELECT
+          p.PilotId,
+          p.Name,
+          p.Age,
+          p.Gender,
+          p.Nationality,
+          p.VehicleTypeCode,
+          p.AllowedRangeKm,
+          p.SeniorityLevel
+        FROM Pilot p
+        WHERE p.PilotId IN (${placeholders})
+        ORDER BY p.PilotId
+        `,
+        pilotIds
+      );
+
+      // optional: add pilot languages
+      const pilotLang = await dbAll(
+        `
+        SELECT pl.PilotId, l.LanguageCode, l.LanguageName
+        FROM PilotLanguage pl
+        JOIN Language l ON l.LanguageCode = pl.LanguageCode
+        WHERE pl.PilotId IN (${placeholders})
+        ORDER BY pl.PilotId
+        `,
+        pilotIds
+      );
+
+      const langMap = new Map();
+      for (const row of pilotLang) {
+        if (!langMap.has(row.PilotId)) langMap.set(row.PilotId, []);
+        langMap.get(row.PilotId).push({ code: row.LanguageCode, name: row.LanguageName });
+      }
+      pilots = pilots.map(p => ({ ...p, languages: langMap.get(p.PilotId) || [] }));
+    }
+
+    // 5) Expand attendants by IDs
+    let attendants = [];
+    if (attendantIds.length > 0) {
+      const placeholders = attendantIds.map(() => "?").join(",");
+      attendants = await dbAll(
+        `
+        SELECT
+          a.AttendantId,
+          a.Name,
+          a.Age,
+          a.Gender,
+          a.Nationality,
+          a.AttendantType
+        FROM Attendant a
+        WHERE a.AttendantId IN (${placeholders})
+        ORDER BY a.AttendantId
+        `,
+        attendantIds
+      );
+
+      // optional: languages
+      const attLang = await dbAll(
+        `
+        SELECT al.AttendantId, l.LanguageCode, l.LanguageName
+        FROM AttendantLanguage al
+        JOIN Language l ON l.LanguageCode = al.LanguageCode
+        WHERE al.AttendantId IN (${placeholders})
+        ORDER BY al.AttendantId
+        `,
+        attendantIds
+      );
+
+      const langMap = new Map();
+      for (const row of attLang) {
+        if (!langMap.has(row.AttendantId)) langMap.set(row.AttendantId, []);
+        langMap.get(row.AttendantId).push({ code: row.LanguageCode, name: row.LanguageName });
+      }
+
+      // optional: chef dishes (only for chefs)
+      const chefDishes = await dbAll(
+        `
+        SELECT cd.AttendantId, d.DishId, d.DishName
+        FROM ChefDish cd
+        JOIN Dish d ON d.DishId = cd.DishId
+        WHERE cd.AttendantId IN (${placeholders})
+        ORDER BY cd.AttendantId, d.DishId
+        `,
+        attendantIds
+      );
+
+      const dishMap = new Map();
+      for (const row of chefDishes) {
+        if (!dishMap.has(row.AttendantId)) dishMap.set(row.AttendantId, []);
+        dishMap.get(row.AttendantId).push({ id: row.DishId, name: row.DishName });
+      }
+
+      attendants = attendants.map(a => ({
+        ...a,
+        languages: langMap.get(a.AttendantId) || [],
+        dishes: dishMap.get(a.AttendantId) || []
+      }));
+    }
+
+    // 6) Final integrated response
+    return res.json({
+      flight,
+      roster,        // may be null if no roster row exists
+      pilots,
+      attendants,
+      passengers,
+    });
+  } catch (err) {
+    console.error("GET /api/roster/:flightNumber failed:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Return currently logged-in user info
+app.get("/api/me", async (req, res) => {
+  try {
+    if (!req.session.userId) {
+      return res.status(401).json({ error: "Not logged in" });
+    }
+
+    const row = await dbGet(
+      `SELECT UserId, Username, Role FROM SystemUser WHERE UserId = ?`,
+      [req.session.userId]
+    );
+
+    if (!row) return res.status(404).json({ error: "User not found" });
+
+    // For "Staff Name", your DB currently has Username only.
+    // We'll display Username as staff name.
+    res.json({
+      userId: row.UserId,
+      name: row.Username,
+      role: row.Role
+    });
+  } catch (err) {
+    console.error("GET /api/me failed:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 app.listen(PORT, () => {

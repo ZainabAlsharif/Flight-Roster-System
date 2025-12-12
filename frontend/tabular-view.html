@@ -75,31 +75,7 @@
                             <div class="table-cell cell-flexible"><p>Name</p></div>
                             <div class="table-cell cell-flexible"><p>Seat</p></div>
                         </div>
-
-                        <div class="table-row table-data-row">
-                            <div class="table-cell cell-id"><p>001</p></div>
-                            <div class="table-cell cell-flexible"><p>Pilot</p></div>
-                            <div class="table-cell cell-flexible"><p>John Doe</p></div>
-                            <div class="table-cell cell-flexible"><p>A1</p></div>
-                        </div>
-                        <div class="table-row table-data-row">
-                            <div class="table-cell cell-id"><p>002</p></div>
-                            <div class="table-cell cell-flexible"><p>Passenger</p></div>
-                            <div class="table-cell cell-flexible"><p>Jane Smith</p></div>
-                            <div class="table-cell cell-flexible"><p>14C</p></div>
-                        </div>
-                        <div class="table-row table-data-row">
-                            <div class="table-cell cell-id"><p>&nbsp;</p></div>
-                            <div class="table-cell cell-flexible"><p>&nbsp;</p></div>
-                            <div class="table-cell cell-flexible"><p>&nbsp;</p></div>
-                            <div class="table-cell cell-flexible"><p>&nbsp;</p></div>
-                        </div>
-                        <div class="table-row table-data-row">
-                            <div class="table-cell cell-id"><p>&nbsp;</p></div>
-                            <div class="table-cell cell-flexible"><p>&nbsp;</p></div>
-                            <div class="table-cell cell-flexible"><p>&nbsp;</p></div>
-                            <div class="table-cell cell-flexible"><p>&nbsp;</p></div>
-                        </div>
+                        <div id="tableBody"></div>
                     </div>
                 </div>
 
@@ -116,6 +92,64 @@
             </div>
         </main>
     </div>
+    <script>
+  function getFlightNumber() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("flightNumber") || "FT201";
+  }
+
+  async function loadRoster() {
+    const flightNumber = getFlightNumber();
+
+    const response = await fetch(`/api/roster/${flightNumber}`);
+    const data = await response.json();
+
+    // Update flight header
+    document.querySelector(".flight-title").textContent =
+      `Flight: ${data.flight.FlightNumber}`;
+
+    document.querySelector(".flight-details").textContent =
+      `${data.flight.SourceAirportCode} → ${data.flight.DestinationAirportCode}
+       | ${data.flight.FlightDateTime}`;
+
+    const container = document.getElementById("tableBody");
+    container.innerHTML = "";
+
+    function addRow(id, role, name, seat) {
+      const row = document.createElement("div");
+      row.className = "table-row table-data-row";
+      row.innerHTML = `
+        <div class="table-cell cell-id"><p>${id}</p></div>
+        <div class="table-cell cell-flexible"><p>${role}</p></div>
+        <div class="table-cell cell-flexible"><p>${name}</p></div>
+        <div class="table-cell cell-flexible"><p>${seat ?? "-"}</p></div>
+      `;
+      container.appendChild(row);
+    }
+
+    // Pilots
+    data.pilots.forEach(p =>
+      addRow(p.PilotId, "Pilot", p.Name, "-")
+    );
+
+    // Cabin crew
+    data.attendants.forEach(a =>
+      addRow(a.AttendantId, a.AttendantType, a.Name, "-")
+    );
+
+    // Passengers
+    data.passengers.forEach(p =>
+      addRow(
+        p.PassengerId,
+        `Passenger (${p.SeatType})`,
+        p.Name,
+        p.SeatNumber
+      )
+    );
+  }
+
+  window.addEventListener("DOMContentLoaded", loadRoster);
+</script>
 
 </body>
 </html>

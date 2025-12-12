@@ -40,108 +40,124 @@
         <div class="info-card">
             <h1 class="page-title">Assigned Flights</h1>
             <div class="staff-details">
-                <p>Staff ID:</p>
-                <p>Staff Name:</p>
+                <p>Staff ID: <span id="staffId">—</span></p>
+                <p>Staff Name: <span id="staffName">—</span></p>
             </div>
         </div>
 
         <!-- Flights List Card -->
-        <div class="flights-card">
-            
-            <!-- Ticket 1 -->
-            <div class="ticket" onclick="window.location.href='./tabular-view.html';">
-                <div class="ticket-header">
-                    <span class="flight-number">FT101</span>
-                    <span class="status-badge">SCHEDULED</span>
-                </div>
-                
-                <div class="ticket-body">
-                    <div class="route-section">
-                        <div class="airport">
-                            <span class="code">IST</span>
-                            <span class="city">Istanbul</span>
-                        </div>
-                        
-                        <div class="flight-visual">
-                            <div class="line"></div>
-                            <i class="fas fa-plane plane-icon" aria-hidden="true"></i>
-                        </div>
-
-                        <div class="airport">
-                            <span class="code">JFK</span>
-                            <span class="city">New York</span>
-                        </div>
-                    </div>
-
-                    <div class="details-grid">
-                        <div class="detail-item">
-                            <span class="label">Date / Time</span>
-                            <span class="value">11-01-2025 / 15:00</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="label">Duration</span>
-                            <span class="value">150 mins</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="label">Distance</span>
-                            <span class="value">150 KM</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="label">Aircraft</span>
-                            <span class="value">B777</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Ticket 2 -->
-            <div class="ticket" onclick="window.location.href='./tabular-view.html';">
-                <div class="ticket-header">
-                    <span class="flight-number">FT101</span>
-                    <span class="status-badge">SCHEDULED</span>
-                </div>
-                
-                <div class="ticket-body">
-                    <div class="route-section">
-                        <div class="airport">
-                            <span class="code">IST</span>
-                            <span class="city">Istanbul</span>
-                        </div>
-                        
-                        <div class="flight-visual">
-                            <div class="line"></div>
-                            <i class="fas fa-plane plane-icon" aria-hidden="true"></i>
-                        </div>
-
-                        <div class="airport">
-                            <span class="code">JFK</span>
-                            <span class="city">New York</span>
-                        </div>
-                    </div>
-
-                    <div class="details-grid">
-                        <div class="detail-item">
-                            <span class="label">Date / Time</span>
-                            <span class="value">11-01-2025 / 15:00</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="label">Duration</span>
-                            <span class="value">150 mins</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="label">Distance</span>
-                            <span class="value">150 KM</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="label">Aircraft</span>
-                            <span class="value">B777</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+        <div class="flights-card" id="flightsList">
+        <!-- tickets inserted here -->
         </div>
+        
     </main>
+<script>
+  // Fetch and display flights that have rosters assigned
+  async function loadAssignedFlights() {
+    const list = document.getElementById("flightsList");
+
+    // Temporary loading message
+    list.innerHTML = "<p style='color:white; opacity:0.8;'>Loading flights...</p>";
+
+    // Call backend API to get assigned flights
+    const res = await fetch("/api/assigned-flights");
+
+    // If backend fails, show error
+    if (!res.ok) {
+      list.innerHTML = "<p style='color:white;'>Failed to load flights.</p>";
+      return;
+    }
+
+    // Parse JSON response
+    const flights = await res.json();
+    list.innerHTML = "";
+
+    // If no flights exist
+    if (!flights.length) {
+      list.innerHTML = "<p style='color:white;'>No flights found.</p>";
+      return;
+    }
+
+    // Create one ticket per flight
+    flights.forEach(f => {
+      const ticket = document.createElement("div");
+      ticket.className = "ticket";
+
+      // When user clicks ticket → go to tabular view with flight number
+      ticket.onclick = () => {
+        window.location.href =
+          `./tabular-view.html?flightNumber=${f.FlightNumber}`;
+      };
+
+      // Format date/time for display
+      const dateTime = (f.FlightDateTime || "").replace("T", " ");
+
+      // Fill ticket HTML using flight data
+      ticket.innerHTML = `
+        <div class="ticket-header">
+          <span class="flight-number">${f.FlightNumber}</span>
+          <span class="status-badge">SCHEDULED</span>
+        </div>
+
+        <div class="ticket-body">
+          <div class="route-section">
+            <div class="airport">
+              <span class="code">${f.SourceAirportCode}</span>
+              <span class="city">${f.SourceCity}</span>
+            </div>
+
+            <div class="flight-visual">
+              <div class="line"></div>
+              <i class="fas fa-plane plane-icon"></i>
+            </div>
+
+            <div class="airport">
+              <span class="code">${f.DestinationAirportCode}</span>
+              <span class="city">${f.DestinationCity}</span>
+            </div>
+          </div>
+
+          <div class="details-grid">
+            <div class="detail-item">
+              <span class="label">Date / Time</span>
+              <span class="value">${dateTime}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Duration</span>
+              <span class="value">${f.DurationMinutes} mins</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Distance</span>
+              <span class="value">${f.DistanceKm} KM</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Aircraft</span>
+              <span class="value">${f.VehicleTypeCode}</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Add ticket to the page
+      list.appendChild(ticket);
+    });
+  }
+  // Fetches the currently logged-in staff member
+  async function loadStaffInfo() {
+  const res = await fetch("/api/me", { credentials: "include" })
+  if (!res.ok) return; // not logged in, leave placeholders
+
+  const me = await res.json();
+  document.getElementById("staffId").textContent = me.userId;
+  document.getElementById("staffName").textContent = me.name;
+    }
+
+  // Load flights when page is ready
+  window.addEventListener("DOMContentLoaded", () => {
+    loadStaffInfo();
+    loadAssignedFlights();
+  });
+</script>
 
 </body>
 </html>
