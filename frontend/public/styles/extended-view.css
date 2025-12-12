@@ -1,0 +1,401 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* =========================================
+   PART 1: SHARED STYLES (matches Tabular View)
+   ========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(to top, #c4daf5 0%, #70b7e9 19.036%, #212f5e 100%);
+    color: #333;
+}
+
+a { text-decoration: none; }
+
+.app-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+main.container {
+    max-width: 1200px;
+    padding: 2rem 20px 2rem 20px;
+}
+
+.main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 30px;
+    padding-bottom: 20px;
+}
+
+.logo-container {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.airplane-icon {
+    width: 44px;
+    height: 44px;
+}
+
+.brand-name {
+    font-size: 32px;
+    font-weight: 400;
+    color: white;
+}
+
+.nav-container {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+}
+
+.nav-link {
+    font-size: 20px;
+    color: white;
+    font-weight: 400;
+    transition: opacity 0.2s;
+}
+
+.nav-link:hover {
+    opacity: 0.8;
+}
+
+.login-button {
+    background-color: #253360;
+    color: white;
+    font-size: 20px;
+    font-weight: 500;
+    padding: 10px 40px;
+    border-radius: 50px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    transition: transform 0.1s;
+    cursor: pointer;
+}
+
+.login-button:active {
+    transform: scale(0.98);
+}
+
+.main-card {
+    background-color: #feffff;
+    border-radius: 25px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 40px;
+    padding: 56px 40px 40px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    min-height: 600px;
+    position: relative;
+}
+
+.back-row {
+    display: flex;
+    justify-content: flex-start;
+    margin: 0;
+    position: absolute;
+    top: 14px;
+    left: 14px;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background-color: transparent;
+    border: 1.5px solid #9aa3b5;
+    border-radius: 50%;
+    color: #9aa3b5;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, transform 0.1s, border-color 0.2s;
+}
+
+.back-button:hover {
+    color: #212f5e;
+    border-color: #212f5e;
+    background-color: transparent;
+    transform: translateX(-2px);
+}
+
+.back-button i {
+    font-size: 18px;
+}
+
+.flight-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.flight-title {
+    font-size: 35px;
+    font-weight: 700;
+    color: black;
+}
+
+.flight-details {
+    font-size: 20px;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.divider-line {
+    border: none;
+    height: 2px;
+    background-color: #cacaca;
+    width: 100%;
+}
+
+.view-tabs {
+    display: flex;
+    gap: 10px;
+    border-bottom: 1px solid #ddd;
+    overflow-x: auto;
+}
+
+.tab-item {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.tab-item:hover {
+    background-color: #f5f5f5;
+    border-radius: 8px 8px 0 0;
+}
+
+.tab-active {
+    border-bottom-color: #212f5e;
+}
+
+.tab-icon {
+    width: 24px;
+    height: 24px;
+    color: #5b5b5b;
+}
+
+.tab-item span {
+    font-size: 20px;
+    font-weight: 600;
+    color: #5b5b5b;
+}
+
+.tab-active .tab-icon {
+    color: #212f5e;
+}
+
+.tab-active span {
+    color: #212f5e;
+}
+
+.export-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: auto;
+    padding-top: 20px;
+}
+
+.export-button {
+    background-color: #212f5e;
+    border: none;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 12px 30px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.export-button:hover {
+    background-color: #324685;
+}
+
+.download-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.export-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: #feffff;
+    font-family: 'Inter', sans-serif;
+}
+
+
+/* =========================================
+   PART 2: EXTENDED-SPECIFIC STYLES
+   ========================================= */
+
+:root {
+    --color-yellow: #ddaa13;
+    --color-blue: #4e85df;
+    --color-purple: #9357dd;
+    --bg-yellow: #ffe28d;
+    --bg-blue: #aacbff;
+    --bg-purple: #daaaff;
+}
+
+.extended-content-wrapper {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.tables-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.extended-box {
+    border: 2px solid;
+    border-radius: 20px;
+    padding: 20px;
+    background-color: #feffff;
+}
+
+.border-yellow { border-color: var(--color-yellow); }
+.border-blue { border-color: var(--color-blue); }
+.border-purple { border-color: var(--color-purple); }
+
+.extended-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.text-yellow { color: var(--color-yellow); }
+.text-blue { color: var(--color-blue); }
+.text-purple { color: var(--color-purple); }
+
+.icon-circle svg {
+    display: block;
+}
+
+.extended-scroll {
+    overflow-x: auto;
+}
+
+.extended-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: auto;
+}
+
+.extended-table th,
+.extended-table td {
+    padding: 8px 6px;
+    text-align: center;
+    border: 1px solid rgba(91,91,91,0.65);
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.extended-table th {
+    font-weight: 600;
+    font-size: 13px;
+    color: black;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.extended-table td {
+    background-color: #feffff;
+    font-size: 12px;
+    height: 38px;
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bg-yellow { background-color: var(--bg-yellow); }
+.bg-blue { background-color: var(--bg-blue); }
+.bg-purple { background-color: var(--bg-purple); }
+
+
+/* =========================================
+   PART 3: RESPONSIVE BREAKPOINTS
+   ========================================= */
+
+@media (max-width: 768px) {
+    .main-header {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .nav-container {
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .main-card {
+        padding: 60px 20px 20px 20px;
+    }
+    
+    .back-row {
+        top: 12px;
+        left: 12px;
+    }
+    
+    .back-button {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+    }
+    
+    .back-button i {
+        font-size: 14px;
+    }
+    
+    .flight-title {
+        font-size: 28px;
+    }
+    
+    .view-tabs {
+        justify-content: flex-start;
+    }
+    
+    .tab-item span {
+        font-size: 16px;
+    }
+    
+    .export-container {
+        justify-content: center;
+    }
+}

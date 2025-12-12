@@ -158,6 +158,12 @@ app.get('/tabular-view', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'frontend', 'tabular-view.html'));
 });
 
+// Show extended view page (GET)
+app.get('/extended-view', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'extended-view.html'));
+});
+
+
 // Return flights that have rosters assigned
 app.get("/api/assigned-flights", async (req, res) => {
   try {
@@ -231,24 +237,39 @@ app.get("/api/roster/:flightNumber", async (req, res) => {
     const passengers = await dbAll(
       `
       SELECT
-        PassengerId,
-        Name,
-        Age,
-        Gender,
-        Nationality,
-        SeatType,
-        SeatNumber,
-        ParentPassengerId
-      FROM Passenger
-      WHERE FlightNumber = ?
+        p.PassengerId,
+        p.Name,
+        p.Age,
+        p.Gender,
+        p.Nationality,
+        p.SeatType,
+        p.SeatNumber,
+        p.ParentPassengerId,
+        parent.Name as ParentName
+      FROM Passenger p
+      LEFT JOIN Passenger parent ON parent.PassengerId = p.ParentPassengerId
+      WHERE p.FlightNumber = ?
       ORDER BY
-        CASE WHEN SeatType = 'Business' THEN 0 ELSE 1 END,
-        SeatNumber
+        CASE WHEN p.SeatType = 'Business' THEN 0 ELSE 1 END,
+        p.SeatNumber
       `,
       [flightNumber]
     );
 
-    // 3) Load latest roster record (if any) and parse crew IDs
+    // 3a) Enrich passengers with children info
+    for (let passenger of passengers) {
+      const children = await dbAll(
+        `
+        SELECT PassengerId, Name
+        FROM Passenger
+        WHERE ParentPassengerId = ? AND FlightNumber = ?
+        `,
+        [passenger.PassengerId, flightNumber]
+      );
+      passenger.children = children || [];
+    }
+
+    // 3b) Load latest roster record (if any) and parse crew IDs
     const rosterRow = await dbGet(
       `
       SELECT RosterId, FlightNumber, GeneratedAt, RosterJson

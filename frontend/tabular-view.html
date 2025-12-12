@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tabular View</title>
-    <link rel="stylesheet" href="./public/styles/tabular-view.css">
+    <link rel="stylesheet" href="/public/styles/tabular-view.css">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -59,7 +59,7 @@
                         <span>Tabular View</span>
                     </div>
 
-                    <div class="tab-item">
+                    <div class="tab-item" onclick="navigateToExtendedView()">
                         <div class="tab-icon">
                             <i class="fas fa-list"></i>
                         </div>
@@ -98,8 +98,20 @@
     return params.get("flightNumber") || "FT201";
   }
 
+  function navigateToExtendedView() {
+    const flightNumber = getFlightNumber();
+        // Use the Express route so the server can serve the page with the query intact
+        window.location.href = `/extended-view?flightNumber=${flightNumber}`;
+  }
+
   async function loadRoster() {
     const flightNumber = getFlightNumber();
+
+        // Ensure other view tabs carries the flight number when navigating
+        const hiddenFlightInput = document.getElementById("formFlightNum");
+        if (hiddenFlightInput) {
+            hiddenFlightInput.value = flightNumber;
+        }
 
     const response = await fetch(`/api/roster/${flightNumber}`);
     const data = await response.json();

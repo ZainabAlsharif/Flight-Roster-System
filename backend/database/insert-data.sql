@@ -31,10 +31,10 @@ INSERT OR REPLACE INTO Language (LanguageCode, LanguageName) VALUES
 
 --pilots
 INSERT OR REPLACE INTO Pilot (PilotId, Name, Age, Gender, Nationality, VehicleTypeCode, AllowedRangeKm, SeniorityLevel) VALUES
-(1, 'Abdulsallam Alaradi', 45, 'Male', 'Libya', 'A320', 6000, 'senior'),
-(2, 'Aya Sabah', 42, 'Female', 'Iraq', 'A320', 6000, 'senior'),
-(3, 'Karim Benali', 28, 'Male', 'Algeria', 'A320', 6000, 'junior'),
-(4, 'Selin Arslan', 27, 'Female', 'Turkey', 'A320', 6000, 'junior');
+(1, 'Abdulsallam Alaradi', 45, 'Male', 'Libya', 'A320', 6000, 'Senior'),
+(2, 'Aya Sabah', 42, 'Female', 'Iraq', 'A320', 6000, 'Senior'),
+(3, 'Karim Benali', 28, 'Male', 'Algeria', 'A320', 6000, 'Junior'),
+(4, 'Selin Arslan', 27, 'Female', 'Turkey', 'A320', 6000, 'Junior');
 
 --pilot languages
 INSERT OR REPLACE INTO PilotLanguage (PilotId, LanguageCode) VALUES
@@ -45,18 +45,18 @@ INSERT OR REPLACE INTO PilotLanguage (PilotId, LanguageCode) VALUES
 
 --cabin crew (atttendants)
 INSERT OR REPLACE INTO Attendant (AttendantId, Name, Age, Gender, Nationality, AttendantType) VALUES
-(1, 'Hassan Alawi', 32, 'Male', 'Egypt', 'flight attendant'),
-(2, 'Merve Yildiz', 29, 'Female', 'Turkey', 'flight attendant'),
-(3, 'Fatima Almansouri', 30, 'Female', 'Libya', 'chef'),
-(4, 'Omar Nasser', 31, 'Male', 'Iraq', 'chef'),
-(5, 'Lina Saeed', 28, 'Female', 'Algeria', 'flight attendant'),
-(6, 'Yusuf Karim', 33, 'Male', 'Egypt', 'flight attendant'),
-(7, 'Ayla Demir', 27, 'Female', 'Turkey', 'chef'),
-(8, 'Sami Haddad', 34, 'Male', 'Iraq', 'chef'),
-(9, 'Nadia Bensalem', 30, 'Female', 'Algeria', 'flight attendant'),
-(10, 'Salma Farouk', 29, 'Female', 'Libya', 'flight attendant'),
-(11, 'Omar Zaki', 35, 'Male', 'Egypt', 'chef'),
-(12, 'Dina Youssef', 28, 'Female', 'Turkey', 'chef');
+(1, 'Hassan Alawi', 32, 'Male', 'Egypt', 'Flight attendant'),
+(2, 'Merve Yildiz', 29, 'Female', 'Turkey', 'Flight attendant'),
+(3, 'Fatima Almansouri', 30, 'Female', 'Libya', 'Chef'),
+(4, 'Omar Nasser', 31, 'Male', 'Iraq', 'Chef'),
+(5, 'Lina Saeed', 28, 'Female', 'Algeria', 'Flight attendant'),
+(6, 'Yusuf Karim', 33, 'Male', 'Egypt', 'Flight attendant'),
+(7, 'Ayla Demir', 27, 'Female', 'Turkey', 'Chef'),
+(8, 'Sami Haddad', 34, 'Male', 'Iraq', 'Chef'),
+(9, 'Nadia Bensalem', 30, 'Female', 'Algeria', 'Flight attendant'),
+(10, 'Salma Farouk', 29, 'Female', 'Libya', 'Flight attendant'),
+(11, 'Omar Zaki', 35, 'Male', 'Egypt', 'Chef'),
+(12, 'Dina Youssef', 28, 'Female', 'Turkey', 'Chef');
 
 --attendant languages
 INSERT OR REPLACE INTO AttendantLanguage (AttendantId, LanguageCode) VALUES
@@ -98,26 +98,36 @@ INSERT OR REPLACE INTO Dish (DishId, DishName) VALUES
 
 --chef dishes
 INSERT OR REPLACE INTO ChefDish (AttendantId, DishId) VALUES
-(1, 1), (1, 2),
 (4, 1), (4, 3),
 (3, 4), (3, 5),
+(7, 2), (7, 5),
 (8, 2), (8, 5),
 (11, 1), (11, 4),
 (12, 3), (12, 5);
 
 --passengers
 INSERT OR REPLACE INTO Passenger (PassengerId, FlightNumber, Name, Age, Gender, Nationality, SeatType, SeatNumber, ParentPassengerId) VALUES
-(1, 'FT101', 'Omar Ali', 30, 'Male', 'Turkey', 'Economy', '12A', NULL),
+-- FT101 passengers
+(1, 'FT101', 'Omar Ali', 35, 'Male', 'Turkey', 'Business', '1A', NULL),
+(2, 'FT101', 'Zeynep Ali', 32, 'Female', 'Turkey', 'Business', '1B', NULL),
+(7, 'FT101', 'Elif Ali', 8, 'Female', 'Turkey', 'Business', '1C', 1),
+(8, 'FT101', 'Can Ali', 5, 'Male', 'Turkey', 'Business', '2A', 1),
+(9, 'FT101', 'Ahmet Yilmaz', 45, 'Male', 'Turkey', 'Economy', '10A', NULL),
+-- FT201 passengers
 (3, 'FT201', 'Youssef Hassan', 40, 'Male', 'Egypt', 'Business', '2A', NULL),
 (4, 'FT201', 'Amina Youssef', 2, 'Female', 'Egypt', 'Economy', '15C', 3),
+-- FT303 passengers
 (5, 'FT303', 'Sara Ahmed', 25, 'Female', 'Iraq', 'Economy', '14D', NULL),
+-- FT405 passengers
 (6, 'FT405', 'Lina Mustafa', 35, 'Female', 'Libya', 'Business', '3B', NULL);
 
 --passenger affiliations
 INSERT OR REPLACE INTO PassengerAffiliation (PassengerId, AffiliateId) VALUES
 (1, 2),
+(2, 1),
+(7, 8),
+(8, 7),
 (3, 4),
-(3, 5),
 (6, 1);
 
 ---system users
@@ -133,7 +143,7 @@ INSERT OR REPLACE INTO SystemUser (UserId, Username, Password, Role) VALUES
 
 --rosters
 INSERT OR REPLACE INTO Roster (RosterId, FlightNumber, GeneratedAt, RosterJson) VALUES
-(1, 'FT101', '11-01-2025 / 10:00:00', '{"pilots":[1],"attendants":[1,2,3,4]}'),
+(1, 'FT101', '11-01-2025 / 10:00:00', '{"pilots":[1,3],"attendants":[1,2,3,4]}'),
 (2, 'FT201', '05-11-2025 / 11:00:00', '{"pilots":[2],"attendants":[5,6,7,8]}'),
 (3, 'FT303', '10-11-2025 / 09:30:00', '{"pilots":[3],"attendants":[1,6,9,10]}'),
 (4, 'FT405', '15-11-2025 / 14:00:00', '{"pilots":[4],"attendants":[2,5,11,12]}');
