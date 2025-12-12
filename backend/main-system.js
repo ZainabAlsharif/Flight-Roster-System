@@ -130,17 +130,22 @@ app.get('/passenger-flight-search', (req, res) => {
 
 // Passenger Flight Search (POST)
 app.post('/passenger-flight-search', (req, res) => {
-    const { flightNumber } = req.body;
+    const { ticketId } = req.body;
 
-    const query = 'SELECT FlightNumber FROM Flight WHERE FlightNumber = ?';
+    const query = 'SELECT TicketID, FlightNumber FROM Passenger WHERE TicketID = ?';
 
-    db.get(query, [flightNumber], (err, row) => {
+    db.get(query, [ticketId], (err, row) => {
         if (err) {
             console.error('Search error:', err);
             return res.redirect('/passenger-flight-search');
         }
 
         if (row) {
+            // Store ticket info in session for use on search result page
+            req.session.ticketInfo = {
+                ticketID: row.TicketID,
+                flightNumber: row.FlightNumber
+            };
             return res.redirect('/flight-search-result');
         } else {
             return res.redirect('/passenger-flight-search');
@@ -157,12 +162,6 @@ app.get('/flight-search-result', (req, res) => {
 app.get('/tabular-view', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'frontend', 'tabular-view.html'));
 });
-
-// Show extended view page (GET)
-app.get('/extended-view', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'frontend', 'extended-view.html'));
-});
-
 
 // Return flights that have rosters assigned
 app.get("/api/assigned-flights", async (req, res) => {

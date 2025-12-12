@@ -44,18 +44,18 @@
                     </div>
                     <h1 class="card-title">Search Flights</h1>
                 </div>
-                <p class="card-subtitle">Search by flight number to view flight information</p>
+                <p class="card-subtitle">Search by ticket ID to view your flight information</p>
             </div>
 
             <div class="tab-section">
-                <span class="tab-label">Flight Number</span>
+                <span class="tab-label">Ticket ID</span>
                 <div class="divider"></div>
             </div>
 
             <form class="form-section" action="/passenger-flight-search" method="POST">
                 <div class="input-group">
-                    <label class="input-label">Enter flight number</label>
-                    <input type="text" name="flightNumber" class="custom-input" placeholder="e.g. FT123" required>
+                    <label class="input-label">Enter ticket ID</label>
+                    <input type="text" name="ticketId" class="custom-input" placeholder="e.g. 12345" required>
                 </div>
 
                 <button type="submit" class="btn-search">Search</button>
