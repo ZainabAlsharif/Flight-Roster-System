@@ -131,6 +131,7 @@ CREATE TABLE ChefDish (
 -- PASSENGER
 CREATE TABLE Passenger (
     PassengerId INTEGER PRIMARY KEY,
+    TicketID TEXT NOT NULL UNIQUE,
     FlightNumber TEXT NOT NULL,
     Name TEXT NOT NULL,
     Age INTEGER NOT NULL,

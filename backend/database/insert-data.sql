@@ -106,20 +106,16 @@ INSERT OR REPLACE INTO ChefDish (AttendantId, DishId) VALUES
 (12, 3), (12, 5);
 
 --passengers
-INSERT OR REPLACE INTO Passenger (PassengerId, FlightNumber, Name, Age, Gender, Nationality, SeatType, SeatNumber, ParentPassengerId) VALUES
--- FT101 passengers
-(1, 'FT101', 'Omar Ali', 35, 'Male', 'Turkey', 'Business', '1A', NULL),
-(2, 'FT101', 'Zeynep Ali', 32, 'Female', 'Turkey', 'Business', '1B', NULL),
-(7, 'FT101', 'Elif Ali', 8, 'Female', 'Turkey', 'Business', '1C', 1),
-(8, 'FT101', 'Can Ali', 5, 'Male', 'Turkey', 'Business', '2A', 1),
-(9, 'FT101', 'Ahmet Yilmaz', 45, 'Male', 'Turkey', 'Economy', '10A', NULL),
--- FT201 passengers
-(3, 'FT201', 'Youssef Hassan', 40, 'Male', 'Egypt', 'Business', '2A', NULL),
-(4, 'FT201', 'Amina Youssef', 2, 'Female', 'Egypt', 'Economy', '15C', 3),
--- FT303 passengers
-(5, 'FT303', 'Sara Ahmed', 25, 'Female', 'Iraq', 'Economy', '14D', NULL),
--- FT405 passengers
-(6, 'FT405', 'Lina Mustafa', 35, 'Female', 'Libya', 'Business', '3B', NULL);
+INSERT OR REPLACE INTO Passenger (PassengerId, FlightNumber, TicketID, Name, Age, Gender, Nationality, SeatType, SeatNumber, ParentPassengerId) VALUES
+(1, 'FT101', '00001', 'Omar Ali', 35, 'Male', 'Turkey', 'Business', '1A', NULL),
+(2, 'FT101', '00002', 'Zeynep Ali', 32, 'Female', 'Turkey', 'Business', '1B', NULL),
+(7, 'FT101', '00007', 'Elif Ali', 8, 'Female', 'Turkey', 'Business', '1C', 1),
+(8, 'FT101', '00008', 'Can Ali', 5, 'Male', 'Turkey', 'Business', '2A', 1),
+(9, 'FT101', '00009', 'Ahmet Yilmaz', 45, 'Male', 'Turkey', 'Economy', '10A', NULL),
+(3, 'FT201', '00003', 'Youssef Hassan', 40, 'Male', 'Egypt', 'Business', '2A', NULL),
+(4, 'FT201', '00004', 'Amina Youssef', 2, 'Female', 'Egypt', 'Economy', '15C', 3),
+(5, 'FT303', '00005', 'Sara Ahmed', 25, 'Female', 'Iraq', 'Economy', '14D', NULL),
+(6, 'FT405', '00006', 'Lina Mustafa', 35, 'Female', 'Libya', 'Business', '3B', NULL);
 
 --passenger affiliations
 INSERT OR REPLACE INTO PassengerAffiliation (PassengerId, AffiliateId) VALUES

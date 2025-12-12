@@ -24,20 +24,21 @@ const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
 });
 
 // GET /api/passengers
-// Get all passengers with optional filters (e.g., FlightID, name)
+// Get all passengers with optional filters (e.g., FlightNumber, name, ticketID)
 app.get('/api/passengers', (req, res) => {
-    const { flightID, name } = req.query;
+    const { flightNumber, name, ticketID } = req.query;
 
     let sql = `
         SELECT 
             p.PassengerID,
+            p.TicketID,
             p.Name,
             p.Age,
             p.Gender,
             p.Nationality,
             p.SeatType,
             p.SeatNumber,
-            p.FlightID,
+            p.FlightNumber,
             p.ParentPassengerID
         FROM Passenger p
         WHERE 1=1
@@ -45,10 +46,16 @@ app.get('/api/passengers', (req, res) => {
 
     const params = [];
 
-    // Filter by FlightID
-    if (flightID) {
-        sql += ` AND p.FlightID = ?`;
-        params.push(flightID);
+    // Filter by FlightNumber
+    if (flightNumber) {
+        sql += ` AND p.FlightNumber = ?`;
+        params.push(flightNumber);
+    }
+
+    // Filter by TicketID (exact match)
+    if (ticketID) {
+        sql += ` AND p.TicketID = ?`;
+        params.push(ticketID);
     }
 
     // Filter by Name (partial match)
@@ -75,13 +82,14 @@ app.get('/api/passengers/:id', (req, res) => {
     const sql = `
         SELECT 
             p.PassengerID,
+            p.TicketID,
             p.Name,
             p.Age,
             p.Gender,
             p.Nationality,
             p.SeatType,
             p.SeatNumber,
-            p.FlightID,
+            p.FlightNumber,
             p.ParentPassengerID
         FROM Passenger p
         WHERE p.PassengerID = ?
@@ -100,17 +108,51 @@ app.get('/api/passengers/:id', (req, res) => {
     });
 });
 
+// GET /api/passengers/ticket/:ticketID
+// Get a single passenger by their Ticket ID
+app.get('/api/passengers/ticket/:ticketID', (req, res) => {
+    const ticketID = req.params.ticketID;
+
+    const sql = `
+        SELECT 
+            p.PassengerID,
+            p.TicketID,
+            p.Name,
+            p.Age,
+            p.Gender,
+            p.Nationality,
+            p.SeatType,
+            p.SeatNumber,
+            p.FlightNumber,
+            p.ParentPassengerID
+        FROM Passenger p
+        WHERE p.TicketID = ?
+    `;
+
+    db.get(sql, [ticketID], (err, row) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        if (!row) {
+            res.status(404).json({ error: "Passenger not found" });
+            return;
+        }
+        res.json(row);
+    });
+});
+
 // POST /api/passengers
 // Add a new passenger
 app.post('/api/passengers', (req, res) => {
-    const { name, age, gender, nationality, seatType, seatNumber, flightID, parentPassengerID } = req.body;
+    const { ticketID, name, age, gender, nationality, seatType, seatNumber, flightNumber, parentPassengerID } = req.body;
 
     const sql = `
-        INSERT INTO Passenger (Name, Age, Gender, Nationality, SeatType, SeatNumber, FlightID, ParentPassengerID)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO Passenger (TicketID, Name, Age, Gender, Nationality, SeatType, SeatNumber, FlightNumber, ParentPassengerID)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    db.run(sql, [name, age, gender, nationality, seatType, seatNumber, flightID, parentPassengerID], function(err) {
+    db.run(sql, [ticketID, name, age, gender, nationality, seatType, seatNumber, flightNumber, parentPassengerID], function(err) {
         if (err) {
             res.status(500).json({ error: err.message });
             return;
