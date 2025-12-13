@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flight Search Result - FlyTech</title>
     <link rel="stylesheet" href="./public/styles/flight-search-result.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Material+Icons&display=swap" rel="stylesheet">
@@ -34,9 +35,14 @@
 
     <main class="content-wrapper">
         <div class="white-card">
+            <div class="back-row">
+                <button class="back-button" onclick="window.location.href='./passenger-flight-search.html';" aria-label="Back to search">
+                    <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                </button>
+            </div>
             
             <div class="flight-info">
-                <h1>Flight Number: <span id="flight-number">FT101</span></h1>
+                <h1>Ticket ID: <span id="flight-number">00001</span></h1>
                 <p>Passenger ID: <span id="passenger-id">P12345</span></p>
                 <p>Passenger Name: <span id="passenger-name">John Doe</span></p>
             </div>
@@ -66,43 +72,47 @@
                         <div class="flight-details-grid">
                             <div class="detail-group full-width">
                                 <div class="label">PASSENGER NAME</div>
-                                <div class="value-xl">SURNAME / NAME</div>
+                                <div class="value-xl" data-field="passengerName">SURNAME / NAME</div>
                             </div>
 
                             <div class="detail-group">
                                 <div class="label">FROM</div>
-                                <div class="value-lg">IST</div>
+                                <div class="value-lg" data-field="from">IST</div>
                             </div>
                             <div class="detail-group">
                                 <div class="label">TO</div>
-                                <div class="value-lg">JFK</div>
+                                <div class="value-lg" data-field="to">JFK</div>
                             </div>
                             <div class="detail-group">
                                 <div class="label">FLIGHT</div>
-                                <div class="value-md">FT101</div>
+                                <div class="value-md" data-field="flight">FT101</div>
                             </div>
                             <div class="detail-group">
                                 <div class="label">DATE</div>
-                                <div class="value-md">18 DEC 2025</div>
+                                <div class="value-md" data-field="date">18 DEC 2025</div>
                             </div>
 
                             <div class="grid-divider"></div>
 
                             <div class="detail-group">
                                 <div class="label">AIRCRAFT</div>
-                                <div class="value-md">B777</div>
+                                <div class="value-md" data-field="aircraft">B777</div>
                             </div>
                             <div class="detail-group">
                                 <div class="label">SEAT</div>
-                                <div class="value-md">24C</div>
+                                <div class="value-md" data-field="seat">24C</div>
                             </div>
                             <div class="detail-group">
                                 <div class="label">DURATION</div>
-                                <div class="value-md">160 min</div>
+                                <div class="value-md" data-field="duration">160 min</div>
                             </div>
                             <div class="detail-group">
                                 <div class="label">DISTANCE</div>
-                                <div class="value-md">153 KM</div>
+                                <div class="value-md" data-field="distance">153 KM</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">FAMILY</div>
+                                <div class="value-md" data-field="family">DOE</div>
                             </div>
                         </div>
                     </div>
@@ -125,39 +135,43 @@
                     <div class="stub-body">
                         <div class="detail-group full-width">
                             <div class="label">PASSENGER NAME</div>
-                            <div class="value-md-stub">SURNAME / NAME</div>
+                            <div class="value-md-stub" data-field="passengerName">SURNAME / NAME</div>
                         </div>
 
                         <div class="stub-row">
                             <div class="detail-group">
                                 <div class="label">FROM</div>
-                                <div class="value-sm">IST</div>
+                                <div class="value-sm" data-field="from">IST</div>
                             </div>
                             <div class="detail-group">
                                 <div class="label">TO</div>
-                                <div class="value-sm">JFK</div>
+                                <div class="value-sm" data-field="to">JFK</div>
                             </div>
                         </div>
 
                         <div class="stub-row">
                             <div class="detail-group">
                                 <div class="label">FLIGHT</div>
-                                <div class="value-sm">FT101</div>
+                                <div class="value-sm" data-field="flight">FT101</div>
                             </div>
                             <div class="detail-group">
                                 <div class="label">SEAT</div>
-                                <div class="value-sm">24C</div>
+                                <div class="value-sm" data-field="seat">24C</div>
                             </div>
                         </div>
 
                          <div class="stub-row">
                             <div class="detail-group">
                                 <div class="label">DURATION</div>
-                                <div class="value-xs">160 min</div>
+                                <div class="value-xs" data-field="duration">160 min</div>
                             </div>
                             <div class="detail-group">
                                 <div class="label">DISTANCE</div>
-                                <div class="value-xs">153 KM</div>
+                                <div class="value-xs" data-field="distance">153 KM</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">FAMILY</div>
+                                <div class="value-xs" data-field="family">DOE</div>
                             </div>
                         </div>
                         
@@ -170,5 +184,95 @@
             </div>
     </main>
     </div>
+
+    <script>
+        // Populate ticket dynamically from API if ticketId is provided in the URL
+        (function populateTicket() {
+            const params = new URLSearchParams(window.location.search);
+            const ticketIdParam = params.get('ticketId') || params.get('ticketID');
+
+            const defaults = {
+                ticketId: ticketIdParam || '00001',
+                passengerId: 'P12345',
+                passengerName: 'John Doe',
+                from: 'IST',
+                to: 'JFK',
+                flight: 'FT101',
+                date: '18 DEC 2025',
+                aircraft: 'B777',
+                seat: '24C',
+                duration: '160 min',
+                distance: '153 KM',
+                family: 'DOE'
+            };
+
+            const setTextById = (id, value) => {
+                const el = document.getElementById(id);
+                if (el && value !== undefined && value !== null) {
+                    el.textContent = value;
+                }
+            };
+
+            const setTextByField = (field, value) => {
+                if (value === undefined || value === null) return;
+                document.querySelectorAll(`[data-field="${field}"]`).forEach(el => {
+                    el.textContent = value;
+                });
+            };
+
+            const applyData = (data) => {
+                setTextById('flight-number', data.ticketId);
+                setTextById('passenger-id', data.passengerId);
+                setTextById('passenger-name', data.passengerName);
+
+                ['passengerName','from','to','flight','date','aircraft','seat','duration','distance','family']
+                    .forEach(key => setTextByField(key, data[key]));
+            };
+
+            const formatDate = (iso) => {
+                const dt = new Date(iso);
+                if (Number.isNaN(dt.getTime())) return iso;
+                return dt.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+            };
+
+            const deriveFamily = (name) => {
+                if (!name) return null;
+                const parts = name.trim().split(/\s+/);
+                return parts.length ? parts[parts.length - 1].toUpperCase() : null;
+            };
+
+            const state = { ...defaults };
+            applyData(state);
+
+            if (!ticketIdParam) return;
+
+            fetch(`/api/ticket/${encodeURIComponent(ticketIdParam)}`)
+                .then(res => {
+                    if (!res.ok) throw new Error(`Request failed ${res.status}`);
+                    return res.json();
+                })
+                .then(row => {
+                    const hydrated = {
+                        ticketId: row.ticketId || state.ticketId,
+                        passengerId: row.passengerId || state.passengerId,
+                        passengerName: row.passengerName || state.passengerName,
+                        from: row.sourceAirportCode || state.from,
+                        to: row.destinationAirportCode || state.to,
+                        flight: row.flight || state.flight,
+                        date: row.flightDateTime ? formatDate(row.flightDateTime) : state.date,
+                        aircraft: row.vehicleTypeCode || state.aircraft,
+                        seat: row.seat || state.seat,
+                        duration: row.durationMinutes ? `${row.durationMinutes} min` : state.duration,
+                        distance: row.distanceKm ? `${row.distanceKm} KM` : state.distance,
+                        family: deriveFamily(row.passengerName) || state.family
+                    };
+
+                    applyData(hydrated);
+                })
+                .catch(err => {
+                    console.error('Failed to load ticket from API:', err);
+                });
+        })();
+    </script>
 </body>
 </html>
