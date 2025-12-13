@@ -268,11 +268,12 @@ body {
 
 .details-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem 4rem;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1.25rem 1.5rem;
     flex: 2;
     justify-items: center;
     text-align: center;
+    grid-auto-flow: row;
 }
 
 .detail-item {
@@ -292,6 +293,13 @@ body {
     font-weight: 600;
     color: rgb(0, 0, 0);
 }
+
+/* Keep Distance, Aircraft, Connection on the same row on wide screens */
+.detail-date { order: 1; }
+.detail-duration { order: 2; }
+.detail-distance { order: 4; }
+.detail-aircraft { order: 5; }
+.detail-connection { order: 6; }
 
 /* --- Responsive Design --- */
 @media (max-width: 1024px) {

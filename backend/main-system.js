@@ -219,7 +219,9 @@ app.get("/api/assigned-flights", async (req, res) => {
         sa.City AS SourceCity,
         f.DestinationAirportCode,
         da.City AS DestinationCity,
-        f.VehicleTypeCode
+        f.VehicleTypeCode,
+        f.SharedFlightNumber,
+        f.ConnectingFlightNumber
       FROM Flight f
       JOIN Airport sa ON sa.AirportCode = f.SourceAirportCode
       JOIN Airport da ON da.AirportCode = f.DestinationAirportCode

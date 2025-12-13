@@ -91,6 +91,11 @@
 
       // Format date/time for display
       const dateTime = (f.FlightDateTime || "").replace("T", " ");
+      const connectionType = f.SharedFlightNumber
+        ? "Shared"
+        : f.ConnectingFlightNumber
+          ? "Connecting"
+          : "Direct";
 
       // Fill ticket HTML using flight data
       ticket.innerHTML = `
@@ -118,21 +123,25 @@
           </div>
 
           <div class="details-grid">
-            <div class="detail-item">
+            <div class="detail-item detail-date">
               <span class="label">Date / Time</span>
               <span class="value">${dateTime}</span>
             </div>
-            <div class="detail-item">
+            <div class="detail-item detail-duration">
               <span class="label">Duration</span>
               <span class="value">${f.DurationMinutes} mins</span>
             </div>
-            <div class="detail-item">
+            <div class="detail-item detail-distance">
               <span class="label">Distance</span>
               <span class="value">${f.DistanceKm} KM</span>
             </div>
-            <div class="detail-item">
+            <div class="detail-item detail-aircraft">
               <span class="label">Aircraft</span>
               <span class="value">${f.VehicleTypeCode}</span>
+            </div>
+            <div class="detail-item detail-connection">
+              <span class="label">Connection</span>
+              <span class="value">${connectionType}</span>
             </div>
           </div>
         </div>
