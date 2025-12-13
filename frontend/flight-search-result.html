@@ -91,6 +91,10 @@
                                 <div class="label">DATE</div>
                                 <div class="value-md" data-field="date">18 DEC 2025</div>
                             </div>
+                            <div class="detail-group">
+                                <div class="label">CONNECTION</div>
+                                <div class="value-md" data-field="connection">-</div>
+                            </div>
 
                             <div class="grid-divider"></div>
 
@@ -147,6 +151,10 @@
                                 <div class="label">TO</div>
                                 <div class="value-sm" data-field="to">JFK</div>
                             </div>
+                            <div class="detail-group">
+                                <div class="label">CONNECTION</div>
+                                <div class="value-sm" data-field="connection">Direct</div>
+                            </div>
                         </div>
 
                         <div class="stub-row">
@@ -157,6 +165,10 @@
                             <div class="detail-group">
                                 <div class="label">SEAT</div>
                                 <div class="value-sm" data-field="seat">24C</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">AIRCRAFT</div>
+                                <div class="value-sm" data-field="aircraft">B777</div>
                             </div>
                         </div>
 
@@ -199,6 +211,7 @@
                 to: 'JFK',
                 flight: 'FT101',
                 date: '18 DEC 2025',
+                    connection: '-',
                 aircraft: 'B777',
                 seat: '24C',
                 duration: '160 min',
@@ -225,7 +238,7 @@
                 setTextById('passenger-id', data.passengerId);
                 setTextById('passenger-name', data.passengerName);
 
-                ['passengerName','from','to','flight','date','aircraft','seat','duration','distance','family']
+                ['passengerName','from','to','flight','date','connection','aircraft','seat','duration','distance','family']
                     .forEach(key => setTextByField(key, data[key]));
             };
 
@@ -252,6 +265,11 @@
                     return res.json();
                 })
                 .then(row => {
+                    const connectionType = row.SharedFlightNumber
+                        ? 'Shared'
+                        : row.ConnectingFlightNumber
+                            ? 'Connecting'
+                            : 'Direct';
                     const hydrated = {
                         ticketId: row.ticketId || state.ticketId,
                         passengerId: row.passengerId || state.passengerId,
@@ -260,6 +278,7 @@
                         to: row.destinationAirportCode || state.to,
                         flight: row.flight || state.flight,
                         date: row.flightDateTime ? formatDate(row.flightDateTime) : state.date,
+                        connection: connectionType || state.connection,
                         aircraft: row.vehicleTypeCode || state.aircraft,
                         seat: row.seat || state.seat,
                         duration: row.durationMinutes ? `${row.durationMinutes} min` : state.duration,

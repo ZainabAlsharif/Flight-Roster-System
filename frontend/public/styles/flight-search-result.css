@@ -373,10 +373,10 @@ body {
 }
 
 .stub-body {
-    padding: 25px 20px;
+    padding: 18px 16px; /* tighter padding to fit extra fields */
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 12px; /* reduce vertical gaps */
     flex: 1;
     justify-content: space-between;
 }
@@ -384,12 +384,12 @@ body {
 .stub-row {
     display: flex;
     justify-content: space-between;
-    gap: 12px;
+    gap: 8px; /* reduce horizontal gaps to fit three columns */
 }
 
 .stub-row .detail-group {
     flex: 1;
-    min-width: 90px;
+    min-width: 0; /* allow items to shrink within the row */
 }
 
 .barcode-horizontal img {
@@ -442,7 +442,7 @@ body {
 
 .value-sm { 
     font-weight: 700; 
-    font-size: 16px; 
+    font-size: 14px; /* slightly smaller to fit in stub */
     font-family: 'Inter', sans-serif; 
     color: #000; 
 }

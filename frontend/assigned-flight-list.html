@@ -91,11 +91,7 @@
 
       // Format date/time for display
       const dateTime = (f.FlightDateTime || "").replace("T", " ");
-      const connectionType = f.SharedFlightNumber
-        ? "Shared"
-        : f.ConnectingFlightNumber
-          ? "Connecting"
-          : "Direct";
+      const connectionType = f.SharedFlightNumber ? "Shared" : "Direct";
 
       // Fill ticket HTML using flight data
       ticket.innerHTML = `
