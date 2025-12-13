@@ -128,6 +128,11 @@ app.get('/passenger-flight-search', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'frontend', 'passenger-flight-search.html'));
 });
 
+// Extended View Page (GET)
+app.get('/extended-view', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'extended-view.html'));
+});
+
 // Passenger Flight Search (POST)
 app.post('/passenger-flight-search', (req, res) => {
     const { ticketId } = req.body;
