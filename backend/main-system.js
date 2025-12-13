@@ -162,6 +162,18 @@ async function buildRosterResponse(flightNumber) {
       WHERE PilotId IN (${placeholders})`,
       pilotIds
     );
+
+    // Attach spoken languages per pilot
+    for (const pilot of pilots) {
+      const langs = await dbAll(
+        `SELECT l.LanguageCode AS code, l.LanguageName AS name
+         FROM PilotLanguage pl
+         JOIN Language l ON l.LanguageCode = pl.LanguageCode
+         WHERE pl.PilotId = ?`,
+        [pilot.PilotId]
+      );
+      pilot.languages = langs;
+    }
   }
 
   // 5) Load attendants
@@ -174,6 +186,28 @@ async function buildRosterResponse(flightNumber) {
       WHERE AttendantId IN (${placeholders})`,
       attendantIds
     );
+
+    // Attach spoken languages and dishes per attendant
+    for (const attendant of attendants) {
+      const langs = await dbAll(
+        `SELECT l.LanguageCode AS code, l.LanguageName AS name
+         FROM AttendantLanguage al
+         JOIN Language l ON l.LanguageCode = al.LanguageCode
+         WHERE al.AttendantId = ?`,
+        [attendant.AttendantId]
+      );
+
+      const dishes = await dbAll(
+        `SELECT d.DishId AS id, d.DishName AS name
+         FROM ChefDish cd
+         JOIN Dish d ON d.DishId = cd.DishId
+         WHERE cd.AttendantId = ?`,
+        [attendant.AttendantId]
+      );
+
+      attendant.languages = langs;
+      attendant.dishes = dishes;
+    }
   }
 
   // 6) FINAL unified object
@@ -262,6 +296,11 @@ app.get('/passenger-flight-search', (req, res) => {
 // Extended View Page (GET)
 app.get('/extended-view', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'frontend', 'extended-view.html'));
+});
+
+// About Us Page (GET)
+app.get('/about-us', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'about-us.html'));
 });
 
 // Passenger Flight Search (POST)

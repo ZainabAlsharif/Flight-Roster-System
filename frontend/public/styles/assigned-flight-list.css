@@ -36,27 +36,22 @@ body {
     color: var(--primary-dark);
 }
 
-/* --- Navigation --- */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem var(--padding-desktop);
+/* --- Navigation (match Tabular View) --- */
+.container {
     width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 30px;
+    padding-bottom: 20px;
     position: relative;
     z-index: 10;
-}
-
-.logo-section {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    color: var(--text-white); 
-}
-
-.logo-text {
-    font-size: 1.75rem; 
-    font-weight: 500;
 }
 
 .logo-container {
@@ -76,16 +71,22 @@ body {
     display: block;
 }
 
-.nav-links {
+.brand-name {
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--text-white);
+}
+
+.nav-container {
     display: flex;
+    gap: 40px;
     align-items: center;
-    gap: 3rem;
 }
 
 .nav-link {
     text-decoration: none;
     color: var(--text-white);
-    font-size: 1.125rem; 
+    font-size: 20px;
     font-weight: 400;
     cursor: pointer;
     transition: opacity 0.2s;
@@ -95,19 +96,20 @@ body {
     opacity: 0.8;
 }
 
-.login-badge {
+.login-button {
     background-color: var(--primary-blue);
-    color: var(--text-white); /* Ensure text is visible */
-    padding: 0.6rem 2rem;
-    border-radius: 50px;
+    color: var(--text-white);
+    font-size: 20px;
     font-weight: 500;
+    padding: 10px 40px;
+    border-radius: 50px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    transition: transform 0.2s;
+    transition: transform 0.1s;
     cursor: pointer;
 }
 
-.login-badge:hover {
-    transform: translateY(-2px);
+.login-button:active {
+    transform: scale(0.98);
 }
 
 /* --- Main Layout --- */
@@ -325,13 +327,16 @@ body {
 }
 
 @media (max-width: 768px) {
-    /* Navbar specific */
-    .navbar {
-        padding: 1rem var(--padding-mobile);
+    /* Navbar specific - match Tabular View */
+    .main-header {
+        flex-direction: column;
+        gap: 20px;
     }
     
-    .nav-links {
-        display: none; /* Hides links on mobile */
+    .nav-container {
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
     /* Content specifics */
