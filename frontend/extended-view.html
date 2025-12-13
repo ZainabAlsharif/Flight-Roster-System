@@ -120,7 +120,7 @@
                 </div>
 
                 <div class="export-container">
-                    <button class="export-button">
+                    <button class="export-button" id="exportJsonBtn">
                         <div class="download-icon">
                             <svg viewBox="0 0 28 28" fill="none">
                                 <path d="M14 18.6667L8.16667 12.8333L9.8 11.1417L12.8333 14.175V4.66667H15.1667V14.175L18.2 11.1417L19.8333 12.8333L14 18.6667ZM7 23.3333C6.35833 23.3333 5.80922 23.1051 5.35267 22.6485C4.89611 22.1919 4.66744 21.6424 4.66667 21V17.5H7V21H21V17.5H23.3333V21C23.3333 21.6417 23.1051 22.1912 22.6485 22.6485C22.1919 23.1058 21.6424 23.3341 21 23.3333H7Z" fill="#FEFFFF" />
@@ -137,6 +137,10 @@
             function getFlightNumber() {
                 const params = new URLSearchParams(window.location.search);
                 return params.get("flightNumber") || "FT201";
+            }
+            
+            function downloadRosterJson(flightNumber) {
+            window.location.href = `/api/roster/${encodeURIComponent(flightNumber)}/export`;
             }
 
             function navigateToTabularView() {
@@ -240,7 +244,17 @@
                 }
             }
 
-            window.addEventListener("DOMContentLoaded", loadExtendedRoster);
-        </script>
+            window.addEventListener("DOMContentLoaded", () => {
+            loadExtendedRoster();
+
+            const btn = document.getElementById("exportJsonBtn");
+        if (btn) {
+            btn.addEventListener("click", () => {
+            downloadRosterJson(getFlightNumber());
+                });
+            }
+        });
+
+    </script>
 </body>
 </html>

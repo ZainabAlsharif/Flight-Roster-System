@@ -147,6 +147,19 @@
       list.appendChild(ticket);
     });
   }
+  
+  function formatStaffName(username) {
+  if (!username) return "—";
+
+  // split by underscore → ["pilot", "abdulsallam"]
+  const parts = username.split("_");
+
+  // Capitalize each part
+  return parts
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
   // Fetches the currently logged-in staff member
   async function loadStaffInfo() {
   const res = await fetch("/api/me", { credentials: "include" })
@@ -154,7 +167,8 @@
 
   const me = await res.json();
   document.getElementById("staffId").textContent = me.userId;
-  document.getElementById("staffName").textContent = me.name;
+  document.getElementById("staffName").textContent = formatStaffName(me.name);
+
     }
 
   // Load flights when page is ready

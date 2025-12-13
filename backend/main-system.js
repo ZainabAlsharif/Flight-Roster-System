@@ -48,6 +48,137 @@ function dbAll(sql, params = []) {
     db.all(sql, params, (err, rows) => (err ? reject(err) : resolve(rows)));
   });
 }
+// Helper: builds the complete roster payload for a flight 
+// (flight + passengers + crew) so multiple routes can reuse it
+async function buildRosterResponse(flightNumber) {
+  // 1) Load flight + airports + vehicle
+  const flight = await dbGet(
+    `
+    SELECT
+      f.FlightNumber,
+      f.FlightDateTime,
+      f.DurationMinutes,
+      f.DistanceKm,
+      f.SourceAirportCode,
+      sa.AirportName AS SourceAirportName,
+      sa.City AS SourceCity,
+      sa.Country AS SourceCountry,
+      f.DestinationAirportCode,
+      da.AirportName AS DestinationAirportName,
+      da.City AS DestinationCity,
+      da.Country AS DestinationCountry,
+      f.VehicleTypeCode,
+      vt.SeatCount,
+      vt.SeatingPlan,
+      vt.StandardMenu,
+      f.SharedFlightNumber,
+      f.SharedCompanyName,
+      f.ConnectingFlightNumber
+    FROM Flight f
+    JOIN Airport sa ON sa.AirportCode = f.SourceAirportCode
+    JOIN Airport da ON da.AirportCode = f.DestinationAirportCode
+    JOIN VehicleType vt ON vt.VehicleTypeCode = f.VehicleTypeCode
+    WHERE f.FlightNumber = ?
+    `,
+    [flightNumber]
+  );
+
+  if (!flight) return null;
+
+  // 2) Load passengers
+  const passengers = await dbAll(
+    `
+    SELECT
+      p.PassengerId,
+      p.Name,
+      p.Age,
+      p.Gender,
+      p.Nationality,
+      p.SeatType,
+      p.SeatNumber,
+      p.ParentPassengerId,
+      parent.Name AS ParentName
+    FROM Passenger p
+    LEFT JOIN Passenger parent ON parent.PassengerId = p.ParentPassengerId
+    WHERE p.FlightNumber = ?
+    ORDER BY
+      CASE WHEN p.SeatType = 'Business' THEN 0 ELSE 1 END,
+      p.SeatNumber
+    `,
+    [flightNumber]
+  );
+
+  // 2b) Add children per passenger
+  for (let p of passengers) {
+    p.children = await dbAll(
+      `
+      SELECT PassengerId, Name
+      FROM Passenger
+      WHERE ParentPassengerId = ? AND FlightNumber = ?
+      `,
+      [p.PassengerId, flightNumber]
+    );
+  }
+
+  // 3) Load roster row
+  const rosterRow = await dbGet(
+    `
+    SELECT RosterId, GeneratedAt, RosterJson
+    FROM Roster
+    WHERE FlightNumber = ?
+    ORDER BY RosterId DESC
+    LIMIT 1
+    `,
+    [flightNumber]
+  );
+
+  let roster = null;
+  let pilotIds = [];
+  let attendantIds = [];
+
+  if (rosterRow) {
+    roster = {
+      rosterId: rosterRow.RosterId,
+      generatedAt: rosterRow.GeneratedAt
+    };
+
+    let parsed = {};
+    try {
+    parsed = JSON.parse(rosterRow.RosterJson || "{}");
+    } catch (e) {
+    parsed = {};
+    }
+    pilotIds = parsed.pilots || [];
+    attendantIds = parsed.attendants || [];
+  }
+
+  // 4) Load pilots
+  let pilots = [];
+  if (pilotIds.length) {
+    const placeholders = pilotIds.map(() => "?").join(",");
+    pilots = await dbAll(
+      `SELECT PilotId, Name, Age, Gender, Nationality, VehicleTypeCode, AllowedRangeKm, SeniorityLevel
+      FROM Pilot
+      WHERE PilotId IN (${placeholders})`,
+      pilotIds
+    );
+  }
+
+  // 5) Load attendants
+  let attendants = [];
+  if (attendantIds.length) {
+    const placeholders = attendantIds.map(() => "?").join(",");
+    attendants = await dbAll(
+      `SELECT AttendantId, Name, Age, Gender, Nationality, AttendantType
+      FROM Attendant
+      WHERE AttendantId IN (${placeholders})`,
+      attendantIds
+    );
+  }
+
+  // 6) FINAL unified object
+  return { flight, roster, pilots, attendants, passengers };
+}
 const staffUsers = {
     'pilot_abdulsallam': 'pilot1',
     'pilot_aya': 'pilot2',
@@ -237,230 +368,32 @@ app.get("/api/assigned-flights", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+app.get("/api/roster/:flightNumber/export", async (req, res) => {
+  try {
+    const data = await buildRosterResponse(req.params.flightNumber);
+    if (!data) return res.status(404).json({ error: "Flight not found" });
+
+    res.setHeader("Content-Type", "application/json");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="roster-${req.params.flightNumber}.json"`
+    );
+
+    res.send(JSON.stringify(data, null, 2));
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 app.get("/api/roster/:flightNumber", async (req, res) => {
   try {
-    const flightNumber = req.params.flightNumber;
-
-    // 1) Load flight + airports + vehicle
-    const flight = await dbGet(
-      `
-      SELECT
-        f.FlightNumber,
-        f.FlightDateTime,
-        f.DurationMinutes,
-        f.DistanceKm,
-        f.SourceAirportCode,
-        sa.AirportName AS SourceAirportName,
-        sa.City AS SourceCity,
-        sa.Country AS SourceCountry,
-        f.DestinationAirportCode,
-        da.AirportName AS DestinationAirportName,
-        da.City AS DestinationCity,
-        da.Country AS DestinationCountry,
-        f.VehicleTypeCode,
-        vt.SeatCount,
-        vt.SeatingPlan,
-        vt.StandardMenu,
-        f.SharedFlightNumber,
-        f.SharedCompanyName,
-        f.ConnectingFlightNumber
-      FROM Flight f
-      JOIN Airport sa ON sa.AirportCode = f.SourceAirportCode
-      JOIN Airport da ON da.AirportCode = f.DestinationAirportCode
-      JOIN VehicleType vt ON vt.VehicleTypeCode = f.VehicleTypeCode
-      WHERE f.FlightNumber = ?
-      `,
-      [flightNumber]
-    );
-
-    if (!flight) {
-      return res.status(404).json({ error: "Flight not found" });
-    }
-
-    // 2) Load passengers for this flight (seat already stored in Passenger)
-    const passengers = await dbAll(
-      `
-      SELECT
-        p.PassengerId,
-        p.Name,
-        p.Age,
-        p.Gender,
-        p.Nationality,
-        p.SeatType,
-        p.SeatNumber,
-        p.ParentPassengerId,
-        parent.Name as ParentName
-      FROM Passenger p
-      LEFT JOIN Passenger parent ON parent.PassengerId = p.ParentPassengerId
-      WHERE p.FlightNumber = ?
-      ORDER BY
-        CASE WHEN p.SeatType = 'Business' THEN 0 ELSE 1 END,
-        p.SeatNumber
-      `,
-      [flightNumber]
-    );
-
-    // 3a) Enrich passengers with children info
-    for (let passenger of passengers) {
-      const children = await dbAll(
-        `
-        SELECT PassengerId, Name
-        FROM Passenger
-        WHERE ParentPassengerId = ? AND FlightNumber = ?
-        `,
-        [passenger.PassengerId, flightNumber]
-      );
-      passenger.children = children || [];
-    }
-
-    // 3b) Load latest roster record (if any) and parse crew IDs
-    const rosterRow = await dbGet(
-      `
-      SELECT RosterId, FlightNumber, GeneratedAt, RosterJson
-      FROM Roster
-      WHERE FlightNumber = ?
-      ORDER BY RosterId DESC
-      LIMIT 1
-      `,
-      [flightNumber]
-    );
-
-    let roster = null;
-    let pilotIds = [];
-    let attendantIds = [];
-
-    if (rosterRow) {
-      roster = {
-        rosterId: rosterRow.RosterId,
-        generatedAt: rosterRow.GeneratedAt,
-      };
-
-      try {
-        const parsed = JSON.parse(rosterRow.RosterJson || "{}");
-        pilotIds = Array.isArray(parsed.pilots) ? parsed.pilots : [];
-        attendantIds = Array.isArray(parsed.attendants) ? parsed.attendants : [];
-      } catch (e) {
-        // bad JSON in DB: don’t crash the system
-        pilotIds = [];
-        attendantIds = [];
-      }
-    }
-
-    // 4) Expand pilots by IDs
-    let pilots = [];
-    if (pilotIds.length > 0) {
-      const placeholders = pilotIds.map(() => "?").join(",");
-      pilots = await dbAll(
-        `
-        SELECT
-          p.PilotId,
-          p.Name,
-          p.Age,
-          p.Gender,
-          p.Nationality,
-          p.VehicleTypeCode,
-          p.AllowedRangeKm,
-          p.SeniorityLevel
-        FROM Pilot p
-        WHERE p.PilotId IN (${placeholders})
-        ORDER BY p.PilotId
-        `,
-        pilotIds
-      );
-
-      // optional: add pilot languages
-      const pilotLang = await dbAll(
-        `
-        SELECT pl.PilotId, l.LanguageCode, l.LanguageName
-        FROM PilotLanguage pl
-        JOIN Language l ON l.LanguageCode = pl.LanguageCode
-        WHERE pl.PilotId IN (${placeholders})
-        ORDER BY pl.PilotId
-        `,
-        pilotIds
-      );
-
-      const langMap = new Map();
-      for (const row of pilotLang) {
-        if (!langMap.has(row.PilotId)) langMap.set(row.PilotId, []);
-        langMap.get(row.PilotId).push({ code: row.LanguageCode, name: row.LanguageName });
-      }
-      pilots = pilots.map(p => ({ ...p, languages: langMap.get(p.PilotId) || [] }));
-    }
-
-    // 5) Expand attendants by IDs
-    let attendants = [];
-    if (attendantIds.length > 0) {
-      const placeholders = attendantIds.map(() => "?").join(",");
-      attendants = await dbAll(
-        `
-        SELECT
-          a.AttendantId,
-          a.Name,
-          a.Age,
-          a.Gender,
-          a.Nationality,
-          a.AttendantType
-        FROM Attendant a
-        WHERE a.AttendantId IN (${placeholders})
-        ORDER BY a.AttendantId
-        `,
-        attendantIds
-      );
-
-      // optional: languages
-      const attLang = await dbAll(
-        `
-        SELECT al.AttendantId, l.LanguageCode, l.LanguageName
-        FROM AttendantLanguage al
-        JOIN Language l ON l.LanguageCode = al.LanguageCode
-        WHERE al.AttendantId IN (${placeholders})
-        ORDER BY al.AttendantId
-        `,
-        attendantIds
-      );
-
-      const langMap = new Map();
-      for (const row of attLang) {
-        if (!langMap.has(row.AttendantId)) langMap.set(row.AttendantId, []);
-        langMap.get(row.AttendantId).push({ code: row.LanguageCode, name: row.LanguageName });
-      }
-
-      // optional: chef dishes (only for chefs)
-      const chefDishes = await dbAll(
-        `
-        SELECT cd.AttendantId, d.DishId, d.DishName
-        FROM ChefDish cd
-        JOIN Dish d ON d.DishId = cd.DishId
-        WHERE cd.AttendantId IN (${placeholders})
-        ORDER BY cd.AttendantId, d.DishId
-        `,
-        attendantIds
-      );
-
-      const dishMap = new Map();
-      for (const row of chefDishes) {
-        if (!dishMap.has(row.AttendantId)) dishMap.set(row.AttendantId, []);
-        dishMap.get(row.AttendantId).push({ id: row.DishId, name: row.DishName });
-      }
-
-      attendants = attendants.map(a => ({
-        ...a,
-        languages: langMap.get(a.AttendantId) || [],
-        dishes: dishMap.get(a.AttendantId) || []
-      }));
-    }
-
-    // 6) Final integrated response
-    return res.json({
-      flight,
-      roster,        // may be null if no roster row exists
-      pilots,
-      attendants,
-      passengers,
-    });
+    const data = await buildRosterResponse(req.params.flightNumber);
+    if (!data) return res.status(404).json({ error: "Flight not found" });
+    res.json(data);
   } catch (err) {
-    console.error("GET /api/roster/:flightNumber failed:", err);
+    console.error(err);
     res.status(500).json({ error: "Internal server error" });
   }
 });
