@@ -151,7 +151,7 @@ app.post('/passenger-flight-search', (req, res) => {
                 ticketID: row.TicketID,
                 flightNumber: row.FlightNumber
             };
-            return res.redirect('/flight-search-result');
+          return res.redirect(`/flight-search-result?ticketId=${encodeURIComponent(row.TicketID)}`);
         } else {
             return res.redirect('/passenger-flight-search');
         }
@@ -161,6 +161,44 @@ app.post('/passenger-flight-search', (req, res) => {
 // Show flight search result page (GET)
 app.get('/flight-search-result', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'frontend', 'flight-search-result.html'));
+});
+
+// Ticket lookup for flight-search-result page
+app.get('/api/ticket/:ticketId', async (req, res) => {
+  const { ticketId } = req.params;
+
+  try {
+    const row = await dbGet(
+      `
+      SELECT 
+        p.PassengerId AS passengerId,
+        p.TicketID AS ticketId,
+        p.Name AS passengerName,
+        p.SeatNumber AS seat,
+        p.FlightNumber AS flight,
+        p.ParentPassengerId AS parentPassengerId,
+        f.FlightDateTime AS flightDateTime,
+        f.DurationMinutes AS durationMinutes,
+        f.DistanceKm AS distanceKm,
+        f.SourceAirportCode AS sourceAirportCode,
+        f.DestinationAirportCode AS destinationAirportCode,
+        f.VehicleTypeCode AS vehicleTypeCode
+      FROM Passenger p
+      JOIN Flight f ON f.FlightNumber = p.FlightNumber
+      WHERE p.TicketID = ?
+      `,
+      [ticketId]
+    );
+
+    if (!row) {
+      return res.status(404).json({ error: 'Ticket not found' });
+    }
+
+    return res.json(row);
+  } catch (err) {
+    console.error('GET /api/ticket failed:', err);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 // Show tabular view page (GET)
