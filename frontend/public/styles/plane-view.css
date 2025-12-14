@@ -1,0 +1,311 @@
+/* plane-view.css */
+
+:root {
+  --bg: #0f172a;
+  --card: #111c35;
+  --card-2: #0b1327;
+  --text: #e8eefc;
+  --muted: rgba(232, 238, 252, 0.72);
+
+  --stroke: rgba(255, 255, 255, 0.12);
+  --stroke-2: rgba(255, 255, 255, 0.18);
+
+  /* Class colors (match your Extended View purple icon color) */
+  --business: #DDAA13;
+  --first: #9357DD; /* same as your purple icon fill in Extended View */ 
+  --economy: #4E85DF;
+
+  /* Occupied shades */
+  --occupied-default: rgba(255, 255, 255, 0.35);
+  --occupied-business: #DDAA13;
+  --occupied-first: #9357DD;
+  --occupied-economy: #4E85DF;
+
+  /* Available seat base */
+  --seat: rgba(255, 255, 255, 0.10);
+  --seat-hover: rgba(255, 255, 255, 0.16);
+
+  /* Selected outlines */
+  --focus: rgba(255, 255, 255, 0.45);
+}
+
+/* Basic page layout (kept compatible with your other pages) */
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: linear-gradient(180deg, var(--bg), #070b16);
+  color: var(--text);
+}
+
+.container {
+  width: min(1100px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.main-card {
+  background: rgba(17, 28, 53, 0.78);
+  border: 1px solid var(--stroke);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 16px 55px rgba(0, 0, 0, 0.35);
+}
+
+.back-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.back-button {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid var(--stroke);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.flight-info {
+  margin-bottom: 10px;
+}
+
+.flight-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.flight-details {
+  margin: 6px 0 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.divider-line {
+  border: 0;
+  border-top: 1px solid var(--stroke);
+  margin: 14px 0;
+}
+
+/* Plane view wrapper */
+.plane-view-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+/* Plane card */
+.plane-card {
+  background: rgba(11, 19, 39, 0.65);
+  border: 1px solid var(--stroke);
+  border-radius: 18px;
+  padding: 14px;
+}
+
+.plane-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.plane-name {
+  margin: 0;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.plane-sub {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--stroke);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  margin-bottom: 12px;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  border: 1px solid var(--stroke-2);
+  background: var(--seat);
+}
+
+.legend-dot.business { background: rgba(221, 170, 19, 0.25); border-color: rgba(221, 170, 19, 0.55); }
+.legend-dot.first { background: rgba(147, 87, 221, 0.25); border-color: rgba(147, 87, 221, 0.55); }
+.legend-dot.economy { background: rgba(78, 133, 223, 0.25); border-color: rgba(78, 133, 223, 0.55); }
+
+.legend-dot.occupied.business { background: var(--occupied-business); }
+.legend-dot.occupied.first { background: var(--occupied-first); }
+.legend-dot.occupied.economy { background: var(--occupied-economy); }
+
+/* Seat grid */
+.plane-scroll {
+  overflow: auto;
+  padding-bottom: 6px;
+}
+
+.seat-grid {
+  display: grid;
+  gap: 8px;
+  align-items: center;
+  justify-content: start;
+  min-width: max-content;
+}
+
+/* Row label */
+.row-label {
+  color: rgba(232, 238, 252, 0.70);
+  font-weight: 700;
+  font-size: 12px;
+  text-align: right;
+  padding-right: 8px;
+}
+
+/* Seat button base */
+.seat {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--stroke-2);
+  background: var(--seat);
+  color: rgba(232, 238, 252, 0.92);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 90ms ease, background 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.seat:hover {
+  background: var(--seat-hover);
+  transform: translateY(-1px);
+}
+
+.seat:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(232, 238, 252, 0.18);
+}
+
+/* Cabin theming for AVAILABLE seats
+   This fixes the “first class not correct” feeling even when empty.
+   These rules require the seat element to have class: .first or .business or .economy */
+.seat.first {
+  background: rgba(147, 87, 221, 0.12);
+  border-color: rgba(147, 87, 221, 0.45);
+}
+
+.seat.business {
+  background: rgba(221, 170, 19, 0.12);
+  border-color: rgba(221, 170, 19, 0.45);
+}
+
+.seat.economy {
+  background: rgba(78, 133, 223, 0.10);
+  border-color: rgba(78, 133, 223, 0.40);
+}
+
+/* OCCUPIED seats */
+.seat.occupied {
+  cursor: not-allowed;
+  opacity: 0.95;
+  background: var(--occupied-default);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* More specific occupied class colors (wins over .seat.occupied) */
+.seat.occupied.business,
+.seat.occupied.business-class,
+.seat.occupied.businessClass {
+  background: var(--occupied-business);
+  border-color: rgba(221, 170, 19, 0.85);
+  color: #0b0f1d;
+}
+
+.seat.occupied.first,
+.seat.occupied.first-class,
+.seat.occupied.firstClass,
+.seat.occupied.firstclass {
+  background: var(--occupied-first);
+  border-color: rgba(147, 87, 221, 0.90);
+  color: #0b0f1d;
+}
+
+.seat.occupied.economy,
+.seat.occupied.economy-class,
+.seat.occupied.economyClass {
+  background: var(--occupied-economy);
+  border-color: rgba(78, 133, 223, 0.90);
+  color: #0b0f1d;
+}
+
+/* SELECTED seats
+   Make selection match cabin color.
+   This requires you to add .first/.business/.economy to all seats, not only occupied seats. */
+.seat.selected {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.seat.selected.business {
+  background: var(--business);
+  border-color: rgba(221, 170, 19, 0.95);
+  color: #0b0f1d;
+  box-shadow: 0 0 0 3px rgba(221, 170, 19, 0.22);
+}
+
+.seat.selected.first {
+  background: var(--first);
+  border-color: rgba(147, 87, 221, 0.95);
+  color: #0b0f1d;
+  box-shadow: 0 0 0 3px rgba(147, 87, 221, 0.22);
+}
+
+.seat.selected.economy {
+  background: var(--economy);
+  border-color: rgba(78, 133, 223, 0.95);
+  color: #0b0f1d;
+  box-shadow: 0 0 0 3px rgba(78, 133, 223, 0.22);
+}
+
+/* Prevent “selected occupied” weirdness if it ever happens */
+.seat.occupied.selected {
+  box-shadow: none;
+  outline: none;
+}
+
+/* Aisle spacer */
+.aisle {
+  width: 18px;
+  height: 34px;
+}
+
+/* Small responsive tweak */
+@media (max-width: 560px) {
+  .seat { width: 32px; height: 32px; border-radius: 9px; }
+  .aisle { width: 14px; height: 32px; }
+}

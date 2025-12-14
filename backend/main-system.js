@@ -296,6 +296,12 @@ app.get('/passenger-flight-search', (req, res) => {
 // Extended View Page (GET)
 app.get('/extended-view', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'frontend', 'extended-view.html'));
+
+});
+
+// Plane View Page (GET)
+app.get('/plane-view', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'frontend', 'plane-view.html'));
 });
 
 // About Us Page (GET)

@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FlyTech | Plane View</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg1:#c4daf5; --bg2:#70b7e9; --bg3:#212f5e;
+      --card:#FEFFFF; --dark:#253360; --muted:rgba(0,0,0,.65); --border:#CACACA;
+
+      --seat:#EDEFF6;
+      --seatText:rgba(0,0,0,.75);
+      --seatBorder:rgba(37,51,96,.25);
+
+      --occ:#4e85df;
+      --business:#ddaa13;
+      --first:#9357dd;
+
+      --dangerBg:rgba(153,27,27,.08);
+      --dangerBorder:rgba(153,27,27,.25);
+      --dangerText:#991b1b;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      min-height:100vh;
+      background:linear-gradient(to top,var(--bg1) 0%,var(--bg2) 19.036%,var(--bg3) 100%);
+      background-attachment:fixed;
+      color:#1E1E1E;
+    }
+
+    .container{max-width:1200px;margin:0 auto;padding:22px 18px 40px}
+
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      color:#fff;margin-bottom:16px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;user-select:none}
+    .logo{
+      width:44px;height:44px;border-radius:12px;
+      display:grid;place-items:center;
+      background:rgba(255,255,255,.15);
+      border:1px solid rgba(255,255,255,.25);
+      font-weight:800;
+    }
+    .brand .name{font-size:26px;font-weight:500;white-space:nowrap}
+
+    .btn{
+      background:var(--dark);color:#fff;border:none;cursor:pointer;
+      padding:10px 18px;border-radius:999px;
+      box-shadow:0 4px 4px rgba(0,0,0,.25);
+      font-weight:700;
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:24px;
+      box-shadow:0 8px 16px rgba(0,0,0,.10);
+      padding:20px;
+    }
+
+    .header{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap;
+      border-bottom:2px solid var(--border);
+      padding-bottom:14px;margin-bottom:14px;
+    }
+    .title h1{font-size:24px;font-weight:800;margin-bottom:6px}
+    .title p{font-size:14px;color:var(--muted);line-height:1.45;max-width:720px}
+
+    .meta{display:grid;gap:6px;min-width:280px;margin-left:auto}
+    .meta .row{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted)}
+    .meta .row strong{color:#000;font-weight:800}
+
+    .planeSwitch{
+      display:flex;gap:10px;flex-wrap:wrap;
+      margin:12px 0 14px;
+    }
+    .pill{
+      border:1px solid rgba(37,51,96,.25);
+      background:#fff;
+      padding:8px 12px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:800;
+      color:var(--dark);
+    }
+    .pill.active{
+      background:var(--dark);
+      color:#fff;
+      border-color:var(--dark);
+    }
+
+    .legend{
+      display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;
+      margin:8px 0 14px;color:var(--muted);font-size:13px;
+    }
+    .legend .item{display:flex;align-items:center;gap:8px}
+    .dot{width:14px;height:14px;border-radius:5px;border:1px solid rgba(0,0,0,.2);background:#fff}
+    .dot.available{background:var(--seat)}
+    .dot.occupied{background:var(--occ);border-color:var(--occ)}
+    .dot.business{background:var(--business);border-color:var(--business)}
+    .dot.first{background:var(--first);border-color:var(--first)}
+
+    .planeWrap{
+      display:grid;
+      grid-template-columns: 1fr 320px;
+      gap:18px;
+      align-items:start;
+    }
+
+    .seatMapCard{
+      border:1px solid rgba(33,47,94,.25);
+      border-radius:14px;
+      padding:14px;
+      background:#fafafa;
+    }
+
+    .seatMapHeader{
+      display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .seatMapHeader .left{
+      display:flex;flex-direction:column;gap:4px;
+    }
+    .seatMapHeader .left .aircraft{
+      font-weight:900;color:var(--dark);
+    }
+    .seatMapHeader .left .hint{
+      font-size:13px;color:var(--muted);
+    }
+
+    .scrollArea{
+      max-height: 72vh;
+      overflow:auto;
+      padding-right:6px;
+    }
+
+    .cabin{
+      background:#fff;
+      border:1px solid rgba(0,0,0,.12);
+      border-radius:12px;
+      padding:12px;
+      margin-bottom:12px;
+    }
+    .cabinTitle{
+      font-weight:900;color:var(--dark);
+      display:flex;justify-content:space-between;gap:10px;align-items:baseline;
+      margin-bottom:10px;
+    }
+    .cabinTitle span{font-size:13px;color:var(--muted);font-weight:700}
+
+    .seatRow{
+      display:flex;align-items:center;gap:10px;
+      margin-bottom:6px;
+    }
+    .rowNum{
+      width:34px;text-align:right;
+      font-size:12px;color:var(--muted);font-weight:800;
+    }
+    .block{display:flex;gap:6px}
+    .aisle{width:22px}
+
+    .seat{
+      width:34px;height:34px;
+      border-radius:9px;
+      background:var(--seat);
+      border:1px solid var(--seatBorder);
+      color:var(--seatText);
+      font-weight:900;
+      display:grid;place-items:center;
+      cursor:pointer;
+      user-select:none;
+    }
+    .seat:hover{transform:translateY(-1px)}
+    .seat.occupied{
+      color:#fff;border-color:transparent;
+    }
+    .seat.occupied.economy{background:var(--occ)}
+    .seat.occupied.business{background:var(--business)}
+    .seat.occupied.first{background:var(--first)}
+
+    .seatDetails{
+      border:1px solid rgba(0,0,0,.12);
+      border-radius:14px;
+      padding:14px;
+      background:#fff;
+    }
+    .seatDetails h2{font-size:16px;font-weight:900;color:var(--dark);margin-bottom:10px}
+    .seatDetails .body{
+      font-size:14px;color:rgba(0,0,0,.75);
+      display:flex;flex-direction:column;gap:8px;
+      line-height:1.45;
+    }
+    .muted{color:var(--muted)}
+    .err{
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:14px;
+      background:var(--dangerBg);
+      border:1px solid var(--dangerBorder);
+      color:var(--dangerText);
+      display:none;
+      font-weight:800;
+    }
+
+    @media (max-width: 980px){
+      .planeWrap{grid-template-columns:1fr}
+      .scrollArea{max-height:none}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">FT</div>
+        <div class="name">FlyTech</div>
+      </div>
+      <button class="btn" id="backBtn">Back</button>
+    </div>
+
+    <div class="card">
+      <div class="header">
+        <div class="title">
+          <h1>Plane View</h1>
+          <p>Seat map renders for A320, B737, B777. Occupied seats come from passengers in the roster API.</p>
+        </div>
+
+        <div class="meta">
+          <div class="row"><span>Flight</span><strong id="mFlight">-</strong></div>
+          <div class="row"><span>Route</span><strong id="mRoute">-</strong></div>
+          <div class="row"><span>Date</span><strong id="mDate">-</strong></div>
+          <div class="row"><span>Aircraft</span><strong id="mAircraft">-</strong></div>
+        </div>
+      </div>
+
+      <!-- 3 plane views: switch between the 3 aircraft layouts -->
+      <div class="planeSwitch">
+        <button class="pill" id="btnA320" data-aircraft="A320">A320</button>
+        <button class="pill" id="btnB737" data-aircraft="B737">B737</button>
+        <button class="pill" id="btnB777" data-aircraft="B777">B777</button>
+      </div>
+
+      <div class="legend">
+        <div class="item"><span class="dot available"></span><span>Available</span></div>
+        <div class="item"><span class="dot occupied"></span><span>Occupied</span></div>
+        <div class="item"><span class="dot business"></span><span>Business</span></div>
+        <div class="item"><span class="dot first"></span><span>First</span></div>
+      </div>
+
+      <div class="planeWrap">
+        <div class="seatMapCard">
+          <div class="seatMapHeader">
+            <div class="left">
+              <div class="aircraft" id="aircraftTitle">Aircraft: -</div>
+              <div class="hint muted" id="aircraftHint">Loading…</div>
+            </div>
+          </div>
+
+          <div class="scrollArea">
+            <div id="seatmap">
+              <div class="muted" style="padding:10px;font-weight:800;">Loading seat map…</div>
+            </div>
+          </div>
+
+          <div class="err" id="errBox"></div>
+        </div>
+
+        <div class="seatDetails">
+          <h2>Seat details</h2>
+          <div class="body" id="seatDetailsBody">
+            <div class="muted">Click a seat. Occupied seats show passenger info.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Back
+    document.getElementById("backBtn").addEventListener("click", () => history.back());
+
+    function getFlightNumber() {
+      const p = new URLSearchParams(window.location.search);
+      return p.get("flightNumber") || "FT201";
+    }
+
+    // Optional override: /plane-view?flightNumber=FT101&aircraft=B777
+    function getAircraftOverride() {
+      const p = new URLSearchParams(window.location.search);
+      const a = (p.get("aircraft") || "").toUpperCase();
+      return ["A320","B737","B777"].includes(a) ? a : null;
+    }
+
+    function normalizeSeat(seat) {
+      return String(seat || "").trim().toUpperCase().replace(/\s+/g, "");
+    }
+
+    function showError(msg) {
+      const box = document.getElementById("errBox");
+      box.textContent = msg;
+      box.style.display = "block";
+    }
+
+    function clearError() {
+      const box = document.getElementById("errBox");
+      box.textContent = "";
+      box.style.display = "none";
+    }
+
+    // Seat counts match your DB definition:
+    // B737: 166 (Business 16, Economy 150)
+    // A320: 180 (Business 20, Economy 160)
+    // B777: 244 (First 8, Business 35, Economy 201)
+    // :contentReference[oaicite:4]{index=4}
+    const LAYOUTS = {
+      B737: {
+        name: "Boeing 737",
+        cabins: [
+          { title: "Business", cabin: "business", startRow: 1, rows: 4, blocks: ["AB","CD"] },      // 16
+          { title: "Economy",  cabin: "economy",  startRow: 5, rows: 25, blocks: ["ABC","DEF"] }    // 150
+        ]
+      },
+      A320: {
+        name: "Airbus A320",
+        cabins: [
+          { title: "Business", cabin: "business", startRow: 1, rows: 5,  blocks: ["AB","CD"] },     // 20
+          { title: "Economy",  cabin: "economy",  startRow: 6, rows: 26, blocks: ["ABC","DEF"] },   // 156
+          { title: "Economy",  cabin: "economy",  startRow: 32, rows: 1, blocks: ["AB","CD"] }      // +4 => 160
+        ]
+      },
+      B777: {
+        name: "Boeing 777",
+        cabins: [
+          { title: "First",    cabin: "first",    startRow: 1, rows: 2,  blocks: ["AB","CD"] },       // 8
+          { title: "Business", cabin: "business", startRow: 3, rows: 5,  blocks: ["AB","CDE","FG"] }, // 35
+          { title: "Economy",  cabin: "economy",  startRow: 8, rows: 28, blocks: ["ABC","DEFG"] },    // 196
+          { title: "Economy",  cabin: "economy",  startRow: 36, rows: 1, blocks: ["ABC","DE"] }       // +5 => 201
+        ]
+      }
+    };
+
+    function classifySeat(passenger, cabinFallback) {
+      const t = String(passenger?.SeatType || "").toLowerCase();
+      if (t.includes("first")) return "first";
+      if (t.includes("business")) return "business";
+      if (t.includes("economy")) return "economy";
+      return cabinFallback || "economy";
+    }
+
+    function setMeta(flight) {
+      document.getElementById("mFlight").textContent = flight?.FlightNumber || "-";
+      document.getElementById("mRoute").textContent = `${flight?.SourceAirportCode || "-"} → ${flight?.DestinationAirportCode || "-"}`;
+      document.getElementById("mDate").textContent = flight?.FlightDateTime || "-";
+      document.getElementById("mAircraft").textContent = flight?.VehicleTypeCode || "-";
+    }
+
+    function setActiveAircraftButtons(code) {
+      document.querySelectorAll(".pill").forEach(b => b.classList.remove("active"));
+      const btn = document.querySelector(`.pill[data-aircraft="${code}"]`);
+      if (btn) btn.classList.add("active");
+    }
+
+    function renderSeatMap(aircraftCode, passengers) {
+      clearError();
+
+      const code = String(aircraftCode || "").toUpperCase();
+      const layout = LAYOUTS[code];
+
+      if (!layout) {
+        showError(`Unsupported aircraft "${code}". Expected A320, B737, B777.`);
+        return;
+      }
+
+      setActiveAircraftButtons(code);
+
+      document.getElementById("aircraftTitle").textContent = `Aircraft: ${code} (${layout.name})`;
+      document.getElementById("aircraftHint").textContent = "Scroll to view cabins. Click seats for details.";
+
+      const occupied = new Map();
+      (passengers || []).forEach(p => {
+        const s = normalizeSeat(p.SeatNumber);
+        if (s) occupied.set(s, p);
+      });
+
+      const seatmap = document.getElementById("seatmap");
+      seatmap.innerHTML = "";
+
+      const detailsBody = document.getElementById("seatDetailsBody");
+      detailsBody.innerHTML = `<div class="muted">Click a seat. Occupied seats show passenger info.</div>`;
+
+      layout.cabins.forEach(cabin => {
+        const cabEl = document.createElement("div");
+        cabEl.className = "cabin";
+
+        const seatsPerRow = cabin.blocks.reduce((sum, b) => sum + b.length, 0);
+        const cabinSeats = cabin.rows * seatsPerRow;
+
+        const title = document.createElement("div");
+        title.className = "cabinTitle";
+        title.innerHTML = `<div>${cabin.title}</div><span>${cabinSeats} seats</span>`;
+        cabEl.appendChild(title);
+
+        for (let r = cabin.startRow; r < cabin.startRow + cabin.rows; r++) {
+          const rowEl = document.createElement("div");
+          rowEl.className = "seatRow";
+
+          const rn = document.createElement("div");
+          rn.className = "rowNum";
+          rn.textContent = r;
+          rowEl.appendChild(rn);
+
+          cabin.blocks.forEach((blockStr, idx) => {
+            const block = document.createElement("div");
+            block.className = "block";
+
+            for (const letter of blockStr.split("")) {
+              const seatCode = `${r}${letter}`;
+              const p = occupied.get(seatCode);
+
+              const btn = document.createElement("button");
+              btn.type = "button";
+              btn.className = "seat" + (p ? " occupied" : "");
+              btn.textContent = letter;
+              btn.title = p ? `${seatCode} • ${p.Name} • ${p.SeatType}` : `${seatCode} • Available`;
+
+              if (p) {
+                const cls = classifySeat(p, cabin.cabin);
+                btn.classList.add(cls);
+              }
+
+              btn.addEventListener("click", () => {
+                if (!p) {
+                  detailsBody.innerHTML = `<div><b>Seat:</b> ${seatCode}</div><div class="muted">Available</div>`;
+                  return;
+                }
+                detailsBody.innerHTML = `
+                  <div><b>Seat:</b> ${seatCode}</div>
+                  <div><b>Name:</b> ${p.Name}</div>
+                  <div><b>PassengerId:</b> ${p.PassengerId}</div>
+                  <div><b>SeatType:</b> ${p.SeatType}</div>
+                  <div><b>Nationality:</b> ${p.Nationality || "-"}</div>
+                `;
+              });
+
+              block.appendChild(btn);
+            }
+
+            rowEl.appendChild(block);
+
+            if (idx < cabin.blocks.length - 1) {
+              const aisle = document.createElement("div");
+              aisle.className = "aisle";
+              rowEl.appendChild(aisle);
+            }
+          });
+
+          cabEl.appendChild(rowEl);
+        }
+
+        seatmap.appendChild(cabEl);
+      });
+    }
+
+    let rosterCache = null;
+    let activeAircraft = "A320";
+
+    async function load() {
+      const flightNumber = getFlightNumber();
+
+      try {
+        const res = await fetch(`/api/roster/${encodeURIComponent(flightNumber)}`);
+        if (!res.ok) {
+          showError(`Roster API failed (${res.status}). Check flightNumber in URL.`);
+          return;
+        }
+
+        rosterCache = await res.json();
+        setMeta(rosterCache.flight);
+
+        // Default aircraft comes from the flight, which your backend returns. :contentReference[oaicite:5]{index=5}
+        const fromFlight = String(rosterCache.flight?.VehicleTypeCode || "").toUpperCase();
+        activeAircraft = ["A320","B737","B777"].includes(fromFlight) ? fromFlight : "A320";
+
+        // Allow override via ?aircraft=
+        const override = getAircraftOverride();
+        if (override) activeAircraft = override;
+
+        // Render
+        renderSeatMap(activeAircraft, rosterCache.passengers || []);
+
+      } catch (e) {
+        console.error(e);
+        showError("Failed to load plane view. Check server console.");
+      }
+    }
+
+    // 3-plane switch
+    document.querySelectorAll(".pill").forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (!rosterCache) return;
+        activeAircraft = btn.dataset.aircraft;
+        renderSeatMap(activeAircraft, rosterCache.passengers || []);
+      });
+    });
+
+    load();
+  </script>
+</body>
+</html>
