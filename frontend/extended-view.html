@@ -74,7 +74,7 @@
                             <div class="extended-scroll">
                                 <table class="extended-table">
                                     <thead>
-                                        <tr><th class="bg-yellow">Name</th><th class="bg-yellow">Gender</th><th class="bg-yellow">Age</th><th class="bg-yellow">Nationality</th><th class="bg-yellow">Rank</th><th class="bg-yellow">Languages</th></tr>
+                                        <tr><th class="bg-yellow">ID</th><th class="bg-yellow">Name</th><th class="bg-yellow">Gender</th><th class="bg-yellow">Age</th><th class="bg-yellow">Nationality</th><th class="bg-yellow">Rank</th><th class="bg-yellow">Seat</th><th class="bg-yellow">Languages</th></tr>
                                     </thead>
                                     <tbody id="ext-flight-crew-body"></tbody>
                                 </table>
@@ -91,7 +91,7 @@
                             <div class="extended-scroll">
                                 <table class="extended-table">
                                     <thead>
-                                        <tr><th class="bg-blue">Name</th><th class="bg-blue">Gender</th><th class="bg-blue">Age</th><th class="bg-blue">Nationality</th><th class="bg-blue">Role</th><th class="bg-blue">Languages</th><th class="bg-blue">Dishes</th></tr>
+                                        <tr><th class="bg-blue">ID</th><th class="bg-blue">Name</th><th class="bg-blue">Gender</th><th class="bg-blue">Age</th><th class="bg-blue">Nationality</th><th class="bg-blue">Role</th><th class="bg-blue">Seat</th><th class="bg-blue">Languages</th><th class="bg-blue">Dishes</th></tr>
                                     </thead>
                                     <tbody id="ext-cabin-crew-body"></tbody>
                                 </table>
@@ -108,7 +108,7 @@
                             <div class="extended-scroll">
                                 <table class="extended-table">
                                     <thead>
-                                        <tr><th class="bg-purple">Name</th><th class="bg-purple">Gender</th><th class="bg-purple">Age</th><th class="bg-purple">Nationality</th><th class="bg-purple">Seat</th><th class="bg-purple">Class</th><th class="bg-purple">Family</th></tr>
+                                        <tr><th class="bg-purple">ID</th><th class="bg-purple">Name</th><th class="bg-purple">Gender</th><th class="bg-purple">Age</th><th class="bg-purple">Nationality</th><th class="bg-purple">Seat</th><th class="bg-purple">Class</th><th class="bg-purple">Family</th></tr>
                                     </thead>
                                     <tbody id="ext-passengers-body"></tbody>
                                 </table>
@@ -160,18 +160,18 @@
                 const passengersBody = document.getElementById("ext-passengers-body");
 
                 // Simple loading states
-                flightCrewBody.innerHTML = `<tr><td colspan="3">Loading...</td></tr>`;
-                cabinCrewBody.innerHTML = `<tr><td colspan="3">Loading...</td></tr>`;
-                passengersBody.innerHTML = `<tr><td colspan="3">Loading...</td></tr>`;
+                flightCrewBody.innerHTML = `<tr><td colspan="8">Loading...</td></tr>`;
+                cabinCrewBody.innerHTML = `<tr><td colspan="9">Loading...</td></tr>`;
+                passengersBody.innerHTML = `<tr><td colspan="8">Loading...</td></tr>`;
 
                 try {
                     const response = await fetch(`/api/roster/${flightNumber}`);
 
                     if (!response.ok) {
                         const message = `Failed to load roster (${response.status})`;
-                        flightCrewBody.innerHTML = `<tr><td colspan="3">${message}</td></tr>`;
-                        cabinCrewBody.innerHTML = `<tr><td colspan="3">${message}</td></tr>`;
-                        passengersBody.innerHTML = `<tr><td colspan="3">${message}</td></tr>`;
+                        flightCrewBody.innerHTML = `<tr><td colspan="8">${message}</td></tr>`;
+                        cabinCrewBody.innerHTML = `<tr><td colspan="9">${message}</td></tr>`;
+                        passengersBody.innerHTML = `<tr><td colspan="8">${message}</td></tr>`;
                         return;
                     }
 
@@ -217,34 +217,40 @@
                     // Flight crew
                     if (data.pilots && data.pilots.length) {
                         flightCrewBody.innerHTML = data.pilots
-                            .map(p => asRow([p.Name || "-", p.Gender || "-", p.Age || "-", p.Nationality || "-", p.SeniorityLevel || "-", formatLanguages(p.languages)]))
+                            .map(p => {
+                                const pilotSeat = p.PilotSeatNumber ?? p.SeatNumber ?? "-";
+                                return asRow([p.PilotId ?? "-", p.Name || "-", p.Gender || "-", p.Age || "-", p.Nationality || "-", p.SeniorityLevel || "-", pilotSeat, formatLanguages(p.languages)]);
+                            })
                             .join("");
                     } else {
-                        flightCrewBody.innerHTML = `<tr><td colspan="6">No crew assigned</td></tr>`;
+                        flightCrewBody.innerHTML = `<tr><td colspan="8">No crew assigned</td></tr>`;
                     }
 
                     // Cabin crew
                     if (data.attendants && data.attendants.length) {
                         cabinCrewBody.innerHTML = data.attendants
-                            .map(a => asRow([a.Name || "-", a.Gender || "-", a.Age || "-", a.Nationality || "-", a.AttendantType || "-", formatLanguages(a.languages), formatDishes(a.dishes)]))
+                            .map(a => {
+                                const attendantSeat = a.AttendantSeatNumber ?? a.SeatNumber ?? "-";
+                                return asRow([a.AttendantId ?? "-", a.Name || "-", a.Gender || "-", a.Age || "-", a.Nationality || "-", a.AttendantType || "-", attendantSeat, formatLanguages(a.languages), formatDishes(a.dishes)]);
+                            })
                             .join("");
                     } else {
-                        cabinCrewBody.innerHTML = `<tr><td colspan="7">No cabin crew assigned</td></tr>`;
+                        cabinCrewBody.innerHTML = `<tr><td colspan="9">No cabin crew assigned</td></tr>`;
                     }
 
                     // Passengers
                     if (data.passengers && data.passengers.length) {
                         passengersBody.innerHTML = data.passengers
-                            .map(p => asRow([p.Name || "-", p.Gender || "-", p.Age || "-", p.Nationality || "-", p.SeatNumber || "-", p.SeatType || "-", formatFamily(p)]))
+                            .map(p => asRow([p.PassengerId ?? "-", p.Name || "-", p.Gender || "-", p.Age || "-", p.Nationality || "-", p.SeatNumber || "-", p.SeatType || "-", formatFamily(p)]))
                             .join("");
                     } else {
-                        passengersBody.innerHTML = `<tr><td colspan="7">No passengers found</td></tr>`;
+                        passengersBody.innerHTML = `<tr><td colspan="8">No passengers found</td></tr>`;
                     }
                 } catch (err) {
                     const message = "Unable to connect to server";
-                    flightCrewBody.innerHTML = `<tr><td colspan="3">${message}</td></tr>`;
-                    cabinCrewBody.innerHTML = `<tr><td colspan="3">${message}</td></tr>`;
-                    passengersBody.innerHTML = `<tr><td colspan="3">${message}</td></tr>`;
+                    flightCrewBody.innerHTML = `<tr><td colspan="8">${message}</td></tr>`;
+                    cabinCrewBody.innerHTML = `<tr><td colspan="9">${message}</td></tr>`;
+                    passengersBody.innerHTML = `<tr><td colspan="8">${message}</td></tr>`;
                 }
             }
 

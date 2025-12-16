@@ -297,18 +297,19 @@
 
         for (let idx = 0; idx < cockpitSeatCount; idx++) {
           const pilot = cockpitSlots[idx];
-          const seatLabel = `P${idx + 1}`; // display label stays constant
+          const seatLabel = `P${idx + 1}`; // fallback label
           const seatCode = normalizeSeat(pilot?.PilotSeatNumber);
+          const displaySeat = seatCode || seatLabel;
           const btn = document.createElement("button");
           btn.type = "button";
 
           if (pilot) {
             btn.className = "seat occupied cockpit";
-            btn.textContent = seatLabel;
-            btn.title = `Pilot: ${pilot.Name}${seatCode ? ` (${seatCode})` : ""}`;
+            btn.textContent = displaySeat;
+            btn.title = `Pilot: ${pilot.Name} (${displaySeat})`;
             btn.addEventListener("click", () => {
               detailsBody.innerHTML = `
-                <div><b>Seat:</b> ${seatLabel}${seatCode ? ` (assigned ${seatCode})` : ""}</div>
+                <div><b>Seat:</b> ${displaySeat}</div>
                 <div><b>Name:</b> ${pilot.Name}</div>
                 <div><b>Rank:</b> ${pilot.SeniorityLevel || "-"}</div>
                 <div><b>Age:</b> ${pilot.Age || "-"}</div>
@@ -318,11 +319,11 @@
             });
           } else {
             btn.className = "seat cockpit";
-            btn.textContent = seatLabel;
-            btn.title = `Available pilot seat ${seatLabel}`;
+            btn.textContent = displaySeat;
+            btn.title = `Available pilot seat ${displaySeat}`;
             btn.addEventListener("click", () => {
               detailsBody.innerHTML = `
-                <div><b>Seat:</b> ${seatLabel}</div>
+                <div><b>Seat:</b> ${displaySeat}</div>
                 <div><b>Status:</b> Available</div>
                 <div><b>Role:</b> Pilot</div>
               `;
@@ -384,18 +385,19 @@
 
         for (let idx = 0; idx < galleySeatCount; idx++) {
           const attendant = galleySlots[idx];
-          const seatLabel = `A${idx + 1}`; // display label stays constant
+          const seatLabel = `A${idx + 1}`; // fallback label
           const seatCode = normalizeSeat(attendant?.AttendantSeatNumber);
+          const displaySeat = seatCode || seatLabel;
           const btn = document.createElement("button");
           btn.type = "button";
 
           if (attendant) {
             btn.className = "seat occupied gallery";
-            btn.textContent = seatLabel;
-            btn.title = `Attendant: ${attendant.Name}${seatCode ? ` (${seatCode})` : ""}`;
+            btn.textContent = displaySeat;
+            btn.title = `Attendant: ${attendant.Name} (${displaySeat})`;
             btn.addEventListener("click", () => {
               detailsBody.innerHTML = `
-                <div><b>Seat:</b> ${seatLabel}${seatCode ? ` (assigned ${seatCode})` : ""}</div>
+                <div><b>Seat:</b> ${displaySeat}</div>
                 <div><b>Name:</b> ${attendant.Name}</div>
                 <div><b>Role:</b> ${attendant.AttendantType || "-"}</div>
                 <div><b>Age:</b> ${attendant.Age || "-"}</div>
@@ -406,13 +408,13 @@
             });
           } else {
             btn.className = "seat gallery";
-            btn.textContent = seatLabel;
-            btn.title = `Available cabin crew seat ${seatLabel}`;
+            btn.textContent = displaySeat;
+            btn.title = `Available cabin crew seat ${displaySeat}`;
             btn.addEventListener("click", () => {
               detailsBody.innerHTML = `
-                <div><b>Seat:</b> ${seatLabel}</div>
+                <div><b>Seat:</b> ${displaySeat}</div>
                 <div><b>Status:</b> Available</div>
-                <div><b>Role:</b> Cabin crew</div>
+                <div><b>Role:</b> Cabin Crew</div>
               `;
             });
           }

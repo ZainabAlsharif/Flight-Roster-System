@@ -78,7 +78,7 @@
               <div class="table-cell cell-id"><p>ID</p></div>
               <div class="table-cell cell-flexible"><p>Role</p></div>
               <div class="table-cell cell-flexible"><p>Name</p></div>
-              <div class="table-cell cell-flexible"><p>Seat</p></div>
+              <div class="table-cell cell-flexible"><p>Seat Number</p></div>
             </div>
             <div id="tableBody"></div>
           </div>
@@ -154,12 +154,16 @@
 
         // Pilots
         (data.pilots || []).forEach(p => {
-          addRow(container, p.PilotId, "Pilot", p.Name, "-");
+          // Prefer `PilotSeatNumber` if available; fallback to generic `SeatNumber`
+          const pilotSeat = p.PilotSeatNumber ?? p.SeatNumber ?? "-";
+          addRow(container, p.PilotId, "Pilot", p.Name, pilotSeat);
         });
 
         // Cabin crew
         (data.attendants || []).forEach(a => {
-          addRow(container, a.AttendantId, a.AttendantType, a.Name, "-");
+          // Prefer `AttendantSeatNumber` if available; fallback to generic `SeatNumber`
+          const attendantSeat = a.AttendantSeatNumber ?? a.SeatNumber ?? "-";
+          addRow(container, a.AttendantId, a.AttendantType, a.Name, attendantSeat);
         });
 
         // Passengers

@@ -343,6 +343,20 @@ main.container {
     text-overflow: ellipsis;
 }
 
+/* Limit Family column width so it doesn’t sprawl */
+.extended-box.border-purple .extended-table th:last-child,
+.extended-box.border-purple .extended-table td:last-child {
+    max-width: 110px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+/* Let other passenger columns breathe a bit more */
+.extended-box.border-purple .extended-table th:not(:last-child),
+.extended-box.border-purple .extended-table td:not(:last-child) {
+    max-width: 90px;
+}
+
 .bg-yellow { background-color: var(--bg-yellow); }
 .bg-blue { background-color: var(--bg-blue); }
 .bg-purple { background-color: var(--bg-purple); }
