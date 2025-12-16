@@ -79,10 +79,10 @@
       const ticket = document.createElement("div");
       ticket.className = "ticket";
 
-      // When user clicks ticket → go to tabular view with flight number
+      // When user clicks ticket → go to plane view with flight number
       ticket.onclick = () => {
         window.location.href =
-          `./tabular-view.html?flightNumber=${f.FlightNumber}`;
+          `./plane-view.html?flightNumber=${f.FlightNumber}`;
       };
 
       // Format date/time for display

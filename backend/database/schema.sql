@@ -60,6 +60,7 @@ CREATE TABLE Pilot (
     VehicleTypeCode TEXT NOT NULL,
     AllowedRangeKm INTEGER NOT NULL,
     SeniorityLevel TEXT NOT NULL,
+    PilotSeatNumber TEXT NOT NULL , 
 
     FOREIGN KEY (VehicleTypeCode) REFERENCES VehicleType(VehicleTypeCode)
 );
@@ -85,7 +86,8 @@ CREATE TABLE Attendant (
     Age INTEGER NOT NULL,
     Gender TEXT NOT NULL,
     Nationality TEXT NOT NULL,
-    AttendantType TEXT NOT NULL    -- chief / regular / chef
+    AttendantType TEXT NOT NULL,   -- chief / regular / chef
+    AttendantSeatNumber TEXT NOT NULL 
 );
 
 -- M:N — ATTENDANT SPEAKS LANGUAGE

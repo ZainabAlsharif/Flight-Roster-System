@@ -3,257 +3,81 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>FlyTech | Plane View</title>
+  <title>Plane View</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    :root{
-      --bg1:#c4daf5; --bg2:#70b7e9; --bg3:#212f5e;
-      --card:#FEFFFF; --dark:#253360; --muted:rgba(0,0,0,.65); --border:#CACACA;
-
-      --seat:#EDEFF6;
-      --seatText:rgba(0,0,0,.75);
-      --seatBorder:rgba(37,51,96,.25);
-
-      --occ:#4e85df;
-      --business:#ddaa13;
-      --first:#9357dd;
-
-      --dangerBg:rgba(153,27,27,.08);
-      --dangerBorder:rgba(153,27,27,.25);
-      --dangerText:#991b1b;
-    }
-
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      min-height:100vh;
-      background:linear-gradient(to top,var(--bg1) 0%,var(--bg2) 19.036%,var(--bg3) 100%);
-      background-attachment:fixed;
-      color:#1E1E1E;
-    }
-
-    .container{max-width:1200px;margin:0 auto;padding:22px 18px 40px}
-
-    .topbar{
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
-      color:#fff;margin-bottom:16px;
-    }
-    .brand{display:flex;align-items:center;gap:12px;user-select:none}
-    .logo{
-      width:44px;height:44px;border-radius:12px;
-      display:grid;place-items:center;
-      background:rgba(255,255,255,.15);
-      border:1px solid rgba(255,255,255,.25);
-      font-weight:800;
-    }
-    .brand .name{font-size:26px;font-weight:500;white-space:nowrap}
-
-    .btn{
-      background:var(--dark);color:#fff;border:none;cursor:pointer;
-      padding:10px 18px;border-radius:999px;
-      box-shadow:0 4px 4px rgba(0,0,0,.25);
-      font-weight:700;
-    }
-
-    .card{
-      background:var(--card);
-      border-radius:24px;
-      box-shadow:0 8px 16px rgba(0,0,0,.10);
-      padding:20px;
-    }
-
-    .header{
-      display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap;
-      border-bottom:2px solid var(--border);
-      padding-bottom:14px;margin-bottom:14px;
-    }
-    .title h1{font-size:24px;font-weight:800;margin-bottom:6px}
-    .title p{font-size:14px;color:var(--muted);line-height:1.45;max-width:720px}
-
-    .meta{display:grid;gap:6px;min-width:280px;margin-left:auto}
-    .meta .row{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted)}
-    .meta .row strong{color:#000;font-weight:800}
-
-    .planeSwitch{
-      display:flex;gap:10px;flex-wrap:wrap;
-      margin:12px 0 14px;
-    }
-    .pill{
-      border:1px solid rgba(37,51,96,.25);
-      background:#fff;
-      padding:8px 12px;
-      border-radius:999px;
-      cursor:pointer;
-      font-weight:800;
-      color:var(--dark);
-    }
-    .pill.active{
-      background:var(--dark);
-      color:#fff;
-      border-color:var(--dark);
-    }
-
-    .legend{
-      display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;
-      margin:8px 0 14px;color:var(--muted);font-size:13px;
-    }
-    .legend .item{display:flex;align-items:center;gap:8px}
-    .dot{width:14px;height:14px;border-radius:5px;border:1px solid rgba(0,0,0,.2);background:#fff}
-    .dot.available{background:var(--seat)}
-    .dot.occupied{background:var(--occ);border-color:var(--occ)}
-    .dot.business{background:var(--business);border-color:var(--business)}
-    .dot.first{background:var(--first);border-color:var(--first)}
-
-    .planeWrap{
-      display:grid;
-      grid-template-columns: 1fr 320px;
-      gap:18px;
-      align-items:start;
-    }
-
-    .seatMapCard{
-      border:1px solid rgba(33,47,94,.25);
-      border-radius:14px;
-      padding:14px;
-      background:#fafafa;
-    }
-
-    .seatMapHeader{
-      display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;
-      margin-bottom:10px;
-    }
-    .seatMapHeader .left{
-      display:flex;flex-direction:column;gap:4px;
-    }
-    .seatMapHeader .left .aircraft{
-      font-weight:900;color:var(--dark);
-    }
-    .seatMapHeader .left .hint{
-      font-size:13px;color:var(--muted);
-    }
-
-    .scrollArea{
-      max-height: 72vh;
-      overflow:auto;
-      padding-right:6px;
-    }
-
-    .cabin{
-      background:#fff;
-      border:1px solid rgba(0,0,0,.12);
-      border-radius:12px;
-      padding:12px;
-      margin-bottom:12px;
-    }
-    .cabinTitle{
-      font-weight:900;color:var(--dark);
-      display:flex;justify-content:space-between;gap:10px;align-items:baseline;
-      margin-bottom:10px;
-    }
-    .cabinTitle span{font-size:13px;color:var(--muted);font-weight:700}
-
-    .seatRow{
-      display:flex;align-items:center;gap:10px;
-      margin-bottom:6px;
-    }
-    .rowNum{
-      width:34px;text-align:right;
-      font-size:12px;color:var(--muted);font-weight:800;
-    }
-    .block{display:flex;gap:6px}
-    .aisle{width:22px}
-
-    .seat{
-      width:34px;height:34px;
-      border-radius:9px;
-      background:var(--seat);
-      border:1px solid var(--seatBorder);
-      color:var(--seatText);
-      font-weight:900;
-      display:grid;place-items:center;
-      cursor:pointer;
-      user-select:none;
-    }
-    .seat:hover{transform:translateY(-1px)}
-    .seat.occupied{
-      color:#fff;border-color:transparent;
-    }
-    .seat.occupied.economy{background:var(--occ)}
-    .seat.occupied.business{background:var(--business)}
-    .seat.occupied.first{background:var(--first)}
-
-    .seatDetails{
-      border:1px solid rgba(0,0,0,.12);
-      border-radius:14px;
-      padding:14px;
-      background:#fff;
-    }
-    .seatDetails h2{font-size:16px;font-weight:900;color:var(--dark);margin-bottom:10px}
-    .seatDetails .body{
-      font-size:14px;color:rgba(0,0,0,.75);
-      display:flex;flex-direction:column;gap:8px;
-      line-height:1.45;
-    }
-    .muted{color:var(--muted)}
-    .err{
-      margin-top:12px;
-      padding:12px 14px;
-      border-radius:14px;
-      background:var(--dangerBg);
-      border:1px solid var(--dangerBorder);
-      color:var(--dangerText);
-      display:none;
-      font-weight:800;
-    }
-
-    @media (max-width: 980px){
-      .planeWrap{grid-template-columns:1fr}
-      .scrollArea{max-height:none}
-    }
-  </style>
+  <!-- Font Awesome for icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <link rel="stylesheet" href="/public/styles/plane-view.css" />
 </head>
 
 <body>
-  <div class="container">
-    <div class="topbar">
-      <div class="brand">
-        <div class="logo">FT</div>
-        <div class="name">FlyTech</div>
+  <div class="app-wrapper">
+    <header class="main-header container">
+      <div class="logo-container">
+        <div class="airplane-icon">
+          <svg viewBox="0 0 44 44" fill="none">
+            <path d="M37.6933 7.16833C38.775 8.25 38.775 9.99167 37.6933 11.055L30.5617 18.1867L34.4483 35.035L31.8633 37.6383L24.75 24.0167L17.6 31.1667L18.26 35.695L16.2983 37.6383L13.0717 31.8083L7.22333 28.5633L9.16667 26.5833L13.75 27.2617L20.845 20.1667L7.22333 12.9983L9.82667 10.4133L26.675 14.3L33.8067 7.16833C34.8333 6.105 36.6667 6.105 37.6933 7.16833Z" fill="white" />
+          </svg>
+        </div>
+        <h1 class="brand-name">FlyTech</h1>
       </div>
-      <button class="btn" id="backBtn">Back</button>
-    </div>
 
-    <div class="card">
-      <div class="header">
-        <div class="title">
-          <h1>Plane View</h1>
-          <p>Seat map renders for A320, B737, B777. Occupied seats come from passengers in the roster API.</p>
+      <nav class="nav-container">
+        <a class="nav-link" onclick="window.location.href='./about-us.html';">About Us</a>
+        <a class="login-button" onclick="window.location.href='./login.html';">Log-in</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <div class="main-card">
+        <div class="back-row">
+          <button class="back-button" onclick="window.location.href='./assigned-flight-list.html';">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+          </button>
         </div>
 
-        <div class="meta">
-          <div class="row"><span>Flight</span><strong id="mFlight">-</strong></div>
-          <div class="row"><span>Route</span><strong id="mRoute">-</strong></div>
-          <div class="row"><span>Date</span><strong id="mDate">-</strong></div>
-          <div class="row"><span>Aircraft</span><strong id="mAircraft">-</strong></div>
+        <div class="flight-info">
+          <h2 class="flight-title">Flight: -</h2>
+          <p class="flight-details">-</p>
         </div>
-      </div>
 
-      <!-- 3 plane views: switch between the 3 aircraft layouts -->
-      <div class="planeSwitch">
-        <button class="pill" id="btnA320" data-aircraft="A320">A320</button>
-        <button class="pill" id="btnB737" data-aircraft="B737">B737</button>
-        <button class="pill" id="btnB777" data-aircraft="B777">B777</button>
-      </div>
+        <hr class="divider-line" />
 
+        <div class="view-tabs">
+          <div class="tab-item tab-active">
+            <div class="tab-icon">
+              <i class="fas fa-plane"></i>
+            </div>
+            <span>Plane View</span>
+          </div>
+
+          <div class="tab-item" onclick="navigateToTabularView()">
+            <div class="tab-icon">
+              <i class="fas fa-table"></i>
+            </div>
+            <span>Tabular View</span>
+          </div>
+
+          <div class="tab-item" onclick="navigateToExtendedView()">
+            <div class="tab-icon">
+              <i class="fas fa-list"></i>
+            </div>
+            <span>Extended View</span>
+          </div>
+        </div>
       <div class="legend">
         <div class="item"><span class="dot available"></span><span>Available</span></div>
         <div class="item"><span class="dot occupied"></span><span>Occupied</span></div>
         <div class="item"><span class="dot business"></span><span>Business</span></div>
-        <div class="item"><span class="dot first"></span><span>First</span></div>
+        <div class="item"><span class="dot crew"></span><span>Crew</span></div>
+        <div class="item" id="legendFirst"><span class="dot first"></span><span>First</span></div>
       </div>
 
       <div class="planeWrap">
@@ -267,7 +91,7 @@
 
           <div class="scrollArea">
             <div id="seatmap">
-              <div class="muted" style="padding:10px;font-weight:800;">Loading seat map…</div>
+              <div class="muted seatmap-loading">Loading seat map…</div>
             </div>
           </div>
 
@@ -282,16 +106,37 @@
         </div>
       </div>
 
-    </div>
+      <div class="export-container">
+        <button class="export-button" id="exportJsonBtn" type="button">
+          <div class="download-icon">
+            <svg viewBox="0 0 28 28" fill="none">
+              <path d="M14 18.6667L8.16667 12.8333L9.8 11.1417L12.8333 14.175V4.66667H15.1667V14.175L18.2 11.1417L19.8333 12.8333L14 18.6667ZM7 23.3333C6.35833 23.3333 5.80922 23.1051 5.35267 22.6485C4.89611 22.1919 4.66744 21.6424 4.66667 21V17.5H7V21H21V17.5H23.3333V21C23.3333 21.6417 23.1051 22.1912 22.6485 22.6485C22.1919 23.1058 21.6424 23.3341 21 23.3333H7Z" fill="#FEFFFF" />
+            </svg>
+          </div>
+          <span class="export-text">Export JSON</span>
+        </button>
+      </div>
+    </main>
   </div>
 
   <script>
-    // Back
-    document.getElementById("backBtn").addEventListener("click", () => history.back());
-
     function getFlightNumber() {
       const p = new URLSearchParams(window.location.search);
       return p.get("flightNumber") || "FT201";
+    }
+
+    function navigateToTabularView() {
+      const flightNumber = getFlightNumber();
+      window.location.href = `/tabular-view?flightNumber=${encodeURIComponent(flightNumber)}`;
+    }
+
+    function navigateToExtendedView() {
+      const flightNumber = getFlightNumber();
+      window.location.href = `/extended-view?flightNumber=${encodeURIComponent(flightNumber)}`;
+    }
+
+    function downloadRosterJson(flightNumber) {
+      window.location.href = `/api/roster/${encodeURIComponent(flightNumber)}/export`;
     }
 
     // Optional override: /plane-view?flightNumber=FT101&aircraft=B777
@@ -304,6 +149,9 @@
     function normalizeSeat(seat) {
       return String(seat || "").trim().toUpperCase().replace(/\s+/g, "");
     }
+
+    const MIN_PILOTS = 2;
+    const MIN_ATTENDANTS = 4;
 
     function showError(msg) {
       const box = document.getElementById("errBox");
@@ -358,10 +206,8 @@
     }
 
     function setMeta(flight) {
-      document.getElementById("mFlight").textContent = flight?.FlightNumber || "-";
-      document.getElementById("mRoute").textContent = `${flight?.SourceAirportCode || "-"} → ${flight?.DestinationAirportCode || "-"}`;
-      document.getElementById("mDate").textContent = flight?.FlightDateTime || "-";
-      document.getElementById("mAircraft").textContent = flight?.VehicleTypeCode || "-";
+      document.querySelector(".flight-title").textContent = `Flight: ${flight?.FlightNumber || "-"}`;
+      document.querySelector(".flight-details").textContent = `${flight?.SourceAirportCode || "-"} → ${flight?.DestinationAirportCode || "-"} | ${flight?.FlightDateTime || "-"}`;
     }
 
     function setActiveAircraftButtons(code) {
@@ -383,6 +229,12 @@
 
       setActiveAircraftButtons(code);
 
+      const firstLegend = document.getElementById("legendFirst");
+      if (firstLegend) {
+        const hasFirst = layout.cabins.some(c => c.cabin === "first");
+        firstLegend.style.display = hasFirst ? "flex" : "none";
+      }
+
       document.getElementById("aircraftTitle").textContent = `Aircraft: ${code} (${layout.name})`;
       document.getElementById("aircraftHint").textContent = "Scroll to view cabins. Click seats for details.";
 
@@ -398,6 +250,182 @@
       const detailsBody = document.getElementById("seatDetailsBody");
       detailsBody.innerHTML = `<div class="muted">Click a seat. Occupied seats show passenger info.</div>`;
 
+      // Add Cockpit section for pilots (always show 2 seats, fill remaining as available)
+      const pilots = (rosterCache && Array.isArray(rosterCache.pilots)) ? rosterCache.pilots : [];
+      const cockpitSeatCount = Math.max(MIN_PILOTS, pilots.length);
+      if (cockpitSeatCount > 0) {
+        const cockpitEl = document.createElement("div");
+        cockpitEl.className = "cabin";
+        
+        const cockpitTitle = document.createElement("div");
+        cockpitTitle.className = "cabinTitle";
+        cockpitTitle.innerHTML = `<div>Cockpit</div><span>${cockpitSeatCount} seats</span>`;
+        cockpitEl.appendChild(cockpitTitle);
+
+        const cockpitRow = document.createElement("div");
+        cockpitRow.className = "seatRow";
+
+        const cockpitBlock = document.createElement("div");
+        cockpitBlock.className = "block";
+
+        const pilotsSorted = [...pilots].sort((a, b) => {
+          const aa = normalizeSeat(a.PilotSeatNumber);
+          const bb = normalizeSeat(b.PilotSeatNumber);
+          if (aa && bb) return aa.localeCompare(bb);
+          if (aa) return -1;
+          if (bb) return 1;
+          return 0;
+        });
+
+        // Place pilots into fixed slots (P1, P2) based on their seat number when available
+        const cockpitSlots = Array.from({ length: cockpitSeatCount }, () => null);
+        pilotsSorted.forEach(pilot => {
+          const code = normalizeSeat(pilot?.PilotSeatNumber);
+          let slotIndex = null;
+          const match = /^P(\d+)$/.exec(code || "");
+          if (match) {
+            const num = parseInt(match[1], 10);
+            if (num >= 1 && num <= cockpitSeatCount) slotIndex = num - 1;
+          }
+          if (slotIndex !== null && cockpitSlots[slotIndex] === null) {
+            cockpitSlots[slotIndex] = pilot;
+          } else {
+            const firstEmpty = cockpitSlots.findIndex(p => p === null);
+            if (firstEmpty !== -1) cockpitSlots[firstEmpty] = pilot;
+          }
+        });
+
+        for (let idx = 0; idx < cockpitSeatCount; idx++) {
+          const pilot = cockpitSlots[idx];
+          const seatLabel = `P${idx + 1}`; // display label stays constant
+          const seatCode = normalizeSeat(pilot?.PilotSeatNumber);
+          const btn = document.createElement("button");
+          btn.type = "button";
+
+          if (pilot) {
+            btn.className = "seat occupied cockpit";
+            btn.textContent = seatLabel;
+            btn.title = `Pilot: ${pilot.Name}${seatCode ? ` (${seatCode})` : ""}`;
+            btn.addEventListener("click", () => {
+              detailsBody.innerHTML = `
+                <div><b>Seat:</b> ${seatLabel}${seatCode ? ` (assigned ${seatCode})` : ""}</div>
+                <div><b>Name:</b> ${pilot.Name}</div>
+                <div><b>Rank:</b> ${pilot.SeniorityLevel || "-"}</div>
+                <div><b>Age:</b> ${pilot.Age || "-"}</div>
+                <div><b>Nationality:</b> ${pilot.Nationality || "-"}</div>
+                <div><b>Languages:</b> ${pilot.languages ? pilot.languages.map(l => l.name).join(", ") : "-"}</div>
+              `;
+            });
+          } else {
+            btn.className = "seat cockpit";
+            btn.textContent = seatLabel;
+            btn.title = `Available pilot seat ${seatLabel}`;
+            btn.addEventListener("click", () => {
+              detailsBody.innerHTML = `
+                <div><b>Seat:</b> ${seatLabel}</div>
+                <div><b>Status:</b> Available</div>
+                <div><b>Role:</b> Pilot</div>
+              `;
+            });
+          }
+
+          cockpitBlock.appendChild(btn);
+        }
+
+        cockpitRow.appendChild(cockpitBlock);
+        cockpitEl.appendChild(cockpitRow);
+        seatmap.appendChild(cockpitEl);
+      }
+
+      // Add Gallery section for cabin crew (always show 4 seats, fill remaining as available)
+      const attendants = (rosterCache && Array.isArray(rosterCache.attendants)) ? rosterCache.attendants : [];
+      const galleySeatCount = Math.max(MIN_ATTENDANTS, attendants.length);
+      if (galleySeatCount > 0) {
+        const galleyEl = document.createElement("div");
+        galleyEl.className = "cabin";
+        
+        const galleyTitle = document.createElement("div");
+        galleyTitle.className = "cabinTitle";
+        galleyTitle.innerHTML = `<div>Gallery</div><span>${galleySeatCount} cabin crew seats</span>`;
+        galleyEl.appendChild(galleyTitle);
+
+        const galleyRow = document.createElement("div");
+        galleyRow.className = "seatRow";
+
+        const galleyBlock = document.createElement("div");
+        galleyBlock.className = "block";
+
+        const attendantsSorted = [...attendants].sort((a, b) => {
+          const aa = normalizeSeat(a.AttendantSeatNumber);
+          const bb = normalizeSeat(b.AttendantSeatNumber);
+          if (aa && bb) return aa.localeCompare(bb);
+          if (aa) return -1;
+          if (bb) return 1;
+          return 0;
+        });
+
+        // Place attendants into fixed slots (A1-A4) based on their seat number when available
+        const galleySlots = Array.from({ length: galleySeatCount }, () => null);
+        attendantsSorted.forEach(attendant => {
+          const code = normalizeSeat(attendant?.AttendantSeatNumber);
+          let slotIndex = null;
+          const match = /^A(\d+)$/.exec(code || "");
+          if (match) {
+            const num = parseInt(match[1], 10);
+            if (num >= 1 && num <= galleySeatCount) slotIndex = num - 1;
+          }
+          if (slotIndex !== null && galleySlots[slotIndex] === null) {
+            galleySlots[slotIndex] = attendant;
+          } else {
+            const firstEmpty = galleySlots.findIndex(a => a === null);
+            if (firstEmpty !== -1) galleySlots[firstEmpty] = attendant;
+          }
+        });
+
+        for (let idx = 0; idx < galleySeatCount; idx++) {
+          const attendant = galleySlots[idx];
+          const seatLabel = `A${idx + 1}`; // display label stays constant
+          const seatCode = normalizeSeat(attendant?.AttendantSeatNumber);
+          const btn = document.createElement("button");
+          btn.type = "button";
+
+          if (attendant) {
+            btn.className = "seat occupied gallery";
+            btn.textContent = seatLabel;
+            btn.title = `Attendant: ${attendant.Name}${seatCode ? ` (${seatCode})` : ""}`;
+            btn.addEventListener("click", () => {
+              detailsBody.innerHTML = `
+                <div><b>Seat:</b> ${seatLabel}${seatCode ? ` (assigned ${seatCode})` : ""}</div>
+                <div><b>Name:</b> ${attendant.Name}</div>
+                <div><b>Role:</b> ${attendant.AttendantType || "-"}</div>
+                <div><b>Age:</b> ${attendant.Age || "-"}</div>
+                <div><b>Nationality:</b> ${attendant.Nationality || "-"}</div>
+                <div><b>Languages:</b> ${attendant.languages ? attendant.languages.map(l => l.name).join(", ") : "-"}</div>
+                <div><b>Dishes:</b> ${attendant.dishes ? attendant.dishes.map(d => d.name).join(", ") : "-"}</div>
+              `;
+            });
+          } else {
+            btn.className = "seat gallery";
+            btn.textContent = seatLabel;
+            btn.title = `Available cabin crew seat ${seatLabel}`;
+            btn.addEventListener("click", () => {
+              detailsBody.innerHTML = `
+                <div><b>Seat:</b> ${seatLabel}</div>
+                <div><b>Status:</b> Available</div>
+                <div><b>Role:</b> Cabin crew</div>
+              `;
+            });
+          }
+
+          galleyBlock.appendChild(btn);
+        }
+
+        galleyRow.appendChild(galleyBlock);
+        galleyEl.appendChild(galleyRow);
+        seatmap.appendChild(galleyEl);
+      }
+
+      // Render passenger cabins
       layout.cabins.forEach(cabin => {
         const cabEl = document.createElement("div");
         cabEl.className = "cabin";
@@ -503,15 +531,12 @@
         showError("Failed to load plane view. Check server console.");
       }
     }
-
-    // 3-plane switch
-    document.querySelectorAll(".pill").forEach(btn => {
-      btn.addEventListener("click", () => {
-        if (!rosterCache) return;
-        activeAircraft = btn.dataset.aircraft;
-        renderSeatMap(activeAircraft, rosterCache.passengers || []);
+    const exportBtn = document.getElementById("exportJsonBtn");
+    if (exportBtn) {
+      exportBtn.addEventListener("click", () => {
+        downloadRosterJson(getFlightNumber());
       });
-    });
+    }
 
     load();
   </script>

@@ -157,7 +157,7 @@ async function buildRosterResponse(flightNumber) {
   if (pilotIds.length) {
     const placeholders = pilotIds.map(() => "?").join(",");
     pilots = await dbAll(
-      `SELECT PilotId, Name, Age, Gender, Nationality, VehicleTypeCode, AllowedRangeKm, SeniorityLevel
+      `SELECT PilotId, Name, Age, Gender, Nationality, VehicleTypeCode, AllowedRangeKm, SeniorityLevel, PilotSeatNumber
       FROM Pilot
       WHERE PilotId IN (${placeholders})`,
       pilotIds
@@ -181,7 +181,7 @@ async function buildRosterResponse(flightNumber) {
   if (attendantIds.length) {
     const placeholders = attendantIds.map(() => "?").join(",");
     attendants = await dbAll(
-      `SELECT AttendantId, Name, Age, Gender, Nationality, AttendantType
+      `SELECT AttendantId, Name, Age, Gender, Nationality, AttendantType, AttendantSeatNumber
       FROM Attendant
       WHERE AttendantId IN (${placeholders})`,
       attendantIds

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlyTech - Extended View</title>
+    <title>Extended View</title>
     <link rel="stylesheet" href="./public/styles/extended-view.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -38,14 +38,14 @@
                 </div>
                 
                 <div class="flight-info">
-                    <h2 class="flight-title">Flight: FT123</h2>
-                    <p class="flight-details">IST → JFK | 10-15-2025 at 4:30</p>
+                    <h2 class="flight-title">Flight: -</h2>
+                    <p class="flight-details">-</p>
                 </div>
 
                 <hr class="divider-line">
 
                 <div class="view-tabs">
-                    <div class="tab-item">
+                    <div class="tab-item" onclick="navigateToPlaneView()">
                         <div class="tab-icon"><i class="fas fa-plane"></i></div>
                         <span>Plane View</span>
                     </div>
@@ -140,6 +140,11 @@
             
             function downloadRosterJson(flightNumber) {
             window.location.href = `/api/roster/${encodeURIComponent(flightNumber)}/export`;
+            }
+
+            function navigateToPlaneView() {
+                const flightNumber = getFlightNumber();
+                window.location.href = `/plane-view?flightNumber=${flightNumber}`;
             }
 
             function navigateToTabularView() {

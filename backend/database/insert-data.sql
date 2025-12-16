@@ -30,11 +30,11 @@ INSERT OR REPLACE INTO Language (LanguageCode, LanguageName) VALUES
 ('FR', 'French');
 
 --pilots
-INSERT OR REPLACE INTO Pilot (PilotId, Name, Age, Gender, Nationality, VehicleTypeCode, AllowedRangeKm, SeniorityLevel) VALUES
-(1, 'Abdulsallam Alaradi', 45, 'Male', 'Libya', 'A320', 6000, 'Senior'),
-(2, 'Aya Sabah', 42, 'Female', 'Iraq', 'A320', 6000, 'Senior'),
-(3, 'Karim Benali', 28, 'Male', 'Algeria', 'A320', 6000, 'Junior'),
-(4, 'Selin Arslan', 27, 'Female', 'Turkey', 'A320', 6000, 'Junior');
+INSERT OR REPLACE INTO Pilot (PilotId, Name, Age, Gender, Nationality, VehicleTypeCode, AllowedRangeKm, SeniorityLevel, PilotSeatNumber) VALUES
+(1, 'Abdulsallam Alaradi', 45, 'Male', 'Libya', 'A320', 6000, 'Senior', 'P1'),
+(2, 'Aya Sabah', 42, 'Female', 'Iraq', 'A320', 6000, 'Senior', 'P1'),
+(3, 'Karim Benali', 28, 'Male', 'Algeria', 'A320', 6000, 'Junior', 'P2'),
+(4, 'Selin Arslan', 27, 'Female', 'Turkey', 'A320', 6000, 'Junior', 'P2');
 
 --pilot languages
 INSERT OR REPLACE INTO PilotLanguage (PilotId, LanguageCode) VALUES
@@ -44,19 +44,19 @@ INSERT OR REPLACE INTO PilotLanguage (PilotId, LanguageCode) VALUES
 (4, 'TR'), (4, 'EN');
 
 --cabin crew (atttendants)
-INSERT OR REPLACE INTO Attendant (AttendantId, Name, Age, Gender, Nationality, AttendantType) VALUES
-(1, 'Hassan Alawi', 32, 'Male', 'Egypt', 'Flight attendant'),
-(2, 'Merve Yildiz', 29, 'Female', 'Turkey', 'Flight attendant'),
-(3, 'Fatima Almansouri', 30, 'Female', 'Libya', 'Chef'),
-(4, 'Omar Nasser', 31, 'Male', 'Iraq', 'Chef'),
-(5, 'Lina Saeed', 28, 'Female', 'Algeria', 'Flight attendant'),
-(6, 'Yusuf Karim', 33, 'Male', 'Egypt', 'Flight attendant'),
-(7, 'Ayla Demir', 27, 'Female', 'Turkey', 'Chef'),
-(8, 'Sami Haddad', 34, 'Male', 'Iraq', 'Chef'),
-(9, 'Nadia Bensalem', 30, 'Female', 'Algeria', 'Flight attendant'),
-(10, 'Salma Farouk', 29, 'Female', 'Libya', 'Flight attendant'),
-(11, 'Omar Zaki', 35, 'Male', 'Egypt', 'Chef'),
-(12, 'Dina Youssef', 28, 'Female', 'Turkey', 'Chef');
+INSERT OR REPLACE INTO Attendant (AttendantId, Name, Age, Gender, Nationality, AttendantType, AttendantSeatNumber) VALUES
+(1, 'Hassan Alawi', 32, 'Male', 'Egypt', 'Flight attendant', 'A1'),
+(2, 'Merve Yildiz', 29, 'Female', 'Turkey', 'Flight attendant', 'A2'),
+(3, 'Fatima Almansouri', 30, 'Female', 'Libya', 'Chef', 'A3'),
+(4, 'Omar Nasser', 31, 'Male', 'Iraq', 'Chef', 'A1'),
+(5, 'Lina Saeed', 28, 'Female', 'Algeria', 'Flight attendant', 'A2'),
+(6, 'Yusuf Karim', 33, 'Male', 'Egypt', 'Flight attendant', 'A3'),
+(7, 'Ayla Demir', 27, 'Female', 'Turkey', 'Chef', 'A1'),
+(8, 'Sami Haddad', 34, 'Male', 'Iraq', 'Chef', 'A2'),
+(9, 'Nadia Bensalem', 30, 'Female', 'Algeria', 'Flight attendant', 'A3'),
+(10, 'Salma Farouk', 29, 'Female', 'Libya', 'Flight attendant', 'A1'),
+(11, 'Omar Zaki', 35, 'Male', 'Egypt', 'Chef', 'A2'),
+(12, 'Dina Youssef', 28, 'Female', 'Turkey', 'Chef', 'A3');
 
 --attendant languages
 INSERT OR REPLACE INTO AttendantLanguage (AttendantId, LanguageCode) VALUES
