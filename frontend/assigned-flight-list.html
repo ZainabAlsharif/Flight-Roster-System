@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assigned Flights - FlyTech</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./public/styles/assigned-flight-list.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <header class="main-header container">
+        <div class="logo-container">
+            <div class="airplane-icon">
+                <svg viewBox="0 0 44 44" fill="none">
+                    <path d="M37.6933 7.16833C38.775 8.25 38.775 9.99167 37.6933 11.055L30.5617 18.1867L34.4483 35.035L31.8633 37.6383L24.75 24.0167L17.6 31.1667L18.26 35.695L16.2983 37.6383L13.0717 31.8083L7.22333 28.5633L9.16667 26.5833L13.75 27.2617L20.845 20.1667L7.22333 12.9983L9.82667 10.4133L26.675 14.3L33.8067 7.16833C34.8333 6.105 36.6667 6.105 37.6933 7.16833Z" fill="white" />
+                </svg>
+            </div>
+            <h1 class="brand-name">FlyTech</h1>
+        </div>
+
+        <nav class="nav-container">
+            <a class="nav-link" onclick="window.location.href='./about-us.html';">About Us</a>
+            <a class="login-button" onclick="window.location.href='./login.html';">Log-in</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        
+        <!-- Top Info Card -->
+        <div class="info-card">
+            <h1 class="page-title">Assigned Flights</h1>
+            <div class="staff-details">
+                <p>Staff ID: <span id="staffId">—</span></p>
+                <p>Staff Name: <span id="staffName">—</span></p>
+            </div>
+        </div>
+
+        <!-- Flights List Card -->
+        <div class="flights-card" id="flightsList">
+        <!-- tickets inserted here -->
+        </div>
+        
+    </main>
+<script>
+  // Fetch and display flights that have rosters assigned
+  async function loadAssignedFlights() {
+    const list = document.getElementById("flightsList");
+
+    // Temporary loading message
+    list.innerHTML = "<p style='color:white; opacity:0.8;'>Loading flights...</p>";
+
+    // Call backend API to get assigned flights
+    const res = await fetch("/api/assigned-flights");
+
+    // If backend fails, show error
+    if (!res.ok) {
+      list.innerHTML = "<p style='color:white;'>Failed to load flights.</p>";
+      return;
+    }
+
+    // Parse JSON response
+    const flights = await res.json();
+    list.innerHTML = "";
+
+    // If no flights exist
+    if (!flights.length) {
+      list.innerHTML = "<p style='color:white;'>No flights found.</p>";
+      return;
+    }
+
+    // Create one ticket per flight
+    flights.forEach(f => {
+      const ticket = document.createElement("div");
+      ticket.className = "ticket";
+
+      // When user clicks ticket → go to plane view with flight number
+      ticket.onclick = () => {
+        window.location.href =
+          `./plane-view.html?flightNumber=${f.FlightNumber}`;
+      };
+
+      // Format date/time for display
+      const dateTime = (f.FlightDateTime || "").replace("T", " ");
+      const connectionType = f.SharedFlightNumber ? "Shared" : "Direct";
+
+      // Fill ticket HTML using flight data
+      ticket.innerHTML = `
+        <div class="ticket-header">
+          <span class="flight-number">${f.FlightNumber}</span>
+          <span class="status-badge">SCHEDULED</span>
+        </div>
+
+        <div class="ticket-body">
+          <div class="route-section">
+            <div class="airport">
+              <span class="code">${f.SourceAirportCode}</span>
+              <span class="city">${f.SourceCity}</span>
+            </div>
+
+            <div class="flight-visual">
+              <div class="line"></div>
+              <i class="fas fa-plane plane-icon"></i>
+            </div>
+
+            <div class="airport">
+              <span class="code">${f.DestinationAirportCode}</span>
+              <span class="city">${f.DestinationCity}</span>
+            </div>
+          </div>
+
+          <div class="details-grid">
+            <div class="detail-item detail-date">
+              <span class="label">Date / Time</span>
+              <span class="value">${dateTime}</span>
+            </div>
+            <div class="detail-item detail-duration">
+              <span class="label">Duration</span>
+              <span class="value">${f.DurationMinutes} mins</span>
+            </div>
+            <div class="detail-item detail-distance">
+              <span class="label">Distance</span>
+              <span class="value">${f.DistanceKm} KM</span>
+            </div>
+            <div class="detail-item detail-aircraft">
+              <span class="label">Aircraft</span>
+              <span class="value">${f.VehicleTypeCode}</span>
+            </div>
+            <div class="detail-item detail-connection">
+              <span class="label">Connection</span>
+              <span class="value">${connectionType}</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Add ticket to the page
+      list.appendChild(ticket);
+    });
+  }
+  
+  function formatStaffName(username) {
+  if (!username) return "—";
+
+  // split by underscore → ["pilot", "abdulsallam"]
+  const parts = username.split("_");
+
+  // Capitalize each part
+  return parts
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+  // Fetches the currently logged-in staff member
+  async function loadStaffInfo() {
+  const res = await fetch("/api/me", { credentials: "include" })
+  if (!res.ok) return; // not logged in, leave placeholders
+
+  const me = await res.json();
+  document.getElementById("staffId").textContent = me.userId;
+  document.getElementById("staffName").textContent = formatStaffName(me.name);
+
+    }
+
+  // Load flights when page is ready
+  window.addEventListener("DOMContentLoaded", () => {
+    loadStaffInfo();
+    loadAssignedFlights();
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,321 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-dark: #212f5e;
+    --primary-light: #253360;
+    --accent-blue: #70b7e9;
+    --bg-gradient-start: #c4daf5;
+    --white: #ffffff;
+    --card-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    --font-main: 'Inter', sans-serif;
+}
+
+body {
+    font-family: var(--font-main);
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(to top, 
+        var(--bg-gradient-start) 0%, 
+        var(--accent-blue) 19.036%, 
+        var(--primary-dark) 100%);
+    color: #333;
+}
+
+.container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/*Layout*/
+.admin-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 16px; 
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-height: 100vh;
+}
+
+/*Nav bar*/
+.main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    padding-bottom: 12px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.logo-container {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.airplane-icon {
+    width: 44px;
+    height: 44px;
+}
+
+.airplane-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.brand-name {
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--white);
+}
+
+.nav-container {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+}
+
+.nav-link {
+    font-size: 20px;
+    color: var(--white);
+    font-weight: 400;
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.nav-link:hover {
+    opacity: 0.8;
+}
+
+.login-button {
+    background-color: #253360;
+    color: var(--white);
+    font-size: 20px;
+    font-weight: 500;
+    padding: 10px 40px;
+    border-radius: 50px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    transition: transform 0.1s;
+    border: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.login-button:active {
+    transform: scale(0.98);
+}
+
+/*Card*/
+.card {
+    background: var(--white);
+    border-radius: 25px;
+    box-shadow: var(--card-shadow);
+    padding: clamp(18px, 2.5vw, 28px);
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/*Welcome*/
+.welcome-card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-left: 60px;
+}
+
+.welcome-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #000;
+}
+
+.admin-info {
+    font-size: 20px;
+    color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/*Actions*/
+.actions-card {
+    min-height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    width: 100%;
+}
+
+.actions-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    width: calc(100% - 40px);
+    max-width: 100%;
+    margin: 0 auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/*Action Item*/
+.action-item {
+    border: 2px solid var(--primary-dark);
+    border-radius: 25px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    text-align: center;
+    background: white;
+}
+
+.action-text h3 {
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.action-text p {
+    font-size: 16px;
+    color: #333;
+}
+
+.action-btn {
+    width: 100%;
+    max-width: 800px;
+    background: var(--primary-light);
+    color: white;
+    font-size: 20px;
+    font-weight: 500;
+    padding: 15px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.action-btn:hover {
+    background: #1a2447;
+}
+
+/*Responsiveness*/
+
+/*Tablet*/
+@media (max-width: 900px) {
+    .main-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .nav-container {
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+    }
+
+    .welcome-card, .actions-card {
+        padding: 20px;
+    }
+
+    .welcome-title {
+        font-size: 26px;
+    }
+
+    /*Actions*/
+    .actions-grid { gap: 16px; }
+}
+
+/*Mobile*/
+@media (max-width: 480px) {
+    .action-btn {
+        font-size: 16px;
+    }
+    
+    .logo-text {
+        font-size: 24px;
+    }
+}
+
+/*Content*/
+.content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.25rem;
+    padding-bottom: 0;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex: 1;
+}
+.success-actions {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.primary-btn {
+    background-color: #2f5bea;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.secondary-btn {
+    background-color: #e5e7eb;
+    color: #111827;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.primary-btn:hover {
+    background-color: #2448c4;
+}
+
+.secondary-btn:hover {
+    background-color: #d1d5db;
+}
+.plane-view {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.seat {
+    padding: 14px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.seat.empty {
+    background-color: #e5e7eb;
+}
+
+.seat.occupied {
+    background-color: #93c5fd;
+}

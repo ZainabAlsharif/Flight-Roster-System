@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Plane View</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome for icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <link rel="stylesheet" href="/public/styles/plane-view.css" />
+</head>
+
+<body>
+  <div class="app-wrapper">
+    <header class="main-header container">
+      <div class="logo-container">
+        <div class="airplane-icon">
+          <svg viewBox="0 0 44 44" fill="none">
+            <path d="M37.6933 7.16833C38.775 8.25 38.775 9.99167 37.6933 11.055L30.5617 18.1867L34.4483 35.035L31.8633 37.6383L24.75 24.0167L17.6 31.1667L18.26 35.695L16.2983 37.6383L13.0717 31.8083L7.22333 28.5633L9.16667 26.5833L13.75 27.2617L20.845 20.1667L7.22333 12.9983L9.82667 10.4133L26.675 14.3L33.8067 7.16833C34.8333 6.105 36.6667 6.105 37.6933 7.16833Z" fill="white" />
+          </svg>
+        </div>
+        <h1 class="brand-name">FlyTech</h1>
+      </div>
+
+      <nav class="nav-container">
+        <a class="nav-link" onclick="window.location.href='./about-us.html';">About Us</a>
+        <a class="login-button" onclick="window.location.href='./login.html';">Log-in</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <div class="main-card">
+        <div class="back-row">
+          <button class="back-button" onclick="window.location.href='./assigned-flight-list.html';">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <div class="flight-info">
+          <h2 class="flight-title">Flight: -</h2>
+          <p class="flight-details">-</p>
+        </div>
+
+        <hr class="divider-line" />
+
+        <div class="view-tabs">
+          <div class="tab-item tab-active">
+            <div class="tab-icon">
+              <i class="fas fa-plane"></i>
+            </div>
+            <span>Plane View</span>
+          </div>
+
+          <div class="tab-item" onclick="navigateToTabularView()">
+            <div class="tab-icon">
+              <i class="fas fa-table"></i>
+            </div>
+            <span>Tabular View</span>
+          </div>
+
+          <div class="tab-item" onclick="navigateToExtendedView()">
+            <div class="tab-icon">
+              <i class="fas fa-list"></i>
+            </div>
+            <span>Extended View</span>
+          </div>
+        </div>
+      <div class="legend">
+        <div class="item"><span class="dot available"></span><span>Available</span></div>
+        <div class="item"><span class="dot occupied"></span><span>Occupied</span></div>
+        <div class="item"><span class="dot business"></span><span>Business</span></div>
+        <div class="item"><span class="dot crew"></span><span>Crew</span></div>
+        <div class="item" id="legendFirst"><span class="dot first"></span><span>First</span></div>
+      </div>
+
+      <div class="planeWrap">
+        <div class="seatMapCard">
+          <div class="seatMapHeader">
+            <div class="left">
+              <div class="aircraft" id="aircraftTitle">Aircraft: -</div>
+              <div class="hint muted" id="aircraftHint">Loading…</div>
+            </div>
+          </div>
+
+          <div class="scrollArea">
+            <div id="seatmap">
+              <div class="muted seatmap-loading">Loading seat map…</div>
+            </div>
+          </div>
+
+          <div class="err" id="errBox"></div>
+        </div>
+
+        <div class="seatDetails">
+          <h2>Seat details</h2>
+          <div class="body" id="seatDetailsBody">
+            <div class="muted">Click a seat. Occupied seats show passenger info.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="export-container">
+        <button class="export-button" id="exportJsonBtn" type="button">
+          <div class="download-icon">
+            <svg viewBox="0 0 28 28" fill="none">
+              <path d="M14 18.6667L8.16667 12.8333L9.8 11.1417L12.8333 14.175V4.66667H15.1667V14.175L18.2 11.1417L19.8333 12.8333L14 18.6667ZM7 23.3333C6.35833 23.3333 5.80922 23.1051 5.35267 22.6485C4.89611 22.1919 4.66744 21.6424 4.66667 21V17.5H7V21H21V17.5H23.3333V21C23.3333 21.6417 23.1051 22.1912 22.6485 22.6485C22.1919 23.1058 21.6424 23.3341 21 23.3333H7Z" fill="#FEFFFF" />
+            </svg>
+          </div>
+          <span class="export-text">Export JSON</span>
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function getFlightNumber() {
+      const p = new URLSearchParams(window.location.search);
+      return p.get("flightNumber") || "FT201";
+    }
+
+    function navigateToTabularView() {
+      const flightNumber = getFlightNumber();
+      window.location.href = `/tabular-view?flightNumber=${encodeURIComponent(flightNumber)}`;
+    }
+
+    function navigateToExtendedView() {
+      const flightNumber = getFlightNumber();
+      window.location.href = `/extended-view?flightNumber=${encodeURIComponent(flightNumber)}`;
+    }
+
+    function downloadRosterJson(flightNumber) {
+      window.location.href = `/api/roster/${encodeURIComponent(flightNumber)}/export`;
+    }
+
+    // Optional override: /plane-view?flightNumber=FT101&aircraft=B777
+    function getAircraftOverride() {
+      const p = new URLSearchParams(window.location.search);
+      const a = (p.get("aircraft") || "").toUpperCase();
+      return ["A320","B737","B777"].includes(a) ? a : null;
+    }
+
+    function normalizeSeat(seat) {
+      return String(seat || "").trim().toUpperCase().replace(/\s+/g, "");
+    }
+
+    const MIN_PILOTS = 2;
+    const MIN_ATTENDANTS = 4;
+
+    function showError(msg) {
+      const box = document.getElementById("errBox");
+      box.textContent = msg;
+      box.style.display = "block";
+    }
+
+    function clearError() {
+      const box = document.getElementById("errBox");
+      box.textContent = "";
+      box.style.display = "none";
+    }
+
+    // Seat counts match your DB definition:
+    // B737: 166 (Business 16, Economy 150)
+    // A320: 180 (Business 20, Economy 160)
+    // B777: 244 (First 8, Business 35, Economy 201)
+    // :contentReference[oaicite:4]{index=4}
+    const LAYOUTS = {
+      B737: {
+        name: "Boeing 737",
+        cabins: [
+          { title: "Business", cabin: "business", startRow: 1, rows: 4, blocks: ["AB","CD"] },      // 16
+          { title: "Economy",  cabin: "economy",  startRow: 5, rows: 25, blocks: ["ABC","DEF"] }    // 150
+        ]
+      },
+      A320: {
+        name: "Airbus A320",
+        cabins: [
+          { title: "Business", cabin: "business", startRow: 1, rows: 5,  blocks: ["AB","CD"] },     // 20
+          { title: "Economy",  cabin: "economy",  startRow: 6, rows: 26, blocks: ["ABC","DEF"] },   // 156
+          { title: "Economy",  cabin: "economy",  startRow: 32, rows: 1, blocks: ["AB","CD"] }      // +4 => 160
+        ]
+      },
+      B777: {
+        name: "Boeing 777",
+        cabins: [
+          { title: "First",    cabin: "first",    startRow: 1, rows: 2,  blocks: ["AB","CD"] },       // 8
+          { title: "Business", cabin: "business", startRow: 3, rows: 5,  blocks: ["AB","CDE","FG"] }, // 35
+          { title: "Economy",  cabin: "economy",  startRow: 8, rows: 28, blocks: ["ABC","DEFG"] },    // 196
+          { title: "Economy",  cabin: "economy",  startRow: 36, rows: 1, blocks: ["ABC","DE"] }       // +5 => 201
+        ]
+      }
+    };
+
+    function classifySeat(passenger, cabinFallback) {
+      const t = String(passenger?.SeatType || "").toLowerCase();
+      if (t.includes("first")) return "first";
+      if (t.includes("business")) return "business";
+      if (t.includes("economy")) return "economy";
+      return cabinFallback || "economy";
+    }
+
+    function setMeta(flight) {
+      document.querySelector(".flight-title").textContent = `Flight: ${flight?.FlightNumber || "-"}`;
+      document.querySelector(".flight-details").textContent = `${flight?.SourceAirportCode || "-"} → ${flight?.DestinationAirportCode || "-"} | ${flight?.FlightDateTime || "-"}`;
+    }
+
+    function setActiveAircraftButtons(code) {
+      document.querySelectorAll(".pill").forEach(b => b.classList.remove("active"));
+      const btn = document.querySelector(`.pill[data-aircraft="${code}"]`);
+      if (btn) btn.classList.add("active");
+    }
+
+    function renderSeatMap(aircraftCode, passengers) {
+      clearError();
+
+      const code = String(aircraftCode || "").toUpperCase();
+      const layout = LAYOUTS[code];
+
+      if (!layout) {
+        showError(`Unsupported aircraft "${code}". Expected A320, B737, B777.`);
+        return;
+      }
+
+      setActiveAircraftButtons(code);
+
+      const firstLegend = document.getElementById("legendFirst");
+      if (firstLegend) {
+        const hasFirst = layout.cabins.some(c => c.cabin === "first");
+        firstLegend.style.display = hasFirst ? "flex" : "none";
+      }
+
+      document.getElementById("aircraftTitle").textContent = `Aircraft: ${code} (${layout.name})`;
+      document.getElementById("aircraftHint").textContent = "Scroll to view cabins. Click seats for details.";
+
+      const occupied = new Map();
+      (passengers || []).forEach(p => {
+        const s = normalizeSeat(p.SeatNumber);
+        if (s) occupied.set(s, p);
+      });
+
+      const seatmap = document.getElementById("seatmap");
+      seatmap.innerHTML = "";
+
+      const detailsBody = document.getElementById("seatDetailsBody");
+      detailsBody.innerHTML = `<div class="muted">Click a seat. Occupied seats show passenger info.</div>`;
+
+      // Add Cockpit section for pilots (always show 2 seats, fill remaining as available)
+      const pilots = (rosterCache && Array.isArray(rosterCache.pilots)) ? rosterCache.pilots : [];
+      const cockpitSeatCount = Math.max(MIN_PILOTS, pilots.length);
+      if (cockpitSeatCount > 0) {
+        const cockpitEl = document.createElement("div");
+        cockpitEl.className = "cabin";
+        
+        const cockpitTitle = document.createElement("div");
+        cockpitTitle.className = "cabinTitle";
+        cockpitTitle.innerHTML = `<div>Cockpit</div><span>${cockpitSeatCount} seats</span>`;
+        cockpitEl.appendChild(cockpitTitle);
+
+        const cockpitRow = document.createElement("div");
+        cockpitRow.className = "seatRow";
+
+        const cockpitBlock = document.createElement("div");
+        cockpitBlock.className = "block";
+
+        const pilotsSorted = [...pilots].sort((a, b) => {
+          const aa = normalizeSeat(a.PilotSeatNumber);
+          const bb = normalizeSeat(b.PilotSeatNumber);
+          if (aa && bb) return aa.localeCompare(bb);
+          if (aa) return -1;
+          if (bb) return 1;
+          return 0;
+        });
+
+        // Place pilots into fixed slots (P1, P2) based on their seat number when available
+        const cockpitSlots = Array.from({ length: cockpitSeatCount }, () => null);
+        pilotsSorted.forEach(pilot => {
+          const code = normalizeSeat(pilot?.PilotSeatNumber);
+          let slotIndex = null;
+          const match = /^P(\d+)$/.exec(code || "");
+          if (match) {
+            const num = parseInt(match[1], 10);
+            if (num >= 1 && num <= cockpitSeatCount) slotIndex = num - 1;
+          }
+          if (slotIndex !== null && cockpitSlots[slotIndex] === null) {
+            cockpitSlots[slotIndex] = pilot;
+          } else {
+            const firstEmpty = cockpitSlots.findIndex(p => p === null);
+            if (firstEmpty !== -1) cockpitSlots[firstEmpty] = pilot;
+          }
+        });
+
+        for (let idx = 0; idx < cockpitSeatCount; idx++) {
+          const pilot = cockpitSlots[idx];
+          const seatLabel = `P${idx + 1}`; // fallback label
+          const seatCode = normalizeSeat(pilot?.PilotSeatNumber);
+          const displaySeat = seatCode || seatLabel;
+          const btn = document.createElement("button");
+          btn.type = "button";
+
+          if (pilot) {
+            btn.className = "seat occupied cockpit";
+            btn.textContent = displaySeat;
+            btn.title = `Pilot: ${pilot.Name} (${displaySeat})`;
+            btn.addEventListener("click", () => {
+              detailsBody.innerHTML = `
+                <div><b>Seat:</b> ${displaySeat}</div>
+                <div><b>Name:</b> ${pilot.Name}</div>
+                <div><b>Rank:</b> ${pilot.SeniorityLevel || "-"}</div>
+                <div><b>Age:</b> ${pilot.Age || "-"}</div>
+                <div><b>Nationality:</b> ${pilot.Nationality || "-"}</div>
+                <div><b>Languages:</b> ${pilot.languages ? pilot.languages.map(l => l.name).join(", ") : "-"}</div>
+              `;
+            });
+          } else {
+            btn.className = "seat cockpit";
+            btn.textContent = displaySeat;
+            btn.title = `Available pilot seat ${displaySeat}`;
+            btn.addEventListener("click", () => {
+              detailsBody.innerHTML = `
+                <div><b>Seat:</b> ${displaySeat}</div>
+                <div><b>Status:</b> Available</div>
+                <div><b>Role:</b> Pilot</div>
+              `;
+            });
+          }
+
+          cockpitBlock.appendChild(btn);
+        }
+
+        cockpitRow.appendChild(cockpitBlock);
+        cockpitEl.appendChild(cockpitRow);
+        seatmap.appendChild(cockpitEl);
+      }
+
+      // Add Gallery section for cabin crew (always show 4 seats, fill remaining as available)
+      const attendants = (rosterCache && Array.isArray(rosterCache.attendants)) ? rosterCache.attendants : [];
+      const galleySeatCount = Math.max(MIN_ATTENDANTS, attendants.length);
+      if (galleySeatCount > 0) {
+        const galleyEl = document.createElement("div");
+        galleyEl.className = "cabin";
+        
+        const galleyTitle = document.createElement("div");
+        galleyTitle.className = "cabinTitle";
+        galleyTitle.innerHTML = `<div>Gallery</div><span>${galleySeatCount} cabin crew seats</span>`;
+        galleyEl.appendChild(galleyTitle);
+
+        const galleyRow = document.createElement("div");
+        galleyRow.className = "seatRow";
+
+        const galleyBlock = document.createElement("div");
+        galleyBlock.className = "block";
+
+        const attendantsSorted = [...attendants].sort((a, b) => {
+          const aa = normalizeSeat(a.AttendantSeatNumber);
+          const bb = normalizeSeat(b.AttendantSeatNumber);
+          if (aa && bb) return aa.localeCompare(bb);
+          if (aa) return -1;
+          if (bb) return 1;
+          return 0;
+        });
+
+        // Place attendants into fixed slots (A1-A4) based on their seat number when available
+        const galleySlots = Array.from({ length: galleySeatCount }, () => null);
+        attendantsSorted.forEach(attendant => {
+          const code = normalizeSeat(attendant?.AttendantSeatNumber);
+          let slotIndex = null;
+          const match = /^A(\d+)$/.exec(code || "");
+          if (match) {
+            const num = parseInt(match[1], 10);
+            if (num >= 1 && num <= galleySeatCount) slotIndex = num - 1;
+          }
+          if (slotIndex !== null && galleySlots[slotIndex] === null) {
+            galleySlots[slotIndex] = attendant;
+          } else {
+            const firstEmpty = galleySlots.findIndex(a => a === null);
+            if (firstEmpty !== -1) galleySlots[firstEmpty] = attendant;
+          }
+        });
+
+        for (let idx = 0; idx < galleySeatCount; idx++) {
+          const attendant = galleySlots[idx];
+          const seatLabel = `A${idx + 1}`; // fallback label
+          const seatCode = normalizeSeat(attendant?.AttendantSeatNumber);
+          const displaySeat = seatCode || seatLabel;
+          const btn = document.createElement("button");
+          btn.type = "button";
+
+          if (attendant) {
+            btn.className = "seat occupied gallery";
+            btn.textContent = displaySeat;
+            btn.title = `Attendant: ${attendant.Name} (${displaySeat})`;
+            btn.addEventListener("click", () => {
+              detailsBody.innerHTML = `
+                <div><b>Seat:</b> ${displaySeat}</div>
+                <div><b>Name:</b> ${attendant.Name}</div>
+                <div><b>Role:</b> ${attendant.AttendantType || "-"}</div>
+                <div><b>Age:</b> ${attendant.Age || "-"}</div>
+                <div><b>Nationality:</b> ${attendant.Nationality || "-"}</div>
+                <div><b>Languages:</b> ${attendant.languages ? attendant.languages.map(l => l.name).join(", ") : "-"}</div>
+                <div><b>Dishes:</b> ${attendant.dishes ? attendant.dishes.map(d => d.name).join(", ") : "-"}</div>
+              `;
+            });
+          } else {
+            btn.className = "seat gallery";
+            btn.textContent = displaySeat;
+            btn.title = `Available cabin crew seat ${displaySeat}`;
+            btn.addEventListener("click", () => {
+              detailsBody.innerHTML = `
+                <div><b>Seat:</b> ${displaySeat}</div>
+                <div><b>Status:</b> Available</div>
+                <div><b>Role:</b> Cabin Crew</div>
+              `;
+            });
+          }
+
+          galleyBlock.appendChild(btn);
+        }
+
+        galleyRow.appendChild(galleyBlock);
+        galleyEl.appendChild(galleyRow);
+        seatmap.appendChild(galleyEl);
+      }
+
+      // Render passenger cabins
+      layout.cabins.forEach(cabin => {
+        const cabEl = document.createElement("div");
+        cabEl.className = "cabin";
+
+        const seatsPerRow = cabin.blocks.reduce((sum, b) => sum + b.length, 0);
+        const cabinSeats = cabin.rows * seatsPerRow;
+
+        const title = document.createElement("div");
+        title.className = "cabinTitle";
+        title.innerHTML = `<div>${cabin.title}</div><span>${cabinSeats} seats</span>`;
+        cabEl.appendChild(title);
+
+        for (let r = cabin.startRow; r < cabin.startRow + cabin.rows; r++) {
+          const rowEl = document.createElement("div");
+          rowEl.className = "seatRow";
+
+          const rn = document.createElement("div");
+          rn.className = "rowNum";
+          rn.textContent = r;
+          rowEl.appendChild(rn);
+
+          cabin.blocks.forEach((blockStr, idx) => {
+            const block = document.createElement("div");
+            block.className = "block";
+
+            for (const letter of blockStr.split("")) {
+              const seatCode = `${r}${letter}`;
+              const p = occupied.get(seatCode);
+
+              const btn = document.createElement("button");
+              btn.type = "button";
+              btn.className = "seat" + (p ? " occupied" : "");
+              btn.textContent = letter;
+              btn.title = p ? `${seatCode} • ${p.Name} • ${p.SeatType}` : `${seatCode} • Available`;
+
+              if (p) {
+                const cls = classifySeat(p, cabin.cabin);
+                btn.classList.add(cls);
+              }
+
+              btn.addEventListener("click", () => {
+                if (!p) {
+                  detailsBody.innerHTML = `<div><b>Seat:</b> ${seatCode}</div><div class="muted">Available</div>`;
+                  return;
+                }
+                detailsBody.innerHTML = `
+                  <div><b>Seat:</b> ${seatCode}</div>
+                  <div><b>Name:</b> ${p.Name}</div>
+                  <div><b>PassengerId:</b> ${p.PassengerId}</div>
+                  <div><b>SeatType:</b> ${p.SeatType}</div>
+                  <div><b>Nationality:</b> ${p.Nationality || "-"}</div>
+                `;
+              });
+
+              block.appendChild(btn);
+            }
+
+            rowEl.appendChild(block);
+
+            if (idx < cabin.blocks.length - 1) {
+              const aisle = document.createElement("div");
+              aisle.className = "aisle";
+              rowEl.appendChild(aisle);
+            }
+          });
+
+          cabEl.appendChild(rowEl);
+        }
+
+        seatmap.appendChild(cabEl);
+      });
+    }
+
+    let rosterCache = null;
+    let activeAircraft = "A320";
+
+    async function load() {
+      const flightNumber = getFlightNumber();
+
+      try {
+        const res = await fetch(`/api/roster/${encodeURIComponent(flightNumber)}`);
+        if (!res.ok) {
+          showError(`Roster API failed (${res.status}). Check flightNumber in URL.`);
+          return;
+        }
+
+        rosterCache = await res.json();
+        setMeta(rosterCache.flight);
+
+        // Default aircraft comes from the flight, which your backend returns. :contentReference[oaicite:5]{index=5}
+        const fromFlight = String(rosterCache.flight?.VehicleTypeCode || "").toUpperCase();
+        activeAircraft = ["A320","B737","B777"].includes(fromFlight) ? fromFlight : "A320";
+
+        // Allow override via ?aircraft=
+        const override = getAircraftOverride();
+        if (override) activeAircraft = override;
+
+        // Render
+        renderSeatMap(activeAircraft, rosterCache.passengers || []);
+
+      } catch (e) {
+        console.error(e);
+        showError("Failed to load plane view. Check server console.");
+      }
+    }
+    const exportBtn = document.getElementById("exportJsonBtn");
+    if (exportBtn) {
+      exportBtn.addEventListener("click", () => {
+        downloadRosterJson(getFlightNumber());
+      });
+    }
+
+    load();
+  </script>
+</body>
+</html>

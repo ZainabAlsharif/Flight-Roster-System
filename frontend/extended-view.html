@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extended View</title>
+    <link rel="stylesheet" href="./public/styles/extended-view.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="app-wrapper">
+        
+        <header class="main-header container">
+            <div class="logo-container">
+                <div class="airplane-icon">
+                    <svg viewBox="0 0 44 44" fill="none">
+                        <path d="M37.6933 7.16833C38.775 8.25 38.775 9.99167 37.6933 11.055L30.5617 18.1867L34.4483 35.035L31.8633 37.6383L24.75 24.0167L17.6 31.1667L18.26 35.695L16.2983 37.6383L13.0717 31.8083L7.22333 28.5633L9.16667 26.5833L13.75 27.2617L20.845 20.1667L7.22333 12.9983L9.82667 10.4133L26.675 14.3L33.8067 7.16833C34.8333 6.105 36.6667 6.105 37.6933 7.16833Z" fill="white" />
+                    </svg>
+                </div>
+                <h1 class="brand-name">FlyTech</h1>
+            </div>
+
+            <nav class="nav-container">
+                <a class="nav-link" onclick="window.location.href='./about-us.html';">About Us</a>
+                <a class="login-button" onclick="window.location.href='./login.html';">Log-in</a>
+            </nav>
+        </header>
+
+        <main class="container">
+            <div class="main-card">
+                
+                <div class="back-row">
+                    <button class="back-button" onclick="window.location.href='./assigned-flight-list.html';">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                    </button>
+                </div>
+                
+                <div class="flight-info">
+                    <h2 class="flight-title">Flight: -</h2>
+                    <p class="flight-details">-</p>
+                </div>
+
+                <hr class="divider-line">
+
+                <div class="view-tabs">
+                    <div class="tab-item" onclick="navigateToPlaneView()">
+                        <div class="tab-icon"><i class="fas fa-plane"></i></div>
+                        <span>Plane View</span>
+                    </div>
+
+                    <div class="tab-item" onclick="navigateToTabularView()">
+                        <div class="tab-icon"><i class="fas fa-table"></i></div>
+                        <span>Tabular View</span>
+                    </div>
+
+                    <div class="tab-item tab-active">
+                        <div class="tab-icon"><i class="fas fa-list"></i></div>
+                        <span>Extended View</span>
+                    </div>
+                </div>
+
+                <div class="extended-content-wrapper">
+                    <div class="tables-grid">
+                        
+                        <div class="extended-box border-yellow">
+                            <div class="extended-header">
+                                <div class="icon-circle">
+                                     <svg viewBox="0 0 24 24" fill="none" width="24" height="24"><path d="M16 14.5C16 15.6 15.7 18 13.8 20.8L13 16L13.9 14.1C13.3 14.1 12.7 14 12 14C11.3 14 10.7 14.1 10.1 14.1L11 16L10.2 20.8C8.3 18.1 8 15.6 8 14.5C5.6 15.2 4 16.5 4 18V22H20V18C20 16.5 18.4 15.2 16 14.5ZM6 4.5C6 3.1 8.7 2 12 2C15.3 2 18 3.1 18 4.5C18 4.9 17.8 5.2 17.5 5.5C16.6 4.6 14.5 4 12 4C9.5 4 7.4 4.6 6.5 5.5C6.2 5.2 6 4.9 6 4.5ZM15.9 7.4C16 7.6 16 7.8 16 8C16 10.2 14.2 12 12 12C9.8 12 8 10.2 8 8C8 7.8 8 7.6 8.1 7.4C9.1 7.8 10.5 8 12 8C13.5 8 14.9 7.8 15.9 7.4ZM16.6 6.1C15.5 6.6 13.9 7 12 7C10.1 7 8.5 6.6 7.4 6.1C8.1 5.5 9.8 5 12 5C14.2 5 15.9 5.5 16.6 6.1Z" fill="#DDAA13"/></svg>
+                                </div>
+                                <h3 class="text-yellow">Flight Crew</h3>
+                            </div>
+                            <div class="extended-scroll">
+                                <table class="extended-table">
+                                    <thead>
+                                        <tr><th class="bg-yellow">ID</th><th class="bg-yellow">Name</th><th class="bg-yellow">Gender</th><th class="bg-yellow">Age</th><th class="bg-yellow">Nationality</th><th class="bg-yellow">Rank</th><th class="bg-yellow">Seat</th><th class="bg-yellow">Languages</th></tr>
+                                    </thead>
+                                    <tbody id="ext-flight-crew-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="extended-box border-blue">
+                            <div class="extended-header">
+                                <div class="icon-circle">
+                                    <svg viewBox="0 0 24 24" fill="none" width="24" height="24"><path d="M16 17V19H2V17C2 17 2 13 9 13C16 13 16 17 16 17ZM12.5 7.5C12.5 6.80777 12.2947 6.13108 11.9101 5.5555C11.5256 4.97993 10.9789 4.53133 10.3394 4.26642C9.69985 4.00152 8.99612 3.9322 8.31718 4.06725C7.63825 4.2023 7.01461 4.53564 6.52513 5.02513C6.03564 5.51461 5.7023 6.13825 5.56725 6.81718C5.4322 7.49612 5.50152 8.19985 5.76642 8.83939C6.03133 9.47893 6.47993 10.0256 7.0555 10.4101C7.63108 10.7947 8.30777 11 9 11C9.92826 11 10.8185 10.6313 11.4749 9.97487C12.1313 9.3185 12.5 8.42826 12.5 7.5ZM15.94 13C16.5547 13.4757 17.0578 14.0804 17.4137 14.7715C17.7696 15.4626 17.9697 16.2233 18 17V19H22V17C22 17 22 13.37 15.94 13ZM15 4C14.3118 3.9968 13.6388 4.20253 13.07 4.59C13.6774 5.43874 14.0041 6.45629 14.0041 7.5C14.0041 8.54371 13.6774 9.56126 13.07 10.41C13.6388 10.7975 14.3118 11.0032 15 11C15.9283 11 16.8185 10.6313 17.4749 9.97487C18.1313 9.3185 18.5 8.42826 18.5 7.5C18.5 6.57174 18.1313 5.6815 17.4749 5.02513C16.8185 4.36875 15.9283 4 15 4Z" fill="#4E85DF"/></svg>
+                                </div>
+                                <h3 class="text-blue">Cabin Crew</h3>
+                            </div>
+                            <div class="extended-scroll">
+                                <table class="extended-table">
+                                    <thead>
+                                        <tr><th class="bg-blue">ID</th><th class="bg-blue">Name</th><th class="bg-blue">Gender</th><th class="bg-blue">Age</th><th class="bg-blue">Nationality</th><th class="bg-blue">Role</th><th class="bg-blue">Seat</th><th class="bg-blue">Languages</th><th class="bg-blue">Dishes</th></tr>
+                                    </thead>
+                                    <tbody id="ext-cabin-crew-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="extended-box border-purple">
+                            <div class="extended-header">
+                                <div class="icon-circle">
+                                    <svg viewBox="0 0 24 24" fill="none" width="24" height="24"><path d="M9 19H15V21H9C6.24 21 4 18.76 4 16V7H6V16C6 17.66 7.34 19 9 19ZM10.42 5.41C11.2 4.63 11.2 3.36 10.42 2.58C9.64 1.8 8.37 1.8 7.59 2.58C6.81 3.36 6.81 4.63 7.59 5.41C8.37 6.2 9.63 6.2 10.42 5.41ZM11.5 9C11.5 7.9 10.6 7 9.5 7H9C7.9 7 7 7.9 7 9V15C7 16.66 8.34 18 10 18H15.07L18.57 21.5L20 20.07L14.93 15H11.5V9Z" fill="#9357DD"/></svg>
+                                </div>
+                                <h3 class="text-purple">Passengers</h3>
+                            </div>
+                            <div class="extended-scroll">
+                                <table class="extended-table">
+                                    <thead>
+                                        <tr><th class="bg-purple">ID</th><th class="bg-purple">Name</th><th class="bg-purple">Gender</th><th class="bg-purple">Age</th><th class="bg-purple">Nationality</th><th class="bg-purple">Seat</th><th class="bg-purple">Class</th><th class="bg-purple">Family</th></tr>
+                                    </thead>
+                                    <tbody id="ext-passengers-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="export-container">
+                    <button class="export-button" id="exportJsonBtn">
+                        <div class="download-icon">
+                            <svg viewBox="0 0 28 28" fill="none">
+                                <path d="M14 18.6667L8.16667 12.8333L9.8 11.1417L12.8333 14.175V4.66667H15.1667V14.175L18.2 11.1417L19.8333 12.8333L14 18.6667ZM7 23.3333C6.35833 23.3333 5.80922 23.1051 5.35267 22.6485C4.89611 22.1919 4.66744 21.6424 4.66667 21V17.5H7V21H21V17.5H23.3333V21C23.3333 21.6417 23.1051 22.1912 22.6485 22.6485C22.1919 23.1058 21.6424 23.3341 21 23.3333H7Z" fill="#FEFFFF" />
+                            </svg>
+                        </div>
+                        <span class="export-text">Export JSON</span>
+                    </button>
+                </div>
+
+            </div>
+        </main>
+    </div>
+        <script>
+            function getFlightNumber() {
+                const params = new URLSearchParams(window.location.search);
+                return params.get("flightNumber") || "FT201";
+            }
+            
+            function downloadRosterJson(flightNumber) {
+            window.location.href = `/api/roster/${encodeURIComponent(flightNumber)}/export`;
+            }
+
+            function navigateToPlaneView() {
+                const flightNumber = getFlightNumber();
+                window.location.href = `/plane-view?flightNumber=${flightNumber}`;
+            }
+
+            function navigateToTabularView() {
+                const flightNumber = getFlightNumber();
+                // Go through the Express route so the query string is preserved
+                window.location.href = `/tabular-view?flightNumber=${flightNumber}`;
+            }
+
+            async function loadExtendedRoster() {
+                const flightNumber = getFlightNumber();
+                const flightCrewBody = document.getElementById("ext-flight-crew-body");
+                const cabinCrewBody = document.getElementById("ext-cabin-crew-body");
+                const passengersBody = document.getElementById("ext-passengers-body");
+
+                // Simple loading states
+                flightCrewBody.innerHTML = `<tr><td colspan="8">Loading...</td></tr>`;
+                cabinCrewBody.innerHTML = `<tr><td colspan="9">Loading...</td></tr>`;
+                passengersBody.innerHTML = `<tr><td colspan="8">Loading...</td></tr>`;
+
+                try {
+                    const response = await fetch(`/api/roster/${flightNumber}`);
+
+                    if (!response.ok) {
+                        const message = `Failed to load roster (${response.status})`;
+                        flightCrewBody.innerHTML = `<tr><td colspan="8">${message}</td></tr>`;
+                        cabinCrewBody.innerHTML = `<tr><td colspan="9">${message}</td></tr>`;
+                        passengersBody.innerHTML = `<tr><td colspan="8">${message}</td></tr>`;
+                        return;
+                    }
+
+                    const data = await response.json();
+
+                    // Update flight header text
+                    document.querySelector(".flight-title").textContent = `Flight: ${data.flight.FlightNumber}`;
+                    document.querySelector(".flight-details").textContent = `${data.flight.SourceAirportCode} → ${data.flight.DestinationAirportCode} | ${data.flight.FlightDateTime}`;
+
+                    // Helpers to render rows
+                    const asRow = (cols) => `<tr>${cols.map(c => `<td>${c}</td>`).join("")}</tr>`;
+
+                    // Helper to format language arrays
+                    const formatLanguages = (langs) => {
+                        if (!langs || !Array.isArray(langs) || langs.length === 0) return "-";
+                        return langs.map(l => l.name || l.code).join(", ");
+                    };
+
+                    // Helper to format dish arrays
+                    const formatDishes = (dishes) => {
+                        if (!dishes || !Array.isArray(dishes) || dishes.length === 0) return "-";
+                        return dishes.map(d => d.name || d.id).join(", ");
+                    };
+
+                    // Helper to format family relationships
+                    const formatFamily = (passenger) => {
+                        const relations = [];
+                        
+                        // Add parent if exists
+                        if (passenger.ParentName) {
+                            relations.push(`Parent: ${passenger.ParentName}`);
+                        }
+                        
+                        // Add children if any
+                        if (passenger.children && passenger.children.length > 0) {
+                            const childrenNames = passenger.children.map(c => c.Name).join(", ");
+                            relations.push(`Children: ${childrenNames}`);
+                        }
+                        
+                        return relations.length > 0 ? relations.join(" | ") : "-";
+                    };
+
+                    // Flight crew
+                    if (data.pilots && data.pilots.length) {
+                        flightCrewBody.innerHTML = data.pilots
+                            .map(p => {
+                                const pilotSeat = p.PilotSeatNumber ?? p.SeatNumber ?? "-";
+                                return asRow([p.PilotId ?? "-", p.Name || "-", p.Gender || "-", p.Age || "-", p.Nationality || "-", p.SeniorityLevel || "-", pilotSeat, formatLanguages(p.languages)]);
+                            })
+                            .join("");
+                    } else {
+                        flightCrewBody.innerHTML = `<tr><td colspan="8">No crew assigned</td></tr>`;
+                    }
+
+                    // Cabin crew
+                    if (data.attendants && data.attendants.length) {
+                        cabinCrewBody.innerHTML = data.attendants
+                            .map(a => {
+                                const attendantSeat = a.AttendantSeatNumber ?? a.SeatNumber ?? "-";
+                                return asRow([a.AttendantId ?? "-", a.Name || "-", a.Gender || "-", a.Age || "-", a.Nationality || "-", a.AttendantType || "-", attendantSeat, formatLanguages(a.languages), formatDishes(a.dishes)]);
+                            })
+                            .join("");
+                    } else {
+                        cabinCrewBody.innerHTML = `<tr><td colspan="9">No cabin crew assigned</td></tr>`;
+                    }
+
+                    // Passengers
+                    if (data.passengers && data.passengers.length) {
+                        passengersBody.innerHTML = data.passengers
+                            .map(p => asRow([p.PassengerId ?? "-", p.Name || "-", p.Gender || "-", p.Age || "-", p.Nationality || "-", p.SeatNumber || "-", p.SeatType || "-", formatFamily(p)]))
+                            .join("");
+                    } else {
+                        passengersBody.innerHTML = `<tr><td colspan="8">No passengers found</td></tr>`;
+                    }
+                } catch (err) {
+                    const message = "Unable to connect to server";
+                    flightCrewBody.innerHTML = `<tr><td colspan="8">${message}</td></tr>`;
+                    cabinCrewBody.innerHTML = `<tr><td colspan="9">${message}</td></tr>`;
+                    passengersBody.innerHTML = `<tr><td colspan="8">${message}</td></tr>`;
+                }
+            }
+
+            window.addEventListener("DOMContentLoaded", () => {
+            loadExtendedRoster();
+
+            const btn = document.getElementById("exportJsonBtn");
+        if (btn) {
+            btn.addEventListener("click", () => {
+            downloadRosterJson(getFlightNumber());
+                });
+            }
+        });
+
+    </script>
+</body>
+</html>

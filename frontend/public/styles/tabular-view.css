@@ -1,0 +1,362 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(to top, #c4daf5 0%, #70b7e9 19.036%, #212f5e 100%);
+    color: #333;
+}
+
+a { text-decoration: none; }
+
+
+.app-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+main.container {
+    max-width: 1200px;
+    padding: 2rem 20px 2rem 20px;
+}
+
+.back-row {
+    display: flex;
+    justify-content: flex-start;
+    margin: 0;
+    position: absolute;
+    top: 14px;
+    left: 14px;
+}
+
+/*Nav bar*/
+.main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 30px;
+    padding-bottom: 20px;
+}
+
+.logo-container {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.airplane-icon {
+    width: 44px;
+    height: 44px;
+}
+
+.brand-name {
+    font-size: 32px;
+    font-weight: 400;
+    color: white;
+}
+
+.nav-container {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+}
+
+.nav-link {
+    font-size: 20px;
+    color: white;
+    font-weight: 400;
+    transition: opacity 0.2s;
+}
+
+.nav-link:hover {
+    opacity: 0.8;
+}
+
+.login-button {
+    background-color: #253360;
+    color: white;
+    font-size: 20px;
+    font-weight: 500;
+    padding: 10px 40px;
+    border-radius: 50px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    transition: transform 0.1s;
+}
+
+.login-button:active {
+    transform: scale(0.98);
+}
+
+/*Card*/
+.main-card {
+    background-color: #feffff;
+    border-radius: 25px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 40px;
+    padding: 56px 40px 40px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    min-height: 600px;
+    position: relative;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background-color: transparent;
+    border: 1.5px solid #9aa3b5;
+    border-radius: 50%;
+    color: #9aa3b5;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, transform 0.1s, border-color 0.2s;
+}
+
+.back-button:hover {
+    color: #212f5e;
+    border-color: #212f5e;
+    background-color: transparent;
+    transform: translateX(-2px);
+}
+
+.back-button i {
+    font-size: 18px;
+}
+
+/*Flight Info*/
+.flight-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.flight-title {
+    font-size: 35px;
+    font-weight: 700;
+    color: black;
+}
+
+.flight-details {
+    font-size: 20px;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.divider-line {
+    border: none;
+    height: 2px;
+    background-color: #cacaca;
+    width: 100%;
+}
+
+/*Tabs*/
+.view-tabs {
+    display: flex;
+    gap: 10px;
+    border-bottom: 1px solid #ddd;
+    overflow-x: auto;
+}
+
+.tab-item {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.tab-item:hover {
+    background-color: #f5f5f5;
+    border-radius: 8px 8px 0 0;
+}
+
+.tab-active {
+    border-bottom-color: #212f5e;
+}
+
+.tab-icon {
+    width: 24px;
+    height: 24px;
+    color: #5b5b5b;
+}
+
+.tab-item span {
+    font-size: 20px;
+    font-weight: 600;
+    color: #5b5b5b;
+}
+
+.tab-active .tab-icon {
+    color: #212f5e;
+}
+
+.tab-active span {
+    color: #212f5e;
+}
+
+/*Table*/
+.table-container {
+    width: 100%;
+    overflow-x: auto; 
+    border: 1px solid #212f5e;
+    border-radius: 4px;
+}
+
+.table-wrapper {
+    background-color: #363636;
+    min-width: 600px;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.table-row {
+    display: flex;
+    width: 100%;
+}
+
+.table-header-row {
+    background-color: #212f5e;
+}
+
+.table-data-row {
+    background-color: #feffff;
+}
+
+.table-cell {
+    padding: 12px;
+    border-right: 1px solid rgba(91, 91, 91, 0.2);
+    border-bottom: 1px solid rgba(91, 91, 91, 0.2);
+    display: flex;
+    align-items: center;
+}
+
+/*Columns*/
+.cell-id {
+    width: 100px;
+    flex-shrink: 0;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.cell-flexible {
+    flex: 1;
+}
+
+.table-header-row .table-cell {
+    border: none;
+    color: white;
+}
+
+.table-header-row p {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.table-data-row p {
+    font-size: 14px;
+    color: #333;
+}
+
+/*Export*/
+.export-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: auto;
+    padding-top: 20px;
+}
+
+.export-button {
+    background-color: #212f5e;
+    border: none;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 12px 30px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.export-button:hover {
+    background-color: #324685;
+}
+
+.download-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.export-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: #feffff;
+    font-family: 'Inter', sans-serif;
+}
+
+
+
+/*Responsive*/
+@media (max-width: 768px) {
+    .main-header {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .nav-container {
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .main-card {
+        padding: 60px 20px 20px 20px;
+    }
+    
+    .back-row {
+        top: 12px;
+        left: 12px;
+    }
+    
+    .back-button {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+    }
+    
+    .back-button i {
+        font-size: 14px;
+    }
+    
+    .flight-title {
+        font-size: 28px;
+    }
+    
+    .view-tabs {
+        justify-content: flex-start;
+    }
+    
+    .tab-item span {
+        font-size: 16px;
+    }
+}

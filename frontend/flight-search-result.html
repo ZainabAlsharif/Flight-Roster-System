@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Search Result - FlyTech</title>
+    <link rel="stylesheet" href="./public/styles/flight-search-result.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Material+Icons&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        
+        <!-- Navigation -->
+        <header class="main-header container">
+            <div class="logo-container">
+                <div class="airplane-icon">
+                    <svg viewBox="0 0 44 44" fill="none">
+                        <path d="M37.6933 7.16833C38.775 8.25 38.775 9.99167 37.6933 11.055L30.5617 18.1867L34.4483 35.035L31.8633 37.6383L24.75 24.0167L17.6 31.1667L18.26 35.695L16.2983 37.6383L13.0717 31.8083L7.22333 28.5633L9.16667 26.5833L13.75 27.2617L20.845 20.1667L7.22333 12.9983L9.82667 10.4133L26.675 14.3L33.8067 7.16833C34.8333 6.105 36.6667 6.105 37.6933 7.16833Z" fill="white" />
+                    </svg>
+                </div>
+                <h1 class="brand-name">FlyTech</h1>
+            </div>
+
+            <nav class="nav-container">
+                <a class="nav-link" onclick="window.location.href='./about-us.html';">About Us</a>
+                <a class="login-button" onclick="window.location.href='./login.html';">Log-in</a>
+            </nav>
+        </header>
+
+    <main class="content-wrapper">
+        <div class="white-card">
+            <div class="back-row">
+                <button class="back-button" onclick="window.location.href='./passenger-flight-search.html';" aria-label="Back to search">
+                    <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                </button>
+            </div>
+            
+            <div class="flight-info">
+                <h1>Ticket ID: <span id="flight-number">00001</span></h1>
+                <p>Passenger ID: <span id="passenger-id">P12345</span></p>
+                <p>Passenger Name: <span id="passenger-name">John Doe</span></p>
+            </div>
+
+            <div class="info-divider"></div>
+
+            <div class="boarding-pass">
+                
+                <div class="ticket-left">
+                    <div class="ticket-header">
+                        <div class="header-brand">
+                            <div class="airplane-icon ticket-icon">
+                                <svg viewBox="0 0 44 44" fill="none">
+                                    <path d="M37.6933 7.16833C38.775 8.25 38.775 9.99167 37.6933 11.055L30.5617 18.1867L34.4483 35.035L31.8633 37.6383L24.75 24.0167L17.6 31.1667L18.26 35.695L16.2983 37.6383L13.0717 31.8083L7.22333 28.5633L9.16667 26.5833L13.75 27.2617L20.845 20.1667L7.22333 12.9983L9.82667 10.4133L26.675 14.3L33.8067 7.16833C34.8333 6.105 36.6667 6.105 37.6933 7.16833Z" fill="white" />
+                                </svg>
+                            </div>
+                            <span class="ticket-brand-text">FlyTech</span>
+                        </div>
+                        <span class="class-label">ECONOMY</span>
+                    </div>
+
+                    <div class="ticket-body">
+                        <div class="barcode-vertical">
+                            <img src="./images/barcode.png" alt="Barcode">
+                        </div>
+
+                        <div class="flight-details-grid">
+                            <div class="detail-group full-width">
+                                <div class="label">PASSENGER NAME</div>
+                                <div class="value-xl" data-field="passengerName">SURNAME / NAME</div>
+                            </div>
+
+                            <div class="detail-group">
+                                <div class="label">FROM</div>
+                                <div class="value-lg" data-field="from">IST</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">TO</div>
+                                <div class="value-lg" data-field="to">JFK</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">FLIGHT</div>
+                                <div class="value-md" data-field="flight">FT101</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">DATE</div>
+                                <div class="value-md" data-field="date">18 DEC 2025</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">CONNECTION</div>
+                                <div class="value-md" data-field="connection">-</div>
+                            </div>
+
+                            <div class="grid-divider"></div>
+
+                            <div class="detail-group">
+                                <div class="label">AIRCRAFT</div>
+                                <div class="value-md" data-field="aircraft">B777</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">SEAT</div>
+                                <div class="value-md" data-field="seat">24C</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">DURATION</div>
+                                <div class="value-md" data-field="duration">160 min</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">DISTANCE</div>
+                                <div class="value-md" data-field="distance">153 KM</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">FAMILY</div>
+                                <div class="value-md" data-field="family">DOE</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ticket-divider"></div>
+
+                <div class="ticket-right">
+                    <div class="ticket-header">
+                        <div class="header-brand">
+                            <div class="airplane-icon ticket-icon">
+                                <svg viewBox="0 0 44 44" fill="none">
+                                    <path d="M37.6933 7.16833C38.775 8.25 38.775 9.99167 37.6933 11.055L30.5617 18.1867L34.4483 35.035L31.8633 37.6383L24.75 24.0167L17.6 31.1667L18.26 35.695L16.2983 37.6383L13.0717 31.8083L7.22333 28.5633L9.16667 26.5833L13.75 27.2617L20.845 20.1667L7.22333 12.9983L9.82667 10.4133L26.675 14.3L33.8067 7.16833C34.8333 6.105 36.6667 6.105 37.6933 7.16833Z" fill="white" />
+                                </svg>
+                            </div>
+                            <span class="ticket-brand-text">FlyTech</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stub-body">
+                        <div class="detail-group full-width">
+                            <div class="label">PASSENGER NAME</div>
+                            <div class="value-md-stub" data-field="passengerName">SURNAME / NAME</div>
+                        </div>
+
+                        <div class="stub-row">
+                            <div class="detail-group">
+                                <div class="label">FROM</div>
+                                <div class="value-sm" data-field="from">IST</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">TO</div>
+                                <div class="value-sm" data-field="to">JFK</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">CONNECTION</div>
+                                <div class="value-sm" data-field="connection">Direct</div>
+                            </div>
+                        </div>
+
+                        <div class="stub-row">
+                            <div class="detail-group">
+                                <div class="label">FLIGHT</div>
+                                <div class="value-sm" data-field="flight">FT101</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">SEAT</div>
+                                <div class="value-sm" data-field="seat">24C</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">AIRCRAFT</div>
+                                <div class="value-sm" data-field="aircraft">B777</div>
+                            </div>
+                        </div>
+
+                         <div class="stub-row">
+                            <div class="detail-group">
+                                <div class="label">DURATION</div>
+                                <div class="value-xs" data-field="duration">160 min</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">DISTANCE</div>
+                                <div class="value-xs" data-field="distance">153 KM</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="label">FAMILY</div>
+                                <div class="value-xs" data-field="family">DOE</div>
+                            </div>
+                        </div>
+                        
+                        <div class="barcode-horizontal">
+                            <img src="./images/barcode.png" alt="Barcode">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+    </main>
+    </div>
+
+    <script>
+        // Populate ticket dynamically from API if ticketId is provided in the URL
+        (function populateTicket() {
+            const params = new URLSearchParams(window.location.search);
+            const ticketIdParam = params.get('ticketId') || params.get('ticketID');
+
+            const defaults = {
+                ticketId: ticketIdParam || '00001',
+                passengerId: 'P12345',
+                passengerName: 'John Doe',
+                from: 'IST',
+                to: 'JFK',
+                flight: 'FT101',
+                date: '18 DEC 2025',
+                    connection: '-',
+                aircraft: 'B777',
+                seat: '24C',
+                duration: '160 min',
+                distance: '153 KM',
+                family: 'DOE'
+            };
+
+            const setTextById = (id, value) => {
+                const el = document.getElementById(id);
+                if (el && value !== undefined && value !== null) {
+                    el.textContent = value;
+                }
+            };
+
+            const setTextByField = (field, value) => {
+                if (value === undefined || value === null) return;
+                document.querySelectorAll(`[data-field="${field}"]`).forEach(el => {
+                    el.textContent = value;
+                });
+            };
+
+            const applyData = (data) => {
+                setTextById('flight-number', data.ticketId);
+                setTextById('passenger-id', data.passengerId);
+                setTextById('passenger-name', data.passengerName);
+
+                ['passengerName','from','to','flight','date','connection','aircraft','seat','duration','distance','family']
+                    .forEach(key => setTextByField(key, data[key]));
+            };
+
+            const formatDate = (iso) => {
+                const dt = new Date(iso);
+                if (Number.isNaN(dt.getTime())) return iso;
+                return dt.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+            };
+
+            const deriveFamily = (name) => {
+                if (!name) return null;
+                const parts = name.trim().split(/\s+/);
+                return parts.length ? parts[parts.length - 1].toUpperCase() : null;
+            };
+
+            const state = { ...defaults };
+            applyData(state);
+
+            if (!ticketIdParam) return;
+
+            fetch(`/api/ticket/${encodeURIComponent(ticketIdParam)}`)
+                .then(res => {
+                    if (!res.ok) throw new Error(`Request failed ${res.status}`);
+                    return res.json();
+                })
+                .then(row => {
+                    const connectionType = row.SharedFlightNumber
+                        ? 'Shared'
+                        : row.ConnectingFlightNumber
+                            ? 'Connecting'
+                            : 'Direct';
+                    const hydrated = {
+                        ticketId: row.ticketId || state.ticketId,
+                        passengerId: row.passengerId || state.passengerId,
+                        passengerName: row.passengerName || state.passengerName,
+                        from: row.sourceAirportCode || state.from,
+                        to: row.destinationAirportCode || state.to,
+                        flight: row.flight || state.flight,
+                        date: row.flightDateTime ? formatDate(row.flightDateTime) : state.date,
+                        connection: connectionType || state.connection,
+                        aircraft: row.vehicleTypeCode || state.aircraft,
+                        seat: row.seat || state.seat,
+                        duration: row.durationMinutes ? `${row.durationMinutes} min` : state.duration,
+                        distance: row.distanceKm ? `${row.distanceKm} KM` : state.distance,
+                        family: deriveFamily(row.passengerName) || state.family
+                    };
+
+                    applyData(hydrated);
+                })
+                .catch(err => {
+                    console.error('Failed to load ticket from API:', err);
+                });
+        })();
+    </script>
+</body>
+</html>

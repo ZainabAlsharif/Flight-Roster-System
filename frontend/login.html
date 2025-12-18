@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log-in</title>
+    <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
+    <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
+    <link href="[https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap)" rel="stylesheet">
+    
+    <link rel="stylesheet" href="./public/styles/login.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <header class="main-header container">
+        <div class="logo-container">
+            <div class="airplane-icon">
+                <svg viewBox="0 0 44 44" fill="none">
+                    <path d="M37.6933 7.16833C38.775 8.25 38.775 9.99167 37.6933 11.055L30.5617 18.1867L34.4483 35.035L31.8633 37.6383L24.75 24.0167L17.6 31.1667L18.26 35.695L16.2983 37.6383L13.0717 31.8083L7.22333 28.5633L9.16667 26.5833L13.75 27.2617L20.845 20.1667L7.22333 12.9983L9.82667 10.4133L26.675 14.3L33.8067 7.16833C34.8333 6.105 36.6667 6.105 37.6933 7.16833Z" fill="white" />
+                </svg>
+            </div>
+            <h1 class="brand-name">FlyTech</h1>
+        </div>
+
+        <nav class="nav-container">
+            <a class="nav-link" onclick="window.location.href='./about-us.html';">About Us</a>
+            <a class="login-button" onclick="window.location.href='./login.html';">Log-in</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        
+        <!-- Login Form Section -->
+        <div class="login-wrapper">
+            <div class="welcome-text">
+                <h1>Welcome back</h1>
+                <p>Log-in to view flights</p>
+            </div>
+
+            <form class="form-group" method="POST" action="/">
+                <div class="input-wrapper">
+                    <label>Staff ID</label>
+                    <input type="number" class="custom-input" name="staffId" placeholder="12345" required>
+                </div>
+
+                <div class="input-wrapper">
+                    <label>Password</label>
+                    <input type="password" class="custom-input" name="password" placeholder="********" required>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">Log-in as Staff</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='/passenger-flight-search';">Continue as Passenger</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Background Image -->
+        <div class="airplane-container">
+            <img src="./images/airplane.png" alt="Airplane" class="airplane-img">
+        </div>
+
+    </main>
+
+</body>
+</html>

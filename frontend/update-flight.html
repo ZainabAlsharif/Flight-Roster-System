@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Flight</title>
+    <link rel="stylesheet" href="./public/styles/admin-home.css">
+</head>
+<body>
+    <div class="admin-wrapper">
+        <header class="main-header container">
+            <div class="logo-container">
+                <div class="airplane-icon">
+                    <svg viewBox="0 0 44 44" fill="none">
+                        <path d="M37.6933 7.16833C38.775 8.25 38.775 9.99167 37.6933 11.055L30.5617 18.1867L34.4483 35.035L31.8633 37.6383L24.75 24.0167L17.6 31.1667L18.26 35.695L16.2983 37.6383L13.0717 31.8083L7.22333 28.5633L9.16667 26.5833L13.75 27.2617L20.845 20.1667L7.22333 12.9983L9.82667 10.4133L26.675 14.3L33.8067 7.16833C34.8333 6.105 36.6667 6.105 37.6933 7.16833Z" fill="white" />
+                    </svg>
+                </div>
+                <h1 class="brand-name">FlyTech</h1>
+            </div>
+            <nav class="nav-container">
+                <a class="nav-link" onclick="window.location.href='./admin-home.html';">Admin Home</a>
+                <a class="login-button" onclick="window.location.href='./login.html';">Log-in</a>
+            </nav>
+        </header>
+
+        <main class="content-container">
+            <section class="card">
+                <h2 class="section-title">Update Flight</h2>
+                <form id="update-flight-form">
+                    <label for="flight-select">Select Flight:</label>
+                    <select id="flight-select" name="flight" required>
+                        <!-- Dynamically filled with flight options -->
+                    </select>
+
+                    <label for="updated-date">Updated Date:</label>
+                    <input type="date" id="updated-date" name="updated-date" required>
+
+                    <label for="updated-time">Updated Time:</label>
+                    <input type="time" id="updated-time" name="updated-time" required>
+
+                    <label for="updated-captain">Updated Captain:</label>
+                    <select id="updated-captain" name="updated-captain" required>
+                        <!-- Dynamically filled with captain options -->
+                    </select>
+
+                    <label for="updated-crew">Updated Crew:</label>
+                    <select id="updated-crew" name="updated-crew" multiple required>
+                        <!-- Dynamically filled with crew options -->
+                    </select>
+
+                    <button type="submit" class="action-btn">Update Flight</button>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        async function loadFlightsAndCaptains() {
+            const flightsResponse = await fetch("/api/flights");
+            const captainsResponse = await fetch("/api/captains");
+
+            const flights = await flightsResponse.json();
+            const captains = await captainsResponse.json();
+
+            const flightSelect = document.getElementById("flight-select");
+            const captainSelect = document.getElementById("updated-captain");
+
+            flights.forEach(flight => {
+                const option = document.createElement("option");
+                option.value = flight.id;
+                option.textContent = flight.flightNumber;
+                flightSelect.appendChild(option);
+            });
+
+            captains.forEach(captain => {
+                const option = document.createElement("option");
+                option.value = captain.id;
+                option.textContent = captain.name;
+                captainSelect.appendChild(option);
+            });
+        }
+
+        document.getElementById("update-flight-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const flightData = Object.fromEntries(formData.entries());
+
+            const response = await fetch(`/api/update-flight/${flightData.flight}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(flightData)
+            });
+
+            if (response.ok) {
+                window.location.href = "./flight-updated-success.html"; // Redirect to success page
+            } else {
+                alert("Error updating flight!");
+            }
+        });
+
+        window.addEventListener("DOMContentLoaded", () => {
+            loadFlightsAndCaptains();
+        });
+    </script>
+</body>
+</html>
