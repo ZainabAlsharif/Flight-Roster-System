@@ -214,7 +214,7 @@ main.container{
   font-weight:800;
 }
 
-/* Navbar styles from tabular-view */
+/*Nav bar*/
 .main-header {
   display: flex;
   align-items: center;
@@ -274,7 +274,7 @@ main.container{
   transform: scale(0.98);
 }
 
-/* Container spacing like tabular-view */
+/*Container*/
 .app-wrapper {
   display: flex;
   flex-direction: column;

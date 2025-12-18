@@ -1,6 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-/* --- Reset & Globals --- */
 * {
     margin: 0;
     padding: 0;
@@ -16,14 +14,13 @@ body {
 
 a { text-decoration: none; }
 
-/* Wrapper for the whole page */
+
 .app-wrapper {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
-/* Utility Class to constrain width and center content */
 .container {
     width: 100%;
     max-width: 1400px;
@@ -31,7 +28,6 @@ a { text-decoration: none; }
     padding: 0 20px;
 }
 
-/* Match navbar-to-content spacing like assigned-flight-list */
 main.container {
     max-width: 1200px;
     padding: 2rem 20px 2rem 20px;
@@ -46,7 +42,7 @@ main.container {
     left: 14px;
 }
 
-/* --- Header --- */
+/*Nav bar*/
 .main-header {
     display: flex;
     align-items: center;
@@ -104,7 +100,7 @@ main.container {
     transform: scale(0.98);
 }
 
-/* --- Main Card Area --- */
+/*Card*/
 .main-card {
     background-color: #feffff;
     border-radius: 25px;
@@ -146,7 +142,7 @@ main.container {
     font-size: 18px;
 }
 
-/* Flight Info */
+/*Flight Info*/
 .flight-info {
     display: flex;
     flex-direction: column;
@@ -171,12 +167,12 @@ main.container {
     width: 100%;
 }
 
-/* --- Tabs --- */
+/*Tabs*/
 .view-tabs {
     display: flex;
     gap: 10px;
     border-bottom: 1px solid #ddd;
-    overflow-x: auto; /* scroll on mobile if needed */
+    overflow-x: auto;
 }
 
 .tab-item {
@@ -219,10 +215,9 @@ main.container {
     color: #212f5e;
 }
 
-/* --- Table --- */
+/*Table*/
 .table-container {
     width: 100%;
-    /* Allow horizontal scroll on small screens */
     overflow-x: auto; 
     border: 1px solid #212f5e;
     border-radius: 4px;
@@ -230,7 +225,7 @@ main.container {
 
 .table-wrapper {
     background-color: #363636;
-    min-width: 600px; /* Ensures table doesn't get too squashed */
+    min-width: 600px;
     border-radius: 3px;
     overflow: hidden;
 }
@@ -256,7 +251,7 @@ main.container {
     align-items: center;
 }
 
-/* Column sizing */
+/*Columns*/
 .cell-id {
     width: 100px;
     flex-shrink: 0;
@@ -283,11 +278,11 @@ main.container {
     color: #333;
 }
 
-/* --- Export Button --- */
+/*Export*/
 .export-container {
     display: flex;
     justify-content: flex-start;
-    margin-top: auto; /* Pushes to bottom of flex container */
+    margin-top: auto;
     padding-top: 20px;
 }
 
@@ -319,9 +314,9 @@ main.container {
     font-family: 'Inter', sans-serif;
 }
 
-/* --- Responsive Breakpoints --- */
 
-/* Tablet & Mobile */
+
+/*Responsive*/
 @media (max-width: 768px) {
     .main-header {
         flex-direction: column;

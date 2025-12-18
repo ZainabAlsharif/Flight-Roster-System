@@ -28,7 +28,7 @@ body {
     color: var(--primary-dark);
 }
 
-/* --- Navigation (match Tabular View) --- */
+/*Nav bar*/
 .container {
     width: 100%;
     max-width: 1400px;
@@ -102,7 +102,7 @@ body {
     transform: scale(0.98);
 }
 
-/* --- Main Content Area --- */
+/*Main*/
 .main-container {
     flex: 1;
     display: flex;
@@ -124,7 +124,7 @@ body {
     min-height: 600px; 
 }
 
-/* Title Section */
+/*Title*/
 .card-header {
     display: flex;
     flex-direction: column;
@@ -154,7 +154,7 @@ body {
     margin-left: 0.2rem;
 }
 
-/* Flight Number Tab / Divider */
+/*Tabs*/
 .tab-section {
     display: flex;
     flex-direction: column;
@@ -175,7 +175,7 @@ body {
     background-color: var(--primary-dark);
 }
 
-/* Form Section */
+/*Form*/
 .form-section {
     display: flex;
     flex-direction: column;
@@ -215,7 +215,7 @@ body {
     color: #7A7A7A;
 }
 
-/* Search Button */
+/*Search*/
 .btn-search {
     background-color: var(--primary-black);
     color: white;
@@ -235,7 +235,7 @@ body {
     opacity: 0.9;
 }
 
-/* --- Responsive Design --- */
+/*Responsive*/
 @media (max-width: 1024px) {
     .main-header {
         padding-top: 20px;

@@ -128,6 +128,7 @@ INSERT OR REPLACE INTO PassengerAffiliation (PassengerId, AffiliateId) VALUES
 ---system users
 -- Passwords are hashed with bcrypt (saltRounds=10)
 INSERT OR REPLACE INTO SystemUser (UserId, Username, Password, Role) VALUES
+(0, 'admin_1', '$2b$10$E63VD/rsaEscV.opPlQ5L.cr27rLctpifVUbqerwsIDL.U9ce4C82', 'admin'), --admin123
 (1, 'pilot_abdulsallam', '$2b$10$c01qtNQhw82Rz.4jLwRchOp7twyo4vZPaQ.mm1zI2Z2c8YTu3QuhW', 'staff'), --pilot1
 (2, 'pilot_aya', '$2b$10$sr0MDZPbWMWcAzge0g90f.sIztNP4W/NL/NIOFuCqTlu0p5vg.06O', 'staff'), --pilot2
 (3, 'pilot_karim', '$2b$10$uZhdSASW6Aapcgrn7ZOOOuxT8isneyTeJB3cexi4U7NudnUYs9FPe', 'staff'), --pilot3

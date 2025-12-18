@@ -1,16 +1,14 @@
 :root {
-    --primary-blue: #253360; /* Added from Login */
+    --primary-blue: #253360;
     --primary-dark: #253360;
-    --text-white: #ffffff;   /* Added from Login */
+    --text-white: #ffffff;
     --text-label: rgba(0, 0, 0, 0.7);
-    
     --glass-border: rgba(255, 255, 255, 0.3);
-    --ticket-header-blue: #9eb8eb; 
+    --ticket-header-blue: #9eb8eb;
     --ticket-border: #253360;
     --card-bg: #FEFFFF;
     --status-bg: #d1edd5;
     --status-text: #48784f;
-    
     --font-main: 'Inter', sans-serif;
     --padding-desktop: 4rem;
     --padding-mobile: 1.5rem;
@@ -36,7 +34,7 @@ body {
     color: var(--primary-dark);
 }
 
-/* --- Navigation (match Tabular View) --- */
+/*Nav bar*/
 .container {
     width: 100%;
     max-width: 1400px;
@@ -112,7 +110,7 @@ body {
     transform: scale(0.98);
 }
 
-/* --- Main Layout --- */
+/*Main*/
 .main-container {
     flex: 1;
     display: flex;
@@ -125,7 +123,7 @@ body {
     margin: 0 auto;
 }
 
-/* Top Info Card */
+/*Info Card*/
 .info-card {
     background-color: var(--card-bg);
     width: 100%;
@@ -152,7 +150,7 @@ body {
     color: rgba(0, 0, 0, 0.8);
 }
 
-/* Flights List Card */
+/*Flights*/
 .flights-card {
     background-color: var(--card-bg);
     width: 100%;
@@ -165,7 +163,7 @@ body {
     min-height: 500px; 
 }
 
-/* --- Ticket Styles --- */
+/*Ticket*/
 .ticket {
     border: 2px solid var(--ticket-border);
     border-radius: 20px;
@@ -296,21 +294,20 @@ body {
     color: rgb(0, 0, 0);
 }
 
-/* Keep Distance, Aircraft, Connection on the same row on wide screens */
+/*Details Order*/
 .detail-date { order: 1; }
 .detail-duration { order: 2; }
 .detail-distance { order: 4; }
 .detail-aircraft { order: 5; }
 .detail-connection { order: 6; }
 
-/* --- Responsive Design --- */
+/*Responsive*/
 @media (max-width: 1024px) {
-    /* Navbar specific */
+    /*Nav bar*/
     .navbar {
         padding: 1.5rem 2rem;
     }
-    
-    /* Ticket specifics */
+    /*Ticket*/
     .ticket-body {
         flex-direction: column;
         gap: 2rem;
@@ -327,7 +324,7 @@ body {
 }
 
 @media (max-width: 768px) {
-    /* Navbar specific - match Tabular View */
+    /*Nav bar*/
     .main-header {
         flex-direction: column;
         gap: 20px;
@@ -339,7 +336,7 @@ body {
         justify-content: center;
     }
 
-    /* Content specifics */
+    /*Content*/
     .info-card, .flights-card {
         padding: 1.5rem;
     }

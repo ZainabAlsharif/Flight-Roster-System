@@ -1,9 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-/* =========================================
-   PART 1: SHARED STYLES (matches Tabular View)
-   ========================================= */
-
 * {
     margin: 0;
     padding: 0;
@@ -251,11 +247,6 @@ main.container {
     font-family: 'Inter', sans-serif;
 }
 
-
-/* =========================================
-   PART 2: EXTENDED-SPECIFIC STYLES
-   ========================================= */
-
 :root {
     --color-yellow: #ddaa13;
     --color-blue: #4e85df;
@@ -344,6 +335,7 @@ main.container {
 }
 
 /* Limit Family column width so it doesn’t sprawl */
+/*Family column*/
 .extended-box.border-purple .extended-table th:last-child,
 .extended-box.border-purple .extended-table td:last-child {
     max-width: 110px;
@@ -351,7 +343,7 @@ main.container {
     overflow-wrap: anywhere;
 }
 
-/* Let other passenger columns breathe a bit more */
+/*Passenger columns*/
 .extended-box.border-purple .extended-table th:not(:last-child),
 .extended-box.border-purple .extended-table td:not(:last-child) {
     max-width: 90px;
@@ -361,11 +353,7 @@ main.container {
 .bg-blue { background-color: var(--bg-blue); }
 .bg-purple { background-color: var(--bg-purple); }
 
-
-/* =========================================
-   PART 3: RESPONSIVE BREAKPOINTS
-   ========================================= */
-
+/*Responsive*/
 @media (max-width: 768px) {
     .main-header {
         flex-direction: column;

@@ -22,13 +22,13 @@ body {
         #c4daf5 0%, 
         #70b7e9 19.036%, 
         #212f5e 100%);
-    background-attachment: fixed; /* Keeps gradient consistent on scroll */
-    overflow-x: hidden; /* Prevents horizontal scroll from the airplane */
+    background-attachment: fixed; 
+    overflow-x: hidden; 
     position: relative;
     color: var(--text-white);
 }
 
-/* --- Navigation (match Tabular View) --- */
+/*Nav bar*/
 .container {
     width: 100%;
     max-width: 1400px;
@@ -103,41 +103,41 @@ body {
     transform: scale(0.98);
 }
 
-/* --- Main Layout --- */
+/*Main*/
 .main-container {
     display: flex;
-    min-height: calc(100vh - 100px); /* Fill remaining height */
-    padding: 0 20px; /* Match navbar padding */
-    max-width: 1400px; /* Match navbar max-width */
-    margin: 0 auto; /* Center like navbar */
+    min-height: calc(100vh - 100px);
+    padding: 0 20px;
+    max-width: 1400px;
+    margin: 0 auto;
     position: relative;
-    align-items: center; /* Vertically center content */
+    align-items: center;
     z-index: 5;
 }
 
 .login-wrapper {
     width: 100%;
-    max-width: 550px; /* Restrict width on large screens */
+    max-width: 550px; 
     display: flex;
     flex-direction: column;
     gap: 3rem;
-    margin-top: -2rem; /* Visual adjustment to pull it slightly up like screenshot */
+    margin-top: -2rem; 
 }
 
-/* --- Text Section --- */
+/*Text*/
 .welcome-text h1 {
-    font-size: 3.5rem; /* ~56px */
+    font-size: 3.5rem;
     font-weight: 600;
     line-height: 1.2;
     margin-bottom: 0.5rem;
 }
 
 .welcome-text p {
-    font-size: 1.25rem; /* ~20px */
+    font-size: 1.25rem; 
     opacity: 0.9;
 }
 
-/* --- Form Section --- */
+/*Form*/
 .form-group {
     display: flex;
     flex-direction: column;
@@ -158,7 +158,7 @@ body {
     width: 100%;
     padding: 1rem 1.25rem;
     background: transparent;
-    border: 2px solid var(--primary-blue); /* Solid border like screenshot */
+    border: 2px solid var(--primary-blue);
     border-radius: 8px;
     font-size: 1.125rem;
     color: var(--text-white);
@@ -175,7 +175,7 @@ body {
     color: rgba(255, 255, 255, 0.6);
 }
 
-/* --- Buttons --- */
+/*Buttons*/
 .btn-group {
     display: flex;
     flex-direction: column;
@@ -207,10 +207,9 @@ body {
 }
 
 .btn-secondary {
-    background-color: rgba(255, 255, 255, 0.4); /* Glassy feel */
+    background-color: rgba(255, 255, 255, 0.4);
     border: 2px solid var(--primary-blue);
     color: var(--primary-blue);
-    /* To make text readable on dark blue areas if overlapping */
     font-weight: 600; 
 }
 
@@ -218,18 +217,16 @@ body {
     background-color: rgba(255, 255, 255, 0.6);
 }
 
-/* --- Background Airplane --- */
+/*Airplane*/
 .airplane-container {
     position: absolute;
-    bottom: -65vh; 
+    bottom: -65vh;
     right: -30vw;
-    width: 450vw; 
+    width: 450vw;
     max-width: 1900px;
     height: auto;
-    pointer-events: none; 
-    z-index: -1; 
-    
-    /* Animation for smooth entrance */
+    pointer-events: none;
+    z-index: -1;
     opacity: 0;
     animation: flyIn 1.5s ease-out forwards;
 }
@@ -252,7 +249,7 @@ body {
     }
 }
 
-/* --- Mobile / Tablet Responsiveness --- */
+/*Responsive*/
 @media (max-width: 1024px) {
     .main-header {
         padding-top: 20px;
@@ -284,7 +281,7 @@ body {
     
     .main-container {
         padding: 2rem var(--padding-mobile);
-        align-items: flex-start; /* Move content to top */
+        align-items: flex-start;
     }
 
     .welcome-text h1 {

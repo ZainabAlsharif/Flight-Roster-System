@@ -9,7 +9,7 @@ const app = express();
 const saltRounds = 10;
 const PORT = 3000;
 
-// Middleware
+//middleware
 app.use(cors({
   origin: "http://localhost:3000",
   credentials: true
@@ -21,11 +21,11 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
 }));
-// static files
+//static files
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'public')));
 
-// Database connection
+//database connection
 const dbPath = path.join(__dirname, 'database', 'roster.db');
 const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
@@ -214,6 +214,7 @@ async function buildRosterResponse(flightNumber) {
   return { flight, roster, pilots, attendants, passengers };
 }
 const staffUsers = {
+    'admin': 'admin123',
     'pilot_abdulsallam': 'pilot1',
     'pilot_aya': 'pilot2',
     'pilot_karim': 'pilot3',
@@ -234,8 +235,6 @@ async function generateHashes() {
 }
 //generateHashes().catch(err => console.error('Error:', err));
 
-//=============================================================================================================
-
 
 // ROUTES
 
@@ -255,7 +254,7 @@ app.post('/', async (req, res) => {
     try {
         const user = await new Promise((resolve, reject) => {
             db.get(
-                'SELECT UserId, Password FROM SystemUser WHERE UserId = ?',
+                'SELECT UserId, Password, Role FROM SystemUser WHERE UserId = ?',
                 [staffId],
                 (err, row) => {
                     if (err) reject(err);
@@ -272,7 +271,14 @@ app.post('/', async (req, res) => {
 
         if (match) {
             req.session.userId = user.UserId;
-            return res.redirect('/assigned-flight-list');
+            req.session.userRole = user.Role;
+            
+            //redirect based on user role (staff or admin)
+            if (user.Role === 'admin') {
+                return res.redirect('/admin-home');
+            } else {
+                return res.redirect('/assigned-flight-list');
+            }
         } else {
             return res.redirect('/');
         }
@@ -286,6 +292,11 @@ app.post('/', async (req, res) => {
 // Show assigned flight list page (GET)
 app.get('/assigned-flight-list', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'frontend', 'assigned-flight-list.html'));
+});
+
+// Show admin home page (GET)
+app.get('/admin-home', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'admin-home.html'));
 });
 
 // Passenger Flight Search (GET)
@@ -457,8 +468,6 @@ app.get("/api/me", async (req, res) => {
 
     if (!row) return res.status(404).json({ error: "User not found" });
 
-    // For "Staff Name", your DB currently has Username only.
-    // We'll display Username as staff name.
     res.json({
       userId: row.UserId,
       name: row.Username,

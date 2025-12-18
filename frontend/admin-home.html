@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Home</title>
+    <link rel="stylesheet" href="./public/styles/admin-home.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="admin-wrapper">
+        <header class="main-header container">
+            <div class="logo-container">
+                <div class="airplane-icon">
+                    <svg viewBox="0 0 44 44" fill="none">
+                        <path d="M37.6933 7.16833C38.775 8.25 38.775 9.99167 37.6933 11.055L30.5617 18.1867L34.4483 35.035L31.8633 37.6383L24.75 24.0167L17.6 31.1667L18.26 35.695L16.2983 37.6383L13.0717 31.8083L7.22333 28.5633L9.16667 26.5833L13.75 27.2617L20.845 20.1667L7.22333 12.9983L9.82667 10.4133L26.675 14.3L33.8067 7.16833C34.8333 6.105 36.6667 6.105 37.6933 7.16833Z" fill="white" />
+                    </svg>
+                </div>
+                <h1 class="brand-name">FlyTech</h1>
+            </div>
+
+            <nav class="nav-container">
+                <a class="nav-link" onclick="window.location.href='./about-us.html';">About Us</a>
+                <a class="login-button" onclick="window.location.href='./login.html';">Log-in</a>
+            </nav>
+        </header>
+
+        <main class="content-container">
+            
+            <section class="card welcome-card">
+                <h2 class="welcome-title">Welcome back, Admin</h2>
+                <div class="admin-info">
+                    <p><strong>Admin ID:</strong> <span id="adminId">0</span></p>
+                    <p><strong>Username:</strong> <span id="adminUsername">admin_1</span></p>
+                </div>
+            </section>
+
+            <section class="card actions-card">
+                <div class="actions-grid">
+                    
+                    <div class="action-item">
+                        <div class="action-text">
+                            <h3>Flight Creation</h3>
+                            <p>Create flights and assign staff and passenger seats</p>
+                        </div>
+                        <button class="action-btn">Create Flight</button>
+                    </div>
+
+                    <div class="action-item">
+                        <div class="action-text">
+                            <h3>Flight Update</h3>
+                            <p>Modify existing flight info and seat map for staff and passengers</p>
+                        </div>
+                        <button class="action-btn">Update Flight</button>
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        // fetches the current logged in admin 
+        async function loadAdminInfo() {
+            try {
+                console.log("Fetching admin info from /api/me...");
+                const res = await fetch("/api/me", { 
+                    credentials: "include",
+                    method: "GET"
+                });
+                
+                console.log("Response status:", res.status);
+                
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    console.warn("Failed to fetch admin info:", res.status, errorText);
+                    return; 
+                }
+
+                const me = await res.json();
+                console.log("Admin data received:", me);
+                
+                //displays admin id
+                if (me.userId !== undefined && me.userId !== null) {
+                    document.getElementById("adminId").textContent = me.userId;
+                }
+                
+                //displays username
+                if (me.name) {
+                    document.getElementById("adminUsername").textContent = me.name;
+                }
+            } catch (error) {
+                console.error("Error loading admin info:", error);
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            loadAdminInfo();
+        });
+    </script>
+</body>
+</html>

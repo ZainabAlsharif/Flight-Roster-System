@@ -38,7 +38,7 @@ body {
     flex-direction: column;
 }
 
-/* --- Navigation (match Tabular View) --- */
+/*Nav bar*/
 .container {
     width: 100%;
     max-width: 1400px;
@@ -116,7 +116,7 @@ body {
     transform: scale(0.98);
 }
 
-/* --- Main Content Wrapper --- */
+/*Content*/
 .content-wrapper {
     flex: 1;
     display: flex;
@@ -171,11 +171,11 @@ body {
     transform: translateX(-2px);
 }
 
-/* --- Flight Info Section --- */
+/*Flight Info*/
 .flight-info {
     width: 100%;
     margin-bottom: 20px;
-    margin-top: 12px; /* add breathing room below the back arrow */
+    margin-top: 12px; 
 }
 
 .flight-info h1 {
@@ -196,7 +196,6 @@ body {
     font-weight: 500;
 }
 
-/* --- Info Divider (Outside Ticket) --- */
 .info-divider {
     width: 100%;
     height: 1px;
@@ -204,18 +203,18 @@ body {
     margin: 10px 0 30px 0;
 }
 
-/* --- Boarding Pass Container --- */
+/*Boarding Pass*/
 .boarding-pass {
     display: flex;
     background: var(--white);
     border-radius: 20px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.08); /* Softer shadow */
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
     overflow: hidden;
     width: 100%;
-    border: 1px solid #eee; /* Slight border definition */
+    border: 1px solid #eee;
 }
 
-/* -- Ticket Left -- */
+/*Ticket Left*/
 .ticket-left {
     flex: 3;
     display: flex;
@@ -272,7 +271,7 @@ body {
     position: relative;
 }
 
-/* Vertical Barcode */
+/*Barcode Vertical*/
 .barcode-vertical {
     width: 60px;
     display: flex;
@@ -289,7 +288,7 @@ body {
     opacity: 0.9;
 }
 
-/* Grid for Flight Details */
+/*Details Grid*/
 .flight-details-grid {
     flex: 1;
     display: grid;
@@ -341,7 +340,6 @@ body {
     margin: 8px 0;
 }
 
-/* -- Vertical Divider between Ticket and Stub -- */
 .ticket-divider {
     width: 0;
     border-left: 2px dashed #d1d5db;
@@ -349,35 +347,32 @@ body {
     position: relative;
     z-index: 10;
 }
-
-/* Add little cutouts for the divider (Optional visual flair to match paper tickets) */
 .ticket-divider::before, .ticket-divider::after {
     content: '';
     position: absolute;
     width: 20px;
     height: 20px;
-    background: #fff; /* Match parent container bg */
+    background: #fff;
     border-radius: 50%;
     left: -11px;
 }
-.ticket-divider::before { top: -10px; background: var(--primary-blue); } /* Top cutout matches header color */
+.ticket-divider::before { top: -10px; background: var(--primary-blue); }
 .ticket-divider::after { bottom: -10px; background: var(--text-white); }
 
-/* -- Ticket Right (Stub) -- */
 .ticket-right {
     flex: 1;
     min-width: 280px;
-    background: linear-gradient(135deg, #fcfcfc 0%, #f9f9f9 100%); /* Subtle gradient */
+    background: linear-gradient(135deg, #fcfcfc 0%, #f9f9f9 100%);
     display: flex;
     flex-direction: column;
     border-left: 1px solid #e5e5e5;
 }
 
 .stub-body {
-    padding: 18px 16px; /* tighter padding to fit extra fields */
+    padding: 18px 16px;
     display: flex;
     flex-direction: column;
-    gap: 12px; /* reduce vertical gaps */
+    gap: 12px;
     flex: 1;
     justify-content: space-between;
 }
@@ -385,12 +380,12 @@ body {
 .stub-row {
     display: flex;
     justify-content: space-between;
-    gap: 8px; /* reduce horizontal gaps to fit three columns */
+    gap: 8px; 
 }
 
 .stub-row .detail-group {
     flex: 1;
-    min-width: 0; /* allow items to shrink within the row */
+    min-width: 0; 
 }
 
 .barcode-horizontal img {
@@ -401,7 +396,7 @@ body {
     margin-top: 8px;
 }
 
-/* --- Typography Classes --- */
+/*Typography*/
 .label {
     font-family: 'Roboto', sans-serif;
     font-size: 11px;
@@ -433,7 +428,7 @@ body {
     color: #000; 
 }
 
-/* Stub specific typography */
+/*Stub Typography*/
 .value-md-stub {
     font-weight: 700; 
     font-size: 16px; 
@@ -443,7 +438,7 @@ body {
 
 .value-sm { 
     font-weight: 700; 
-    font-size: 14px; /* slightly smaller to fit in stub */
+    font-size: 14px; 
     font-family: 'Inter', sans-serif; 
     color: #000; 
 }
@@ -455,7 +450,7 @@ body {
     color: #000; 
 }
 
-/* Responsive */
+/*Responsive*/
 @media (max-width: 1024px) {
     .main-header {
         padding-top: 20px;
@@ -473,7 +468,7 @@ body {
     .ticket-divider { display: none; }
     .ticket-right { border-left: none; min-width: auto; }
     
-    .barcode-vertical { display: none; } /* Hide vertical barcode on mobile */
+    .barcode-vertical { display: none; } 
     
     .flight-details-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -494,5 +489,4 @@ body {
         flex-wrap: wrap;
         justify-content: center;
     }
-}
 }
