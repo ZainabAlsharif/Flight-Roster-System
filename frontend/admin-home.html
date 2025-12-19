@@ -53,16 +53,6 @@
 
           <div class="action-item">
             <div class="action-text">
-              <h3>Update Flight</h3>
-              <p>Edit an existing flight</p>
-            </div>
-            <button class="action-btn" onclick="window.location.href='./update-flight.html';">
-              Update Flight
-            </button>
-          </div>
-
-          <div class="action-item">
-            <div class="action-text">
               <h3>Manage Crew & Passengers</h3>
               <p>Auto/Manual assign + passengers per flight</p>
             </div>
@@ -79,15 +69,14 @@
         <div id="flightsStatus" style="margin-bottom:12px;">Loading flights...</div>
 
         <div style="overflow:auto;">
-          <table style="width:100%; border-collapse:collapse;">
+          <table style="width:100%; border-collapse:collapse; table-layout:fixed;">
             <thead>
               <tr>
-                <th style="text-align:left; padding:10px;">Flight</th>
-                <th style="text-align:left; padding:10px;">From → To</th>
-                <th style="text-align:left; padding:10px;">Date/Time</th>
-                <th style="text-align:left; padding:10px;">Aircraft</th>
-                <th style="text-align:left; padding:10px;">Gate/Terminal</th>
-                <th style="text-align:left; padding:10px;">Actions</th>
+                <th style="text-align:left; padding:10px; width:12%;">Flight</th>
+                <th style="text-align:left; padding:10px; width:20%;">From → To</th>
+                <th style="text-align:left; padding:10px; width:22%;">Date/Time</th>
+                <th style="text-align:left; padding:10px; width:18%;">Aircraft</th>
+                <th style="text-align:left; padding:10px; width:28%;">Actions</th>
               </tr>
             </thead>
             <tbody id="flightsTbody"></tbody>
@@ -134,17 +123,19 @@
 
         for (const f of flights) {
           const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td style="padding:10px;"><strong>${esc(f.FlightNumber)}</strong></td>
-            <td style="padding:10px;">${esc(f.SourceAirportCode)} → ${esc(f.DestinationAirportCode)}</td>
-            <td style="padding:10px;">${esc(f.FlightDateTime)}</td>
-            <td style="padding:10px;">${esc(f.VehicleTypeCode)}</td>
-            <td style="padding:10px;">${esc(f.Gate || "-")} / ${esc(f.Terminal || "-")}</td>
-            <td style="padding:10px; display:flex; gap:8px; flex-wrap:wrap;">
-              <button class="action-btn" style="padding:8px 12px;" onclick="goManage('${esc(f.FlightNumber)}')">Manage</button>
-              <button class="action-btn" style="padding:8px 12px;" onclick="deleteFlight('${esc(f.FlightNumber)}')">Delete</button>
-            </td>
-          `;
+          tr.style.height = "56px";
+            tr.innerHTML = `
+              <td style="padding:10px;"><strong>${esc(f.FlightNumber)}</strong></td>
+              <td style="padding:10px;">${esc(f.SourceAirportCode)} → ${esc(f.DestinationAirportCode)}</td>
+              <td style="padding:10px;">${esc(f.FlightDateTime)}</td>
+              <td style="padding:10px;">${esc(f.VehicleTypeCode)}</td>
+              <td style="padding:10px;">
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                  <button class="action-btn" style="padding:8px 12px;" onclick="goManage('${esc(f.FlightNumber)}')">Manage</button>
+                  <button class="action-btn" style="padding:8px 12px;" onclick="deleteFlight('${esc(f.FlightNumber)}')">Delete</button>
+                </div>
+              </td>
+            `;
           tbody.appendChild(tr);
         }
       } catch (e) {
