@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manage Flight</title>
+  <link rel="stylesheet" href="./public/styles/admin-home.css" />
+</head>
+<body>
+  <div class="admin-wrapper">
+    <header class="main-header container">
+      <div class="logo-container">
+        <h1 class="brand-name">FlyTech</h1>
+      </div>
+      <nav class="nav-container">
+        <a class="nav-link" href="./admin-home.html">Admin Home</a>
+      </nav>
+    </header>
+
+    <main class="content-container">
+      <section class="card">
+        <h2 class="section-title">Manage Flight</h2>
+
+        <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:end;">
+          <div style="flex:1; min-width:220px;">
+            <label>Flight Number</label>
+            <input id="flightNumber" placeholder="e.g., TK900" />
+          </div>
+          <button class="action-btn" id="loadBtn">Load</button>
+        </div>
+
+        <hr style="margin:20px 0; opacity:.2;" />
+
+        <div id="summary"></div>
+
+        <h3 style="margin-top:18px;">Auto Assign Crew</h3>
+        <button class="action-btn" id="autoAssignBtn">Auto Assign</button>
+
+        <h3 style="margin-top:18px;">Manual Assign Crew</h3>
+
+        <div style="display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+          <div>
+            <label>Pilot #1</label>
+            <select id="pilot1"></select>
+          </div>
+          <div>
+            <label>Pilot #2</label>
+            <select id="pilot2"></select>
+          </div>
+          <div style="grid-column: 1 / -1;">
+            <label>Attendants (select multiple)</label>
+            <select id="attendants" multiple size="6" style="width:100%;"></select>
+          </div>
+        </div>
+
+        <button class="action-btn" id="manualAssignBtn" style="margin-top:12px;">Manual Assign</button>
+
+        <h3 style="margin-top:18px;">Passengers</h3>
+        <div id="passengers"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./public/js/api.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const params = new URLSearchParams(window.location.search);
+        const flightNumber = params.get("flightNumber");
+        if (flightNumber) {
+          $("flightNumber").value = flightNumber;
+          loadManage(); // auto-load flight data
+        }
+      });
+
+    const $ = (id) => document.getElementById(id);
+
+    function setOptions(selectEl, items, valueKey, labelFn) {
+      selectEl.innerHTML = "";
+      for (const it of items) {
+        const opt = document.createElement("option");
+        opt.value = it[valueKey];
+        opt.textContent = labelFn(it);
+        selectEl.appendChild(opt);
+      }
+    }
+
+    let currentFlightNumber = "";
+
+    async function loadManage() {
+      const fn = $("flightNumber").value.trim();
+      if (!fn) return alert("Enter flight number");
+
+      currentFlightNumber = fn;
+
+      const data = await api(`/api/admin/flights/${encodeURIComponent(fn)}/manage`);
+
+      $("summary").innerHTML = `
+        <div><b>${data.flight.FlightNumber}</b> | ${data.flight.SourceAirportCode} → ${data.flight.DestinationAirportCode}</div>
+        <div>Capacity: ${data.flight.Capacity ?? "N/A"} | Crew rule: ${data.rules.pilotsRequired} pilots, ${data.rules.attendantsNeeded} attendants</div>
+        <div>Current roster: pilots [${(data.currentRoster.pilots||[]).join(", ")}] attendants [${(data.currentRoster.attendants||[]).join(", ")}]</div>
+      `;
+
+      // pilots
+      setOptions($("pilot1"), data.options.pilots, "PilotId", p => `${p.PilotId} - ${p.Name} (Seniority ${p.SeniorityLevel})`);
+      setOptions($("pilot2"), data.options.pilots, "PilotId", p => `${p.PilotId} - ${p.Name} (Seniority ${p.SeniorityLevel})`);
+
+      // attendants
+      setOptions($("attendants"), data.options.attendants, "AttendantId", a => `${a.AttendantId} - ${a.Name} (${a.AttendantType})`);
+
+      // passengers
+      const ps = data.passengers || [];
+      $("passengers").innerHTML = ps.length
+        ? `<ul>${ps.map(p => `<li>${p.TicketID} - ${p.Name} (${p.SeatType} ${p.SeatNumber})</li>`).join("")}</ul>`
+        : `<div>No passengers yet.</div>`;
+    }
+
+    $("loadBtn").addEventListener("click", () => loadManage().catch(err => alert(err.message)));
+
+    $("autoAssignBtn").addEventListener("click", async () => {
+      if (!currentFlightNumber) return alert("Load flight first");
+      await api(`/api/admin/flights/${currentFlightNumber}/auto-assign`, { method: "POST" });
+      await loadManage();
+      alert("Auto assignment done");
+    });
+
+  $("manualAssignBtn").addEventListener("click", async () => {
+    const flightNumber = $("flightNumber").value.trim();
+    if (!flightNumber) return alert("Enter flight number");
+
+    const pilots = [
+      Number($("pilot1").value),
+      Number($("pilot2").value)
+    ].filter(n => Number.isFinite(n) && n > 0);
+
+    if (pilots.length !== 2 || pilots[0] === pilots[1]) {
+      alert("Select 2 different valid pilots");
+      return;
+    }
+
+    const attendants = Array.from($("attendants").selectedOptions)
+      .map(opt => Number(opt.value))
+      .filter(n => Number.isFinite(n) && n > 0);
+
+    try {
+      await api(`/api/admin/flights/${flightNumber}/manual-assign`, {
+        method: "POST",
+        body: JSON.stringify({ pilots, attendants })
+      });
+      await loadManage();
+      alert("Manual assignment saved successfully");
+    } catch (err) {
+      alert(err.message);
+    }
+  });
+
+  </script>
+</body>
+</html>

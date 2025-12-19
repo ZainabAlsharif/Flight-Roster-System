@@ -1,112 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Home</title>
-    <link rel="stylesheet" href="./public/styles/admin-home.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Home</title>
+  <link rel="stylesheet" href="./public/styles/admin-home.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
-    <div class="admin-wrapper">
-        <header class="main-header container">
-            <div class="logo-container">
-                <div class="airplane-icon">
-                    <svg viewBox="0 0 44 44" fill="none">
-                        <path d="M37.6933 7.16833C38.775 8.25 38.775 9.99167 37.6933 11.055L30.5617 18.1867L34.4483 35.035L31.8633 37.6383L24.75 24.0167L17.6 31.1667L18.26 35.695L16.2983 37.6383L13.0717 31.8083L7.22333 28.5633L9.16667 26.5833L13.75 27.2617L20.845 20.1667L7.22333 12.9983L9.82667 10.4133L26.675 14.3L33.8067 7.16833C34.8333 6.105 36.6667 6.105 37.6933 7.16833Z" fill="white" />
-                    </svg>
-                </div>
-                <h1 class="brand-name">FlyTech</h1>
+  <div class="admin-wrapper">
+    <header class="main-header container">
+      <div class="logo-container">
+        <div class="airplane-icon">
+          <svg viewBox="0 0 44 44" fill="none">
+            <path d="M37.6933 7.16833C38.775 8.25 38.775 9.99167 37.6933 11.055L30.5617 18.1867L34.4483 35.035L31.8633 37.6383L24.75 24.0167L17.6 31.1667L18.26 35.695L16.2983 37.6383L13.0717 31.8083L7.22333 28.5633L9.16667 26.5833L13.75 27.2617L20.845 20.1667L7.22333 12.9983L9.82667 10.4133L26.675 14.3L33.8067 7.16833C34.8333 6.105 36.6667 6.105 37.6933 7.16833Z" fill="white" />
+          </svg>
+        </div>
+        <h1 class="brand-name">FlyTech</h1>
+      </div>
+
+      <nav class="nav-container">
+        <a class="nav-link" onclick="window.location.href='./about-us.html';">About Us</a>
+        <a class="login-button" onclick="window.location.href='./login.html';">Log-in</a>
+      </nav>
+    </header>
+
+    <main class="content-container">
+
+      <section class="card welcome-card">
+        <h2 class="welcome-title">Welcome back, Admin</h2>
+        <div class="admin-info">
+          <p><strong>Admin ID:</strong> <span id="adminId">—</span></p>
+          <p><strong>Username:</strong> <span id="adminUsername">—</span></p>
+        </div>
+      </section>
+
+      <section class="card actions-card">
+        <div class="actions-grid">
+
+          <div class="action-item">
+            <div class="action-text">
+              <h3>Create Flight</h3>
+              <p>Create a new flight (gate/terminal/capacity…)</p>
             </div>
+            <button class="action-btn" onclick="window.location.href='./create-flight.html';">
+              Create Flight
+            </button>
+          </div>
 
-            <nav class="nav-container">
-                <a class="nav-link" onclick="window.location.href='./about-us.html';">About Us</a>
-                <a class="login-button" onclick="window.location.href='./login.html';">Log-in</a>
-            </nav>
-        </header>
+          <div class="action-item">
+            <div class="action-text">
+              <h3>Update Flight</h3>
+              <p>Edit an existing flight</p>
+            </div>
+            <button class="action-btn" onclick="window.location.href='./update-flight.html';">
+              Update Flight
+            </button>
+          </div>
 
-        <main class="content-container">
-            
-            <section class="card welcome-card">
-                <h2 class="welcome-title">Welcome back, Admin</h2>
-                <div class="admin-info">
-                    <p><strong>Admin ID:</strong> <span id="adminId">0</span></p>
-                    <p><strong>Username:</strong> <span id="adminUsername">admin_1</span></p>
-                </div>
-            </section>
+          <div class="action-item">
+            <div class="action-text">
+              <h3>Manage Crew & Passengers</h3>
+              <p>Auto/Manual assign + passengers per flight</p>
+            </div>
+            <button class="action-btn" onclick="document.getElementById('flightsSection').scrollIntoView({behavior:'smooth'});">
+              Manage Flights
+            </button>
+          </div>
 
-            <section class="card actions-card">
-                <div class="actions-grid">
-                    
-                    <div class="action-item">
-                        <div class="action-text">
-                            <h3>Flight Creation</h3>
-                            <p>Create flights and assign staff and passenger seats</p>
-                        </div>
-                        <button 
-                         class="action-btn"
-                        onclick="window.location.href='./create-flight.html';">
-                        Create Flight
-                        </button>
-                    </div>
+        </div>
+      </section>
 
-                    <div class="action-item">
-                        <div class="action-text">
-                            <h3>Flight Update</h3>
-                            <p>Modify existing flight info and seat map for staff and passengers</p>
-                        </div>
-                       <button class="action-btn"
-                            onclick="window.location.href='./update-flight.html';">
-                            Update Flight
-                        </button>
-                    </div>
+      <section class="card" id="flightsSection">
+        <h2 class="section-title">All Flights</h2>
+        <div id="flightsStatus" style="margin-bottom:12px;">Loading flights...</div>
 
-                </div>
-            </section>
+        <div style="overflow:auto;">
+          <table style="width:100%; border-collapse:collapse;">
+            <thead>
+              <tr>
+                <th style="text-align:left; padding:10px;">Flight</th>
+                <th style="text-align:left; padding:10px;">From → To</th>
+                <th style="text-align:left; padding:10px;">Date/Time</th>
+                <th style="text-align:left; padding:10px;">Aircraft</th>
+                <th style="text-align:left; padding:10px;">Gate/Terminal</th>
+                <th style="text-align:left; padding:10px;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="flightsTbody"></tbody>
+          </table>
+        </div>
+      </section>
 
-        </main>
-    </div>
+    </main>
+  </div>
 
-    <script>
-        // fetches the current logged in admin 
-        async function loadAdminInfo() {
-            try {
-                console.log("Fetching admin info from /api/me...");
-                const res = await fetch("/api/me", { 
-                    credentials: "include",
-                    method: "GET"
-                });
-                
-                console.log("Response status:", res.status);
-                
-                if (!res.ok) {
-                    const errorText = await res.text();
-                    console.warn("Failed to fetch admin info:", res.status, errorText);
-                    return; 
-                }
+  <script src="./public/js/api.js"></script>
+  <script>
+    function esc(s) {
+      return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
 
-                const me = await res.json();
-                console.log("Admin data received:", me);
-                
-                //displays admin id
-                if (me.userId !== undefined && me.userId !== null) {
-                    document.getElementById("adminId").textContent = me.userId;
-                }
-                
-                //displays username
-                if (me.name) {
-                    document.getElementById("adminUsername").textContent = me.name;
-                }
-            } catch (error) {
-                console.error("Error loading admin info:", error);
-            }
+    async function requireAdminSessionOrRedirect() {
+      const res = await fetch("/api/me", { credentials: "include" });
+
+      if (res.status === 401) {
+        // not logged in -> go to login page
+        window.location.href = "./login.html";
+        return null;
+      }
+
+      if (!res.ok) {
+        throw new Error("Failed to check session");
+      }
+
+      const me = await res.json();
+      document.getElementById("adminId").textContent = me.userId;
+      document.getElementById("adminUsername").textContent = me.name || "-";
+      return me;
+    }
+
+    async function loadFlights() {
+      const status = document.getElementById("flightsStatus");
+      const tbody = document.getElementById("flightsTbody");
+      tbody.innerHTML = "";
+
+      try {
+        const flights = await api("/api/admin/flights"); // uses credentials include inside api.js
+        status.textContent = `${flights.length} flight(s)`;
+
+        for (const f of flights) {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td style="padding:10px;"><strong>${esc(f.FlightNumber)}</strong></td>
+            <td style="padding:10px;">${esc(f.SourceAirportCode)} → ${esc(f.DestinationAirportCode)}</td>
+            <td style="padding:10px;">${esc(f.FlightDateTime)}</td>
+            <td style="padding:10px;">${esc(f.VehicleTypeCode)}</td>
+            <td style="padding:10px;">${esc(f.Gate || "-")} / ${esc(f.Terminal || "-")}</td>
+            <td style="padding:10px; display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="action-btn" style="padding:8px 12px;" onclick="goManage('${esc(f.FlightNumber)}')">Manage</button>
+              <button class="action-btn" style="padding:8px 12px;" onclick="deleteFlight('${esc(f.FlightNumber)}')">Delete</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
         }
+      } catch (e) {
+        status.textContent = "Failed to load flights.";
+        console.error(e);
+      }
+    }
 
-        window.addEventListener("DOMContentLoaded", () => {
-            loadAdminInfo();
-        });
-    </script>
+    function goManage(flightNumber) {
+      window.location.href = `./manage-flight.html?flightNumber=${encodeURIComponent(flightNumber)}`;
+    }
+
+    async function deleteFlight(flightNumber) {
+      if (!confirm(`Delete flight ${flightNumber}?`)) return;
+      try {
+        await api(`/api/admin/flights/${encodeURIComponent(flightNumber)}`, { method: "DELETE" });
+        await loadFlights();
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", async () => {
+      await requireAdminSessionOrRedirect();
+      await loadFlights();
+    });
+  </script>
 </body>
 </html>

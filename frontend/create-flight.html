@@ -26,83 +26,74 @@
         <main class="content-container">
             <section class="card">
                 <h2 class="section-title">Create Flight</h2>
-                <form id="create-flight-form">
-                    <label for="flight-number">Flight Number:</label>
-                    <input type="text" id="flight-number" name="flight-number" required>
+                <form id="createFlightForm">
+                    <label>Flight Number</label>
+                    <input id="flightNumber" required />
 
-                    <label for="date">Date:</label>
-                    <input type="date" id="date" name="date" required>
+                    <label>Date & Time</label>
+                    <input id="flightDateTime" type="datetime-local" required />
 
-                    <label for="time">Time:</label>
-                    <input type="time" id="time" name="time" required>
+                    <label>Duration (minutes)</label>
+                    <input id="durationMinutes" type="number" required />
 
-                    <label for="captain">Captain:</label>
-                    <select id="captain" name="captain" required>
-                        <!-- Dynamically filled with captain options -->
-                    </select>
+                    <label>Distance (km)</label>
+                    <input id="distanceKm" type="number" required />
 
-                    <label for="crew">Crew:</label>
-                    <select id="crew" name="crew" multiple required>
-                        <!-- Dynamically filled with crew options -->
-                    </select>
+                    <label>Source Airport</label>
+                    <input id="sourceAirportCode" required />
+
+                    <label>Destination Airport</label>
+                    <input id="destinationAirportCode" required />
+
+                    <label>Aircraft Type</label>
+                    <input id="vehicleTypeCode" required />
+
+                    <label>Gate</label>
+                    <input id="gate" />
+
+                    <label>Terminal</label>
+                    <input id="terminal" />
+
+                    <label>Capacity</label>
+                    <input id="capacity" type="number" />
 
                     <button type="submit" class="action-btn">Create Flight</button>
-                </form>
+                    </form>
+
             </section>
         </main>
     </div>
 
-    <script>
-        async function loadCaptainsAndCrew() {
-            // Fetch captains and crew from the backend
-            const captainsResponse = await fetch("/api/captains");
-            const crewResponse = await fetch("/api/crew");
-            
-            const captains = await captainsResponse.json();
-            const crew = await crewResponse.json();
+    
+    <script src="./public/js/api.js"></script>
+<script>
+document.getElementById("createFlightForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-            const captainSelect = document.getElementById("captain");
-            const crewSelect = document.getElementById("crew");
+  const body = {
+    flightNumber: document.getElementById("flightNumber").value.trim(),
+    flightDateTime: document.getElementById("flightDateTime").value.replace("T", " "),
+    durationMinutes: Number(document.getElementById("durationMinutes").value),
+    distanceKm: Number(document.getElementById("distanceKm").value),
+    sourceAirportCode: document.getElementById("sourceAirportCode").value.trim(),
+    destinationAirportCode: document.getElementById("destinationAirportCode").value.trim(),
+    vehicleTypeCode: document.getElementById("vehicleTypeCode").value.trim(),
+    gate: document.getElementById("gate").value.trim() || null,
+    terminal: document.getElementById("terminal").value.trim() || null,
+    capacity: document.getElementById("capacity").value ? Number(document.getElementById("capacity").value) : null,
+    sharedFlightNumber: null,
+    sharedCompanyName: null,
+    connectingFlightNumber: null
+  };
 
-            captains.forEach(captain => {
-                const option = document.createElement("option");
-                option.value = captain.id;
-                option.textContent = captain.name;
-                captainSelect.appendChild(option);
-            });
+  try {
+    await api("/api/admin/flights", { method: "POST", body: JSON.stringify(body) });
+    window.location.href = "./flight-created-success.html";
+  } catch (err) {
+    alert(err.message);
+  }
+});
+</script>
 
-            crew.forEach(member => {
-                const option = document.createElement("option");
-                option.value = member.id;
-                option.textContent = member.name;
-                crewSelect.appendChild(option);
-            });
-        }
-
-        document.getElementById("create-flight-form").addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            const formData = new FormData(e.target);
-            const flightData = Object.fromEntries(formData.entries());
-
-            const response = await fetch("/api/create-flight", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(flightData)
-            });
-
-            if (response.ok) {
-                window.location.href = "./flight-created-success.html";
-            } else {
-                alert("Error creating flight!");
-            }
-        });
-
-        window.addEventListener("DOMContentLoaded", () => {
-            loadCaptainsAndCrew();
-        });
-    </script>
 </body>
 </html>
