@@ -17,10 +17,18 @@ app.use(cors({
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(session({
-  secret: "cmpe331-flytech-secret",   
+  name: "flytech.sid",
+  secret: "cmpe331-flytech-secret",
   resave: false,
   saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: false,   // IMPORTANT for localhost
+    path: "/"
+  }
 }));
+
 //static files
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'public')));
@@ -273,13 +281,13 @@ app.post('/', async (req, res) => {
         if (match) {
             req.session.userId = user.UserId;
             req.session.userRole = user.Role;
-            
+            req.session.save(() => {
             //redirect based on user role (staff or admin)
             if (user.Role === 'admin') {
                 return res.redirect('/admin-home');
             } else {
                 return res.redirect('/assigned-flight-list');
-            }
+            } });
         } else {
             return res.redirect('/');
         }
@@ -458,7 +466,8 @@ app.get("/api/roster/:flightNumber", async (req, res) => {
 // Return currently logged-in user info
 app.get("/api/me", async (req, res) => {
   try {
-    if (!req.session.userId) {
+    // userId can be 0 -> don't use !req.session.userId
+    if (req.session.userId === undefined || req.session.userId === null) {
       return res.status(401).json({ error: "Not logged in" });
     }
 
@@ -469,16 +478,13 @@ app.get("/api/me", async (req, res) => {
 
     if (!row) return res.status(404).json({ error: "User not found" });
 
-    res.json({
-      userId: row.UserId,
-      name: row.Username,
-      role: row.Role
-    });
+    res.json({ userId: row.UserId, name: row.Username, role: row.Role });
   } catch (err) {
     console.error("GET /api/me failed:", err);
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
 // ADMIN: create flight (with gate/terminal/capacity)
 app.post("/api/admin/flights", requireAdmin, async (req, res) => {
   const {
