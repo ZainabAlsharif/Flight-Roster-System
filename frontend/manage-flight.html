@@ -10,17 +10,22 @@
   <div class="admin-wrapper">
     <header class="main-header container">
       <div class="logo-container">
+        <div class="airplane-icon">
+          <svg viewBox="0 0 44 44" fill="none">
+            <path d="M37.6933 7.16833C38.775 8.25 38.775 9.99167 37.6933 11.055L30.5617 18.1867L34.4483 35.035L31.8633 37.6383L24.75 24.0167L17.6 31.1667L18.26 35.695L16.2983 37.6383L13.0717 31.8083L7.22333 28.5633L9.16667 26.5833L13.75 27.2617L20.845 20.1667L7.22333 12.9983L9.82667 10.4133L26.675 14.3L33.8067 7.16833C34.8333 6.105 36.6667 6.105 37.6933 7.16833Z" fill="white" />
+          </svg>
+        </div>
         <h1 class="brand-name">FlyTech</h1>
       </div>
       <nav class="nav-container">
-        <a class="nav-link" href="./admin-home.html">Admin Home</a>
+        <a class="nav-link" onclick="window.location.href='./admin-home.html';">Admin Home</a>
+        <a class="login-button" onclick="window.location.href='./login.html';">Log-in</a>
       </nav>
     </header>
 
     <main class="content-container">
-      <section class="card">
+      <section class="card" id="manageSection" style="display:none; margin-bottom:32px;">
         <h2 class="section-title">Manage Flight</h2>
-
         <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:end;">
           <div style="flex:1; min-width:220px;">
             <label>Flight Number</label>
@@ -28,16 +33,11 @@
           </div>
           <button class="action-btn" id="loadBtn">Load</button>
         </div>
-
         <hr style="margin:20px 0; opacity:.2;" />
-
         <div id="summary"></div>
-
         <h3 style="margin-top:18px;">Auto Assign Crew</h3>
         <button class="action-btn" id="autoAssignBtn">Auto Assign</button>
-
         <h3 style="margin-top:18px;">Manual Assign Crew</h3>
-
         <div style="display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
           <div>
             <label>Pilot #1</label>
@@ -52,11 +52,28 @@
             <select id="attendants" multiple size="6" style="width:100%;"></select>
           </div>
         </div>
-
         <button class="action-btn" id="manualAssignBtn" style="margin-top:12px;">Manual Assign</button>
-
         <h3 style="margin-top:18px;">Passengers</h3>
         <div id="passengers"></div>
+      </section>
+  
+      <section class="card" id="flightsSection">
+        <h2 class="section-title">All Flights</h2>
+        <div id="flightsStatus" style="margin-bottom:12px;">Loading flights...</div>
+        <div style="overflow:auto;">
+          <table style="width:100%; border-collapse:collapse; table-layout:fixed;">
+            <thead>
+              <tr>
+                <th style="text-align:left; padding:10px; width:12%;">Flight</th>
+                <th style="text-align:left; padding:10px; width:20%;">From → To</th>
+                <th style="text-align:left; padding:10px; width:22%;">Date/Time</th>
+                <th style="text-align:left; padding:10px; width:18%;">Aircraft</th>
+                <th style="text-align:left; padding:10px; width:28%;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="flightsTbody"></tbody>
+          </table>
+        </div>
       </section>
     </main>
   </div>
@@ -64,13 +81,33 @@
   <script src="./public/js/api.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-        const params = new URLSearchParams(window.location.search);
-        const flightNumber = params.get("flightNumber");
-        if (flightNumber) {
-          $("flightNumber").value = flightNumber;
-          loadManage(); // auto-load flight data
-        }
-      });
+      const params = new URLSearchParams(window.location.search);
+      const flightNumber = params.get("flightNumber");
+      const created = params.get("created");
+      if (flightNumber) {
+        showManageSection();
+        $("flightNumber").value = flightNumber;
+        loadManage(); // auto-load flight data
+      }
+      loadFlights(); // Always reload flights
+      if (created) {
+        setTimeout(() => {
+          const status = document.getElementById("flightsStatus");
+          if (status) status.textContent = "Flight created successfully!";
+        }, 500);
+      }
+    });
+
+    function showManageSection() {
+      document.getElementById("manageSection").style.display = "block";
+      document.getElementById("flightsSection").style.display = "none";
+      window.scrollTo({ top: document.getElementById("manageSection").offsetTop - 40, behavior: 'smooth' });
+    }
+
+    function hideManageSection() {
+      document.getElementById("manageSection").style.display = "none";
+      document.getElementById("flightsSection").style.display = "block";
+    }
 
     const $ = (id) => document.getElementById(id);
 
@@ -94,10 +131,21 @@
 
       const data = await api(`/api/admin/flights/${encodeURIComponent(fn)}/manage`);
 
+
+      
+      function getNameById(id, arr, idKey = "PilotId") {
+        const found = arr.find(x => x[idKey] === id);
+        return found ? found.Name : id;
+      }
+      
+      const allPilots = [...(data.options.pilots || []), ...(data.pilots || [])];
+      const allAttendants = [...(data.options.attendants || []), ...(data.attendants || [])];
+      const pilotNames = (data.currentRoster.pilots||[]).map(pid => getNameById(pid, allPilots, "PilotId"));
+      const attendantNames = (data.currentRoster.attendants||[]).map(aid => getNameById(aid, allAttendants, "AttendantId"));
       $("summary").innerHTML = `
         <div><b>${data.flight.FlightNumber}</b> | ${data.flight.SourceAirportCode} → ${data.flight.DestinationAirportCode}</div>
-        <div>Capacity: ${data.flight.Capacity ?? "N/A"} | Crew rule: ${data.rules.pilotsRequired} pilots, ${data.rules.attendantsNeeded} attendants</div>
-        <div>Current roster: pilots [${(data.currentRoster.pilots||[]).join(", ")}] attendants [${(data.currentRoster.attendants||[]).join(", ")}]</div>
+        <div>Crew rule: ${data.rules.pilotsRequired} pilots, ${data.rules.attendantsNeeded} attendants</div>
+        <div>Current roster: pilots [${pilotNames.join(", ")}] attendants [${attendantNames.join(", ")}]</div>
       `;
 
       // pilots
@@ -123,36 +171,85 @@
       alert("Auto assignment done");
     });
 
-  $("manualAssignBtn").addEventListener("click", async () => {
-    const flightNumber = $("flightNumber").value.trim();
-    if (!flightNumber) return alert("Enter flight number");
+    $("manualAssignBtn").addEventListener("click", async () => {
+      const flightNumber = $("flightNumber").value.trim();
+      if (!flightNumber) return alert("Enter flight number");
 
-    const pilots = [
-      Number($("pilot1").value),
-      Number($("pilot2").value)
-    ].filter(n => Number.isFinite(n) && n > 0);
+      const pilots = [
+        Number($("pilot1").value),
+        Number($("pilot2").value)
+      ].filter(n => Number.isFinite(n) && n > 0);
 
-    if (pilots.length !== 2 || pilots[0] === pilots[1]) {
-      alert("Select 2 different valid pilots");
-      return;
+      if (pilots.length !== 2 || pilots[0] === pilots[1]) {
+        alert("Select 2 different valid pilots");
+        return;
+      }
+
+      const attendants = Array.from($("attendants").selectedOptions)
+        .map(opt => Number(opt.value))
+        .filter(n => Number.isFinite(n) && n > 0);
+
+      try {
+        await api(`/api/admin/flights/${flightNumber}/manual-assign`, {
+          method: "POST",
+          body: JSON.stringify({ pilots, attendants })
+        });
+        await loadManage();
+        alert("Manual assignment saved successfully");
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+
+    function esc(s) {
+      return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m]));
     }
 
-    const attendants = Array.from($("attendants").selectedOptions)
-      .map(opt => Number(opt.value))
-      .filter(n => Number.isFinite(n) && n > 0);
-
-    try {
-      await api(`/api/admin/flights/${flightNumber}/manual-assign`, {
-        method: "POST",
-        body: JSON.stringify({ pilots, attendants })
-      });
-      await loadManage();
-      alert("Manual assignment saved successfully");
-    } catch (err) {
-      alert(err.message);
+    async function loadFlights() {
+      const status = document.getElementById("flightsStatus");
+      const tbody = document.getElementById("flightsTbody");
+      tbody.innerHTML = "";
+      try {
+        const flights = await api("/api/admin/flights");
+        status.textContent = `${flights.length} flight(s)`;
+        for (const f of flights) {
+          const tr = document.createElement("tr");
+          tr.style.height = "56px";
+          tr.innerHTML = `
+            <td style="padding:10px;"><strong>${esc(f.FlightNumber)}</strong></td>
+            <td style="padding:10px;">${esc(f.SourceAirportCode)} → ${esc(f.DestinationAirportCode)}</td>
+            <td style="padding:10px;">${esc(f.FlightDateTime)}</td>
+            <td style="padding:10px;">${esc(f.VehicleTypeCode)}</td>
+            <td style="padding:10px;">
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <button class="action-btn" style="padding:8px 12px;" onclick="goManage('${esc(f.FlightNumber)}')">Manage</button>
+                <button class="action-btn" style="padding:8px 12px;" onclick="deleteFlight('${esc(f.FlightNumber)}')">Delete</button>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        }
+      } catch (e) {
+        status.textContent = "Failed to load flights.";
+        console.error(e);
+      }
     }
-  });
 
+    function goManage(flightNumber) {
+      showManageSection();
+      $("flightNumber").value = flightNumber;
+      loadManage();
+    }
+
+    async function deleteFlight(flightNumber) {
+      if (!confirm(`Delete flight ${flightNumber}?`)) return;
+      try {
+        await api(`/api/admin/flights/${encodeURIComponent(flightNumber)}`, { method: "DELETE" });
+        await loadFlights();
+      } catch (e) {
+        alert(e.message);
+      }
+    }
   </script>
 </body>
 </html>

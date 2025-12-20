@@ -498,9 +498,9 @@ app.post("/api/admin/flights", requireAdmin, async (req, res) => {
     sharedFlightNumber,
     sharedCompanyName,
     connectingFlightNumber,
-    gate,
-    terminal,
-    capacity
+    // gate,
+    // terminal,
+    // capacity
   } = req.body;
 
   try {
@@ -517,11 +517,8 @@ app.post("/api/admin/flights", requireAdmin, async (req, res) => {
           VehicleTypeCode,
           SharedFlightNumber,
           SharedCompanyName,
-          ConnectingFlightNumber,
-          Gate,
-          Terminal,
-          Capacity
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          ConnectingFlightNumber
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `,
         [
           flightNumber,
@@ -533,10 +530,7 @@ app.post("/api/admin/flights", requireAdmin, async (req, res) => {
           vehicleTypeCode,
           sharedFlightNumber || null,
           sharedCompanyName || null,
-          connectingFlightNumber || null,
-          gate || null,
-          terminal || null,
-          capacity ?? null
+          connectingFlightNumber || null
         ],
         (err) => (err ? reject(err) : resolve())
       );
@@ -955,10 +949,7 @@ app.get("/api/admin/flights", requireAdmin, async (req, res) => {
         sa.City AS SourceCity,
         f.DestinationAirportCode,
         da.City AS DestinationCity,
-        f.VehicleTypeCode,
-        f.Capacity,
-        f.Gate,
-        f.Terminal
+        f.VehicleTypeCode
       FROM Flight f
       JOIN Airport sa ON sa.AirportCode = f.SourceAirportCode
       JOIN Airport da ON da.AirportCode = f.DestinationAirportCode
@@ -988,9 +979,6 @@ app.get("/api/admin/flights/:flightNumber", requireAdmin, async (req, res) => {
         f.DestinationAirportCode,
         da.City AS DestinationCity,
         f.VehicleTypeCode,
-        f.Capacity,
-        f.Gate,
-        f.Terminal,
         f.SharedFlightNumber,
         f.SharedCompanyName,
         f.ConnectingFlightNumber
@@ -1022,9 +1010,9 @@ app.put("/api/admin/flights/:flightNumber", requireAdmin, async (req, res) => {
       sourceAirportCode,
       destinationAirportCode,
       vehicleTypeCode,
-      gate,
-      terminal,
-      capacity,
+      // gate,
+      // terminal,
+      // capacity,
       sharedFlightNumber,
       sharedCompanyName,
       connectingFlightNumber
@@ -1041,9 +1029,6 @@ app.put("/api/admin/flights/:flightNumber", requireAdmin, async (req, res) => {
           SourceAirportCode = ?,
           DestinationAirportCode = ?,
           VehicleTypeCode = ?,
-          Gate = ?,
-          Terminal = ?,
-          Capacity = ?,
           SharedFlightNumber = ?,
           SharedCompanyName = ?,
           ConnectingFlightNumber = ?
@@ -1056,9 +1041,6 @@ app.put("/api/admin/flights/:flightNumber", requireAdmin, async (req, res) => {
           sourceAirportCode,
           destinationAirportCode,
           vehicleTypeCode,
-          gate || null,
-          terminal || null,
-          capacity ?? null,
           sharedFlightNumber || null,
           sharedCompanyName || null,
           connectingFlightNumber || null,

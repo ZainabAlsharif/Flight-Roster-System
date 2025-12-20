@@ -56,7 +56,7 @@
               <h3>Manage Crew & Passengers</h3>
               <p>Auto/Manual assign + passengers per flight</p>
             </div>
-            <button class="action-btn" onclick="document.getElementById('flightsSection').scrollIntoView({behavior:'smooth'});">
+            <button class="action-btn" onclick="window.location.href='./manage-flight.html';">
               Manage Flights
             </button>
           </div>
@@ -64,25 +64,7 @@
         </div>
       </section>
 
-      <section class="card" id="flightsSection">
-        <h2 class="section-title">All Flights</h2>
-        <div id="flightsStatus" style="margin-bottom:12px;">Loading flights...</div>
 
-        <div style="overflow:auto;">
-          <table style="width:100%; border-collapse:collapse; table-layout:fixed;">
-            <thead>
-              <tr>
-                <th style="text-align:left; padding:10px; width:12%;">Flight</th>
-                <th style="text-align:left; padding:10px; width:20%;">From → To</th>
-                <th style="text-align:left; padding:10px; width:22%;">Date/Time</th>
-                <th style="text-align:left; padding:10px; width:18%;">Aircraft</th>
-                <th style="text-align:left; padding:10px; width:28%;">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="flightsTbody"></tbody>
-          </table>
-        </div>
-      </section>
 
     </main>
   </div>
