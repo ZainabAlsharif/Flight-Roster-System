@@ -1126,6 +1126,9 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-    console.log(`http://localhost:${PORT}`);
-});
+if (require.main === module) {
+  app.listen(3000, () => {
+    console.log("Server running at http://localhost:3000");
+  });
+}
+module.exports = app;
